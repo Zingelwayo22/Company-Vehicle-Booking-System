@@ -1,0 +1,674 @@
+﻿```cshtml
+@model IEnumerable<CompanyVehicleBookingSystem.Models.Department>
+
+@{
+    ViewBag.Title = "Department Management";
+
+    var departments = Model.ToList();
+    var totalDepartments = departments.Count;
+}
+
+<style>
+
+    /* =========================================================
+       DEPARTMENT MANAGEMENT
+       ========================================================= */
+
+    .department-management-page {
+        max-width: 1250px;
+        margin: 0 auto;
+        padding: 10px 10px 50px 10px;
+    }
+
+
+    /* =========================================================
+       HEADER
+       ========================================================= */
+
+    .department-management-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 30px;
+        margin-bottom: 28px;
+    }
+
+    .department-management-eyebrow {
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 1.4px;
+        color: #287fd0;
+        margin-bottom: 7px;
+    }
+
+    .department-management-header h1 {
+        margin: 0 0 8px 0;
+        font-size: 34px;
+        font-weight: 700;
+        color: #142f43;
+    }
+
+    .department-management-header p {
+        margin: 0;
+        color: #71808e;
+        font-size: 14px;
+    }
+
+
+    /* =========================================================
+       ADD BUTTON
+       ========================================================= */
+
+    .department-add-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: #287fd0;
+        color: #ffffff !important;
+        text-decoration: none !important;
+        border-radius: 9px;
+        padding: 11px 18px;
+        font-size: 13px;
+        font-weight: 700;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+    }
+
+        .department-add-button:hover {
+            background: #1d68ad;
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(40, 127, 208, 0.20);
+        }
+
+
+    /* =========================================================
+       SUMMARY
+       ========================================================= */
+
+    .department-summary-card {
+        background: #ffffff;
+        border: 1px solid #e5ebf0;
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 28px;
+        box-shadow: 0 5px 18px rgba(20, 47, 67, 0.05);
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .department-summary-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 13px;
+        background: #eaf3fb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        flex-shrink: 0;
+    }
+
+    .department-summary-label {
+        color: #788894;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 4px;
+    }
+
+    .department-summary-value {
+        color: #142f43;
+        font-size: 25px;
+        font-weight: 700;
+        line-height: 1;
+    }
+
+
+    /* =========================================================
+       MAIN CARD
+       ========================================================= */
+
+    .department-management-card {
+        background: #ffffff;
+        border: 1px solid #e4ebf0;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 7px 28px rgba(20, 47, 67, 0.06);
+    }
+
+    .department-management-card-header {
+        padding: 23px 25px;
+        border-bottom: 1px solid #edf1f4;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+    }
+
+        .department-management-card-header h2 {
+            margin: 0 0 5px 0;
+            color: #142f43;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .department-management-card-header p {
+            margin: 0;
+            color: #7a8995;
+            font-size: 13px;
+        }
+
+    .department-count-badge {
+        background: #eef4f8;
+        color: #24455b;
+        padding: 7px 13px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+
+    /* =========================================================
+       TABLE
+       ========================================================= */
+
+    .department-table-wrapper {
+        overflow-x: auto;
+    }
+
+    .department-management-table {
+        width: 100%;
+        min-width: 700px;
+        border-collapse: collapse;
+        margin: 0;
+    }
+
+        .department-management-table thead {
+            background: #f7f9fb;
+        }
+
+        .department-management-table th {
+            padding: 14px 20px;
+            text-align: left;
+            border-bottom: 1px solid #e6edf1;
+            color: #6b7d8b;
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+        }
+
+        .department-management-table td {
+            padding: 18px 20px;
+            border-bottom: 1px solid #edf1f4;
+            color: #334b5d;
+            font-size: 13px;
+            vertical-align: middle;
+        }
+
+        .department-management-table tbody tr {
+            transition: background 0.2s ease;
+        }
+
+            .department-management-table tbody tr:hover {
+                background: #f9fbfc;
+            }
+
+            .department-management-table tbody tr:last-child td {
+                border-bottom: none;
+            }
+
+
+    /* =========================================================
+       DEPARTMENT NAME
+       ========================================================= */
+
+    .department-name-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .department-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        background: #eaf3fb;
+        color: #287fd0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 17px;
+        flex-shrink: 0;
+    }
+
+    .department-name {
+        color: #142f43;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+
+    /* =========================================================
+       DESCRIPTION
+       ========================================================= */
+
+    .department-description {
+        color: #657783;
+        line-height: 1.5;
+        max-width: 600px;
+    }
+
+    .department-description-empty {
+        color: #9aa6ae;
+        font-size: 11px;
+        font-style: italic;
+    }
+
+
+    /* =========================================================
+       ACTIONS
+       ========================================================= */
+
+    .department-actions {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        white-space: nowrap;
+    }
+
+    .department-action-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 8px 12px;
+        border-radius: 7px;
+        font-size: 11px;
+        font-weight: 700;
+        text-decoration: none !important;
+        transition: all 0.2s ease;
+    }
+
+    .department-action-edit {
+        background: #fff4d6;
+        color: #9b6807 !important;
+    }
+
+        .department-action-edit:hover {
+            background: #d99a19;
+            color: #ffffff !important;
+            transform: translateY(-1px);
+        }
+
+    .department-action-delete {
+        background: #fdeaea;
+        color: #c03939 !important;
+    }
+
+        .department-action-delete:hover {
+            background: #c03939;
+            color: #ffffff !important;
+            transform: translateY(-1px);
+        }
+
+
+    /* =========================================================
+       EMPTY STATE
+       ========================================================= */
+
+    .department-empty-state {
+        padding: 75px 30px;
+        text-align: center;
+    }
+
+    .department-empty-icon {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 20px auto;
+        border-radius: 22px;
+        background: #edf4f9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 34px;
+    }
+
+    .department-empty-state h3 {
+        margin: 0 0 8px 0;
+        color: #142f43;
+        font-size: 21px;
+        font-weight: 700;
+    }
+
+    .department-empty-state p {
+        max-width: 500px;
+        margin: 0 auto 22px auto;
+        color: #7b8995;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+
+    /* =========================================================
+       FOOTER
+       ========================================================= */
+
+    .department-management-footer {
+        padding: 18px 25px;
+        border-top: 1px solid #edf1f4;
+        background: #fafcfd;
+        color: #87949f;
+        font-size: 11px;
+    }
+
+
+    /* =========================================================
+       RESPONSIVE
+       ========================================================= */
+
+    @@media (max-width: 768px) {
+
+        .department-management-page {
+            padding: 5px 5px 40px 5px;
+        }
+
+        .department-management-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+            .department-management-header h1 {
+                font-size: 28px;
+            }
+
+        .department-add-button {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .department-management-card-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+
+
+    @@media (max-width: 480px) {
+
+        .department-summary-card {
+            padding: 16px;
+        }
+
+        .department-summary-icon {
+            width: 42px;
+            height: 42px;
+        }
+    }
+</style>
+
+
+<div class="department-management-page">
+
+
+    <!-- =====================================================
+         PAGE HEADER
+         ====================================================== -->
+
+    <div class="department-management-header">
+
+        <div>
+
+            <div class="department-management-eyebrow">
+                ORGANISATION ADMINISTRATION
+            </div>
+
+            <h1>
+                Department Management
+            </h1>
+
+            <p>
+                Manage the departments used to organise company employees.
+            </p>
+
+        </div>
+
+
+        @Html.ActionLink(
+            "＋ Add Department",
+            "Create",
+            "Department",
+            null,
+            new { @class = "department-add-button" }
+        )
+
+    </div>
+
+
+    <!-- =====================================================
+         SUMMARY
+         ====================================================== -->
+
+    <div class="department-summary-card">
+
+        <div class="department-summary-icon">
+            🏢
+        </div>
+
+        <div>
+
+            <div class="department-summary-label">
+                Total Departments
+            </div>
+
+            <div class="department-summary-value">
+                @totalDepartments
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         DEPARTMENT LIST
+         ====================================================== -->
+
+    <div class="department-management-card">
+
+
+        <div class="department-management-card-header">
+
+            <div>
+
+                <h2>
+                    Company Departments
+                </h2>
+
+                <p>
+                    Departments currently registered in the system.
+                </p>
+
+            </div>
+
+            <div class="department-count-badge">
+                @totalDepartments department(s)
+            </div>
+
+        </div>
+
+
+        @if (!departments.Any())
+        {
+
+            <!-- EMPTY STATE -->
+
+            <div class="department-empty-state">
+
+                <div class="department-empty-icon">
+                    🏢
+                </div>
+
+                <h3>
+                    No Departments Found
+                </h3>
+
+                <p>
+                    There are currently no departments registered in the system.
+                    Add a department to begin organising your employees.
+                </p>
+
+                @Html.ActionLink(
+                    "＋ Add First Department",
+                    "Create",
+                    "Department",
+                    null,
+                    new { @class = "department-add-button" }
+                )
+
+            </div>
+
+        }
+        else
+        {
+
+            <!-- =================================================
+                 TABLE
+                 ================================================== -->
+
+            <div class="department-table-wrapper">
+
+                <table class="department-management-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Department
+                            </th>
+
+                            <th>
+                                Description
+                            </th>
+
+                            <th>
+                                Actions
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        @foreach (var item in departments)
+                        {
+
+                            <tr>
+
+
+                                <!-- DEPARTMENT -->
+
+                                <td>
+
+                                    <div class="department-name-wrapper">
+
+                                        <div class="department-icon">
+                                            🏢
+                                        </div>
+
+                                        <div class="department-name">
+                                            @Html.DisplayFor(
+                                                modelItem => item.Name
+                                            )
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- DESCRIPTION -->
+
+                                <td>
+
+                                    @if (!String.IsNullOrWhiteSpace(item.Description))
+                                    {
+                                        <div class="department-description">
+
+                                            @Html.DisplayFor(
+                                                modelItem => item.Description
+                                            )
+
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <span class="department-description-empty">
+                                            No description provided
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <!-- ACTIONS -->
+
+                                <td>
+
+                                    <div class="department-actions">
+
+                                        @Html.ActionLink(
+                                            "Edit",
+                                            "Edit",
+                                            new { id = item.DepartmentId },
+                                            new { @class = "department-action-button department-action-edit" }
+                                        )
+
+                                        @Html.ActionLink(
+                                            "Delete",
+                                            "Delete",
+                                            new { id = item.DepartmentId },
+                                            new { @class = "department-action-button department-action-delete" }
+                                        )
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- FOOTER -->
+
+            <div class="department-management-footer">
+
+                Showing
+                <strong>@totalDepartments</strong>
+                department(s).
+
+                &nbsp;&nbsp;|&nbsp;&nbsp;
+
+                Departments can be assigned to employees from the
+                employee management section.
+
+            </div>
+
+        }
+
+    </div>
+
+</div>
+```

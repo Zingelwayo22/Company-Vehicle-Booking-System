@@ -1,0 +1,435 @@
+﻿@model CompanyVehicleBookingSystem.Models.Vehicle
+
+@{
+    ViewBag.Title = "Add Vehicle";
+}
+
+<div class="vehicle-form-page">
+
+    <div class="page-header-modern">
+        <div>
+            <div class="page-eyebrow">FLEET MANAGEMENT</div>
+            <h1>Add Vehicle</h1>
+            <p>Register a company vehicle and upload its official vehicle photo.</p>
+        </div>
+
+        <div>
+            @Html.ActionLink(
+                "← Back to Vehicles",
+                "Index",
+                "Vehicle",
+                null,
+                new { @class = "btn-modern-secondary" }
+            )
+        </div>
+    </div>
+
+    @using (Html.BeginForm(
+        "Create",
+        "Vehicle",
+        FormMethod.Post,
+        new { enctype = "multipart/form-data", @class = "vehicle-form-card" }))
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.ValidationSummary(
+            true,
+            "",
+            new { @class = "alert alert-danger" }
+        )
+
+        <div class="vehicle-form-section">
+
+            <div class="vehicle-form-section-title">
+                <div class="vehicle-form-section-icon">🚗</div>
+                <div>
+                    <h3>Vehicle Information</h3>
+                    <p>Enter the basic details of the company vehicle.</p>
+                </div>
+            </div>
+
+            <div class="vehicle-form-grid">
+
+                <div class="modern-form-group">
+                    @Html.LabelFor(model => model.RegistrationNumber)
+                    @Html.EditorFor(
+                        model => model.RegistrationNumber,
+                        new
+                        {
+                            htmlAttributes = new
+                            {
+                                @class = "modern-form-control",
+                                placeholder = "e.g. ND 12345"
+                            }
+                        }
+                    )
+                    @Html.ValidationMessageFor(
+                        model => model.RegistrationNumber,
+                        "",
+                        new { @class = "text-danger" }
+                    )
+                </div>
+
+                <div class="modern-form-group">
+                    @Html.LabelFor(model => model.Make)
+                    @Html.EditorFor(
+                        model => model.Make,
+                        new
+                        {
+                            htmlAttributes = new
+                            {
+                                @class = "modern-form-control",
+                                placeholder = "e.g. Toyota"
+                            }
+                        }
+                    )
+                    @Html.ValidationMessageFor(
+                        model => model.Make,
+                        "",
+                        new { @class = "text-danger" }
+                    )
+                </div>
+
+                <div class="modern-form-group">
+                    @Html.LabelFor(model => model.Model)
+                    @Html.EditorFor(
+                        model => model.Model,
+                        new
+                        {
+                            htmlAttributes = new
+                            {
+                                @class = "modern-form-control",
+                                placeholder = "e.g. Hilux"
+                            }
+                        }
+                    )
+                    @Html.ValidationMessageFor(
+                        model => model.Model,
+                        "",
+                        new { @class = "text-danger" }
+                    )
+                </div>
+
+                <div class="modern-form-group">
+                    @Html.LabelFor(model => model.Year)
+                    @Html.EditorFor(
+                        model => model.Year,
+                        new
+                        {
+                            htmlAttributes = new
+                            {
+                                @class = "modern-form-control",
+                                placeholder = "e.g. 2024"
+                            }
+                        }
+                    )
+                    @Html.ValidationMessageFor(
+                        model => model.Year,
+                        "",
+                        new { @class = "text-danger" }
+                    )
+                </div>
+
+                <div class="modern-form-group">
+                    @Html.LabelFor(model => model.Colour)
+                    @Html.EditorFor(
+                        model => model.Colour,
+                        new
+                        {
+                            htmlAttributes = new
+                            {
+                                @class = "modern-form-control",
+                                placeholder = "e.g. White"
+                            }
+                        }
+                    )
+                    @Html.ValidationMessageFor(
+                        model => model.Colour,
+                        "",
+                        new { @class = "text-danger" }
+                    )
+                </div>
+
+                <div class="modern-form-group">
+                    @Html.LabelFor(model => model.VIN)
+                    @Html.EditorFor(
+                        model => model.VIN,
+                        new
+                        {
+                            htmlAttributes = new
+                            {
+                                @class = "modern-form-control",
+                                placeholder = "Vehicle Identification Number"
+                            }
+                        }
+                    )
+                    @Html.ValidationMessageFor(
+                        model => model.VIN,
+                        "",
+                        new { @class = "text-danger" }
+                    )
+                </div>
+
+            </div>
+        </div>
+
+        <div class="vehicle-form-section">
+
+            <div class="vehicle-form-section-title">
+                <div class="vehicle-form-section-icon">📸</div>
+                <div>
+                    <h3>Vehicle Photo</h3>
+                    <p>Upload a clear photo of this specific vehicle.</p>
+                </div>
+            </div>
+
+            <div class="vehicle-photo-upload">
+
+                <div class="vehicle-photo-preview">
+                    <div id="vehiclePhotoPlaceholder">
+                        🚗
+                    </div>
+
+                    <img id="vehiclePhotoPreview"
+                         src=""
+                         alt="Vehicle preview"
+                         style="display:none;" />
+                </div>
+
+                <div class="vehicle-photo-input">
+
+                    <label for="vehicleImage" class="vehicle-upload-button">
+                        📷 Choose Vehicle Photo
+                    </label>
+
+                    <input type="file"
+                           id="vehicleImage"
+                           name="vehicleImage"
+                           accept="image/jpeg,image/png,image/webp"
+                           style="display:none;" />
+
+                    <p id="selectedPhotoName">
+                        No photo selected
+                    </p>
+
+                    <small>
+                        Recommended: clear JPG, PNG or WebP image.
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="vehicle-form-section">
+
+            <div class="vehicle-form-section-title">
+                <div class="vehicle-form-section-icon">📅</div>
+                <div>
+                    <h3>Compliance & Service</h3>
+                    <p>Keep important vehicle dates up to date.</p>
+                </div>
+            </div>
+
+            <div class="vehicle-form-grid">
+
+                <div class="modern-form-group">
+                    @Html.LabelFor(model => model.InsuranceExpiry)
+                    @Html.EditorFor(
+                        model => model.InsuranceExpiry,
+                        new
+                        {
+                            htmlAttributes = new
+                            {
+                                @class = "modern-form-control"
+                            }
+                        }
+                    )
+                    @Html.ValidationMessageFor(
+                        model => model.InsuranceExpiry,
+                        "",
+                        new { @class = "text-danger" }
+                    )
+                </div>
+
+                <div class="modern-form-group">
+                    @Html.LabelFor(model => model.LicenceDiskExpiry)
+                    @Html.EditorFor(
+                        model => model.LicenceDiskExpiry,
+                        new
+                        {
+                            htmlAttributes = new
+                            {
+                                @class = "modern-form-control"
+                            }
+                        }
+                    )
+                    @Html.ValidationMessageFor(
+                        model => model.LicenceDiskExpiry,
+                        "",
+                        new { @class = "text-danger" }
+                    )
+                </div>
+
+                <div class="modern-form-group">
+                    @Html.LabelFor(model => model.LastServiceDate)
+                    @Html.EditorFor(
+                        model => model.LastServiceDate,
+                        new
+                        {
+                            htmlAttributes = new
+                            {
+                                @class = "modern-form-control"
+                            }
+                        }
+                    )
+                    @Html.ValidationMessageFor(
+                        model => model.LastServiceDate,
+                        "",
+                        new { @class = "text-danger" }
+                    )
+                </div>
+
+                <div class="modern-form-group">
+                    @Html.LabelFor(model => model.NextServiceDate)
+                    @Html.EditorFor(
+                        model => model.NextServiceDate,
+                        new
+                        {
+                            htmlAttributes = new
+                            {
+                                @class = "modern-form-control"
+                            }
+                        }
+                    )
+                    @Html.ValidationMessageFor(
+                        model => model.NextServiceDate,
+                        "",
+                        new { @class = "text-danger" }
+                    )
+                </div>
+
+            </div>
+        </div>
+
+        <div class="vehicle-form-section">
+
+            <div class="vehicle-form-section-title">
+                <div class="vehicle-form-section-icon">⚙</div>
+                <div>
+                    <h3>Vehicle Status</h3>
+                    <p>Set the current operational status.</p>
+                </div>
+            </div>
+
+            <div class="vehicle-form-grid">
+
+                <div class="modern-form-group">
+
+                    @Html.LabelFor(model => model.Status)
+
+                    @Html.DropDownListFor(
+                        model => model.Status,
+                        new SelectList(
+                            new[]
+                            {
+                                "Available",
+                                "Maintenance",
+                                "Inactive"
+                            }
+                        ),
+                        new
+                        {
+                            @class = "modern-form-control"
+                        }
+                    )
+
+                    @Html.ValidationMessageFor(
+                        model => model.Status,
+                        "",
+                        new { @class = "text-danger" }
+                    )
+
+                </div>
+
+                <div class="modern-form-group modern-form-full">
+
+                    @Html.LabelFor(model => model.Notes)
+
+                    @Html.TextAreaFor(
+                        model => model.Notes,
+                        new
+                        {
+                            @class = "modern-form-control",
+                            rows = "4",
+                            placeholder = "Enter any additional vehicle notes..."
+                        }
+                    )
+
+                    @Html.ValidationMessageFor(
+                        model => model.Notes,
+                        "",
+                        new { @class = "text-danger" }
+                    )
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="vehicle-form-actions">
+
+            @Html.ActionLink(
+                "Cancel",
+                "Index",
+                "Vehicle",
+                null,
+                new { @class = "btn-modern-secondary" }
+            )
+
+            <button type="submit" class="btn-modern-primary">
+                ✓ Register Vehicle
+            </button>
+
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        document.getElementById("vehicleImage").addEventListener("change", function () {
+
+            var file = this.files[0];
+
+            if (!file) {
+                document.getElementById("selectedPhotoName").textContent =
+                    "No photo selected";
+
+                document.getElementById("vehiclePhotoPreview").style.display = "none";
+                document.getElementById("vehiclePhotoPlaceholder").style.display = "block";
+
+                return;
+            }
+
+            document.getElementById("selectedPhotoName").textContent =
+                file.name;
+
+            var reader = new FileReader();
+
+            reader.onload = function (event) {
+
+                var preview = document.getElementById("vehiclePhotoPreview");
+                var placeholder = document.getElementById("vehiclePhotoPlaceholder");
+
+                preview.src = event.target.result;
+                preview.style.display = "block";
+                placeholder.style.display = "none";
+            };
+
+            reader.readAsDataURL(file);
+        });
+    </script>
+}

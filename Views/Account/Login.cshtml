@@ -1,0 +1,637 @@
+﻿@model CompanyVehicleBookingSystem.Models.LoginViewModel
+
+@{
+    ViewBag.Title = "Sign In";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign In | Company Vehicle Booking System</title>
+
+    @Styles.Render("~/Content/css")
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Segoe UI", Arial, sans-serif;
+            color: #24364d;
+            background: #f1f4f9;
+        }
+
+        .login-shell {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .login-brand-panel {
+            position: relative;
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 55px;
+            overflow: hidden;
+            color: #fff;
+            background: linear-gradient(145deg, #142a49, #244d7b 65%, #34729a);
+        }
+
+            .login-brand-panel:before,
+            .login-brand-panel:after {
+                position: absolute;
+                content: "";
+                border: 1px solid rgba(255,255,255,.12);
+                border-radius: 50%;
+                pointer-events: none;
+            }
+
+            .login-brand-panel:before {
+                width: 480px;
+                height: 480px;
+                right: -160px;
+                top: 12%;
+            }
+
+            .login-brand-panel:after {
+                width: 330px;
+                height: 330px;
+                right: -85px;
+                top: 23%;
+            }
+
+        .login-brand-content,
+        .login-brand-footer {
+            position: relative;
+            z-index: 1;
+        }
+
+        .login-brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 800;
+            line-height: 1.5;
+        }
+
+        .login-brand-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 49px;
+            height: 49px;
+            flex-shrink: 0;
+            border: 1px solid rgba(255,255,255,.22);
+            border-radius: 14px;
+            background: rgba(255,255,255,.12);
+            font-size: 24px;
+        }
+
+        .login-brand-subtitle {
+            display: block;
+            margin-top: 2px;
+            color: #c4d6eb;
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 1.3px;
+            text-transform: uppercase;
+        }
+
+        .login-hero {
+            max-width: 570px;
+            margin: 85px 0;
+        }
+
+        .login-hero-label {
+            display: inline-block;
+            padding: 8px 12px;
+            border: 1px solid rgba(255,255,255,.2);
+            border-radius: 30px;
+            background: rgba(255,255,255,.08);
+            color: #e0ebf8;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.3px;
+            text-transform: uppercase;
+        }
+
+        .login-hero h1 {
+            margin: 25px 0 18px;
+            font-size: clamp(34px, 4vw, 52px);
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -1.3px;
+        }
+
+        .login-hero p {
+            max-width: 450px;
+            color: #d0deee;
+            font-size: 16px;
+            line-height: 1.9;
+        }
+
+        .login-feature-list {
+            display: grid;
+            gap: 18px;
+            margin-top: 35px;
+        }
+
+        .login-feature {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #eef5fc;
+            font-size: 13px;
+        }
+
+        .login-feature-check {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 9px;
+            background: rgba(255,255,255,.13);
+            color: #fff;
+            font-weight: 800;
+        }
+
+        .login-brand-footer {
+            color: #b9cce2;
+            font-size: 11px;
+            line-height: 1.8;
+        }
+
+        .login-form-panel {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 510px;
+            flex-shrink: 0;
+            padding: 45px;
+            background: #fff;
+        }
+
+        .login-form-container {
+            width: 100%;
+            max-width: 370px;
+        }
+
+        .login-mobile-brand {
+            display: none;
+            margin-bottom: 35px;
+            color: #244a7c;
+            font-size: 15px;
+            font-weight: 800;
+        }
+
+        .login-heading {
+            margin-bottom: 32px;
+        }
+
+            .login-heading h2 {
+                margin: 0 0 10px;
+                color: #1b2e49;
+                font-size: 31px;
+                font-weight: 800;
+                letter-spacing: -.6px;
+            }
+
+            .login-heading p {
+                margin: 0;
+                color: #7b8798;
+                font-size: 13px;
+                line-height: 1.8;
+            }
+
+        .login-validation {
+            margin-bottom: 20px;
+            padding: 12px 14px;
+            border: 1px solid #f0d2ce;
+            border-radius: 9px;
+            background: #fff4f2;
+            color: #a83229;
+            font-size: 12px;
+        }
+
+        .login-field {
+            margin-bottom: 22px;
+        }
+
+            .login-field label {
+                display: block;
+                margin-bottom: 9px;
+                color: #34445c;
+                font-size: 12px;
+                font-weight: 800;
+            }
+
+        .login-input-wrap {
+            position: relative;
+        }
+
+        .login-input {
+            display: block;
+            width: 100%;
+            height: 49px;
+            padding: 12px 14px;
+            border: 1px solid #dce3ed;
+            border-radius: 9px;
+            background: #fff;
+            color: #25364d;
+            font-size: 13px;
+            box-shadow: none;
+            transition: border-color .2s, box-shadow .2s;
+        }
+
+            .login-input:focus {
+                border-color: #527fb6;
+                outline: none;
+                box-shadow: 0 0 0 3px rgba(82,127,182,.13);
+            }
+
+            .login-input::placeholder {
+                color: #a1aaba;
+            }
+
+        .login-password-input {
+            padding-right: 76px;
+        }
+
+        .login-show-password {
+            position: absolute;
+            top: 0;
+            right: 0;
+            height: 49px;
+            padding: 0 13px;
+            border: none;
+            background: transparent;
+            color: #426b9d;
+            font-size: 11px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+            .login-show-password:focus {
+                outline: 2px solid #8ab4ed;
+                outline-offset: -4px;
+                border-radius: 8px;
+            }
+
+        .login-field-validation {
+            display: block;
+            margin-top: 6px;
+            color: #b9382d;
+            font-size: 11px;
+        }
+
+        .login-options {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin: 4px 0 26px;
+        }
+
+        .login-remember {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0;
+            color: #65738a;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+            .login-remember input {
+                width: 15px;
+                height: 15px;
+                margin: 0;
+                accent-color: #244a7c;
+            }
+
+        .login-forgot {
+            color: #315e94;
+            font-size: 12px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+            .login-forgot:hover {
+                color: #19365b;
+                text-decoration: underline;
+            }
+
+        .login-submit {
+            width: 100%;
+            min-height: 49px;
+            border: none;
+            border-radius: 9px;
+            background: #244a7c;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: background .2s, transform .2s;
+        }
+
+            .login-submit:hover {
+                background: #19365b;
+            }
+
+            .login-submit:active {
+                transform: scale(.99);
+            }
+
+        .login-security-note {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-top: 25px;
+            padding: 14px;
+            border: 1px solid #e7edf5;
+            border-radius: 9px;
+            background: #f7f9fc;
+            color: #758196;
+            font-size: 11px;
+            line-height: 1.8;
+        }
+
+        .login-security-icon {
+            color: #386a9f;
+            font-size: 16px;
+        }
+
+        .login-form-footer {
+            margin-top: 30px;
+            color: #99a3b2;
+            font-size: 11px;
+            text-align: center;
+            line-height: 1.8;
+        }
+
+        @@media (max-width: 1000px) {
+            .login-brand-panel {
+                padding: 38px;
+            }
+
+            .login-form-panel {
+                width: 440px;
+                padding: 35px;
+            }
+
+            .login-hero h1 {
+                font-size: 38px;
+            }
+        }
+
+        @@media (max-width: 767px) {
+            .login-shell {
+                min-height: 100vh;
+                background: #fff;
+            }
+
+            .login-brand-panel {
+                display: none;
+            }
+
+            .login-form-panel {
+                width: 100%;
+                min-height: 100vh;
+                padding: 32px 25px;
+            }
+
+            .login-form-container {
+                max-width: 420px;
+            }
+
+            .login-mobile-brand {
+                display: block;
+            }
+
+            .login-heading h2 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-shell">
+
+        <section class="login-brand-panel">
+            <div class="login-brand-content">
+
+                <div class="login-brand">
+                    <div class="login-brand-icon">&#128663;</div>
+                    <div>
+                        Company Vehicle
+                        <br />
+                        Booking System
+                        <span class="login-brand-subtitle">
+                            Fleet management portal
+                        </span>
+                    </div>
+                </div>
+
+                <div class="login-hero">
+                    <span class="login-hero-label">
+                        Employee access portal
+                    </span>
+
+                    <h1>
+                        Your journey
+                        starts here.
+                    </h1>
+
+                    <p>
+                        Access your company vehicle bookings, manage requests,
+                        and stay up to date with your vehicle arrangements
+                        through one central platform.
+                    </p>
+
+                    <div class="login-feature-list">
+                        <div class="login-feature">
+                            <span class="login-feature-check">&#10003;</span>
+                            Request and manage vehicle bookings
+                        </div>
+
+                        <div class="login-feature">
+                            <span class="login-feature-check">&#10003;</span>
+                            View booking statuses and history
+                        </div>
+
+                        <div class="login-feature">
+                            <span class="login-feature-check">&#10003;</span>
+                            Keep company vehicle information organised
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="login-brand-footer">
+                Company Vehicle Booking System
+                <br />
+                Secure access for authorised employees.
+            </div>
+        </section>
+
+        <main class="login-form-panel">
+            <div class="login-form-container">
+
+                <div class="login-mobile-brand">
+                    &#128663; Company Vehicle Booking System
+                </div>
+
+                <div class="login-heading">
+                    <h2>Welcome back</h2>
+                    <p>Sign in using your registered employee account.</p>
+                </div>
+
+                @using (Html.BeginForm(
+                    "Login",
+                    "Account",
+                    new { ReturnUrl = ViewBag.ReturnUrl },
+                    FormMethod.Post,
+                    new { role = "form", autocomplete = "on" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    @Html.ValidationSummary(
+                        true,
+                        "",
+                        new { @class = "login-validation" }
+                    )
+
+                    <div class="login-field">
+                        @Html.LabelFor(model => model.Email, "Email Address")
+
+                        @Html.TextBoxFor(
+                            model => model.Email,
+                            new
+                            {
+                                @class = "login-input",
+                                placeholder = "Enter your work email",
+                                autocomplete = "username",
+                                type = "email"
+                            }
+                        )
+
+                        @Html.ValidationMessageFor(
+                            model => model.Email,
+                            "",
+                            new { @class = "login-field-validation" }
+                        )
+                    </div>
+
+                    <div class="login-field">
+                        @Html.LabelFor(model => model.Password, "Password")
+
+                        <div class="login-input-wrap">
+                            @Html.PasswordFor(
+                                model => model.Password,
+                                new
+                                {
+                                    @class = "login-input login-password-input",
+                                    placeholder = "Enter your password",
+                                    autocomplete = "current-password",
+                                    id = "loginPassword"
+                                }
+                            )
+
+                            <button type="button"
+                                    class="login-show-password"
+                                    id="toggleLoginPassword"
+                                    aria-controls="loginPassword"
+                                    aria-pressed="false">
+                                Show
+                            </button>
+                        </div>
+
+                        @Html.ValidationMessageFor(
+                            model => model.Password,
+                            "",
+                            new { @class = "login-field-validation" }
+                        )
+                    </div>
+
+                    <div class="login-options">
+                        <label class="login-remember">
+                            @Html.CheckBoxFor(model => model.RememberMe)
+                            Remember me
+                        </label>
+
+                        @Html.ActionLink(
+                            "Forgot password?",
+                            "ForgotPassword",
+                            "Account",
+                            null,
+                            new { @class = "login-forgot" }
+                        )
+                    </div>
+
+                    <button type="submit" class="login-submit">
+                        Sign In to Your Account
+                    </button>
+                }
+
+                <div class="login-security-note">
+                    <span class="login-security-icon">&#128274;</span>
+                    <span>
+                        <strong>Secure employee access</strong>
+                        <br />
+                        Sign in only with your authorised company account.
+                        Never share your password with anyone.
+                    </span>
+                </div>
+
+                <div class="login-form-footer">
+                    &copy; @DateTime.Now.Year Company Vehicle Booking System
+                    <br />
+                    For authorised company use only.
+                </div>
+
+            </div>
+        </main>
+
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+
+<script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var toggle = document.getElementById("togglePassword");
+            var password = document.getElementById("Password");
+
+            if (!toggle || !password) {
+                return;
+            }
+
+            toggle.onclick = function () {
+                if (!toggle || !password) {
+                    return;
+                }
+
+                var isPassword = password.getAttribute("type") === "password";
+
+                password.setAttribute("type", isPassword ? "text" : "password");
+                toggle.innerHTML = isPassword ? "Hide" : "Show";
+                toggle.setAttribute("aria-pressed", isPassword ? "true" : "false");
+            };
+        });
+</script>
+
+</body>
+</html>

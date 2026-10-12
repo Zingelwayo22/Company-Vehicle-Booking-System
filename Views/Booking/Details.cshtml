@@ -1,0 +1,1754 @@
+﻿@model CompanyVehicleBookingSystem.Models.Booking
+
+@{
+    ViewBag.Title = "Booking Details";
+}
+
+<div class="booking-details-page">
+
+    <!-- PAGE HEADER -->
+    <div class="details-hero">
+
+        <div class="hero-left">
+
+            <div class="hero-icon">
+                🚗
+            </div>
+
+            <div>
+
+                <span class="hero-eyebrow">
+                    EMPLOYEE PORTAL
+                </span>
+
+                <h1>Booking Details</h1>
+
+                <p>
+                    View your vehicle booking, trip information and inspection
+                    details.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="booking-number">
+
+            <span>BOOKING</span>
+
+            <strong>
+                #@Model.BookingId
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <!-- ALERTS -->
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="modern-alert success-alert">
+
+            <span class="alert-icon">✓</span>
+
+            <div>
+                <strong>Success</strong>
+                <p>@TempData["Success"]</p>
+            </div>
+
+        </div>
+    }
+
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="modern-alert error-alert">
+
+            <span class="alert-icon">!</span>
+
+            <div>
+                <strong>Attention</strong>
+                <p>@TempData["Error"]</p>
+            </div>
+
+        </div>
+    }
+
+
+    <!-- STATUS CARD -->
+    <div class="details-card status-card">
+
+        <div class="card-title-row">
+
+            <div class="card-title">
+
+                <div class="section-icon status-icon">
+                    📋
+                </div>
+
+                <div>
+
+                    <h2>Booking Status</h2>
+
+                    <p>
+                        Current status and approval information
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            @if (Model.Status == "Pending")
+            {
+                <span class="status-badge pending">
+                    <span class="status-dot"></span>
+                    Pending Approval
+                </span>
+            }
+            else if (Model.Status == "Approved")
+            {
+                <span class="status-badge approved">
+                    <span class="status-dot"></span>
+                    Approved
+                </span>
+            }
+            else if (Model.Status == "Rejected")
+            {
+                <span class="status-badge rejected">
+                    <span class="status-dot"></span>
+                    Rejected
+                </span>
+            }
+            else if (Model.Status == "Completed")
+            {
+                <span class="status-badge completed">
+                    <span class="status-dot"></span>
+                    Completed
+                </span>
+            }
+            else if (Model.Status == "Cancelled")
+            {
+                <span class="status-badge cancelled">
+                    <span class="status-dot"></span>
+                    Cancelled
+                </span>
+            }
+            else
+            {
+                <span class="status-badge neutral">
+                    <span class="status-dot"></span>
+                    @Model.Status
+                </span>
+            }
+
+        </div>
+
+
+        <div class="status-details">
+
+            <div class="status-item">
+
+                <span class="status-label">
+                    Booking Number
+                </span>
+
+                <strong>
+                    #@Model.BookingId
+                </strong>
+
+            </div>
+
+
+            <div class="status-item">
+
+                <span class="status-label">
+                    Requested On
+                </span>
+
+                <strong>
+                    @Model.DateCreated.ToString("dd/MM/yyyy HH:mm")
+                </strong>
+
+            </div>
+
+
+            @if (Model.ApprovedDate.HasValue)
+            {
+                <div class="status-item">
+
+                    <span class="status-label">
+                        Approved On
+                    </span>
+
+                    <strong>
+                        @Model.ApprovedDate.Value.ToString(
+                            "dd/MM/yyyy HH:mm")
+                    </strong>
+
+                </div>
+            }
+
+
+            @if (Model.RejectedDate.HasValue)
+            {
+                <div class="status-item">
+
+                    <span class="status-label">
+                        Rejected On
+                    </span>
+
+                    <strong>
+                        @Model.RejectedDate.Value.ToString(
+                            "dd/MM/yyyy HH:mm")
+                    </strong>
+
+                </div>
+            }
+
+
+            @if (Model.CancelledDate.HasValue)
+            {
+                <div class="status-item">
+
+                    <span class="status-label">
+                        Cancelled On
+                    </span>
+
+                    <strong>
+                        @Model.CancelledDate.Value.ToString(
+                            "dd/MM/yyyy HH:mm")
+                    </strong>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+
+    <!-- VEHICLE + TRIP SUMMARY -->
+    <div class="details-two-column">
+
+
+        <!-- VEHICLE -->
+        <div class="details-card vehicle-card">
+
+            <div class="card-title-row">
+
+                <div class="card-title">
+
+                    <div class="section-icon vehicle-icon">
+                        🚘
+                    </div>
+
+                    <div>
+
+                        <h2>Vehicle Information</h2>
+
+                        <p>
+                            Vehicle assigned to this booking
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            @if (Model.Vehicle != null)
+            {
+
+                <div class="vehicle-summary">
+
+                    <div class="vehicle-image">
+
+                        @if (!String.IsNullOrEmpty(Model.Vehicle.ImagePath))
+                        {
+                            <img src="@Url.Content(Model.Vehicle.ImagePath)"
+                                 alt="@Model.Vehicle.Make @Model.Vehicle.Model" />
+                        }
+                        else
+                        {
+                            <div class="vehicle-placeholder">
+                                🚗
+                            </div>
+                        }
+
+                    </div>
+
+
+                    <div class="vehicle-main-info">
+
+                        <h3>
+                            @Model.Vehicle.Make
+                            @Model.Vehicle.Model
+                        </h3>
+
+                        <span class="registration-badge">
+                            @Model.Vehicle.RegistrationNumber
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="vehicle-details-grid">
+
+                    <div class="vehicle-detail">
+
+                        <span>Year</span>
+
+                        <strong>
+                            @Model.Vehicle.Year
+                        </strong>
+
+                    </div>
+
+
+                    <div class="vehicle-detail">
+
+                        <span>Colour</span>
+
+                        <strong>
+                            @(String.IsNullOrWhiteSpace(Model.Vehicle.Colour)
+                                ? "Not specified"
+                                : Model.Vehicle.Colour)
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            }
+            else
+            {
+                <div class="empty-information">
+                    Vehicle information is not available.
+                </div>
+            }
+
+        </div>
+
+
+        <!-- TRIP PERIOD -->
+        <div class="details-card trip-card">
+
+            <div class="card-title-row">
+
+                <div class="card-title">
+
+                    <div class="section-icon trip-icon">
+                        🗓️
+                    </div>
+
+                    <div>
+
+                        <h2>Trip Period</h2>
+
+                        <p>
+                            Your requested vehicle usage period
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="trip-timeline">
+
+                <div class="timeline-item">
+
+                    <div class="timeline-marker start-marker">
+                        ✓
+                    </div>
+
+                    <div class="timeline-content">
+
+                        <span class="timeline-label">
+                            START
+                        </span>
+
+                        <strong>
+                            @Model.StartDateTime.ToString("dd/MM/yyyy")
+                        </strong>
+
+                        <span>
+                            @Model.StartDateTime.ToString("HH:mm")
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="timeline-line"></div>
+
+
+                <div class="timeline-item">
+
+                    <div class="timeline-marker end-marker">
+                        ✓
+                    </div>
+
+                    <div class="timeline-content">
+
+                        <span class="timeline-label">
+                            END
+                        </span>
+
+                        <strong>
+                            @Model.EndDateTime.ToString("dd/MM/yyyy")
+                        </strong>
+
+                        <span>
+                            @Model.EndDateTime.ToString("HH:mm")
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- TRIP DETAILS -->
+    <div class="details-card">
+
+        <div class="card-title-row">
+
+            <div class="card-title">
+
+                <div class="section-icon reason-icon">
+                    📝
+                </div>
+
+                <div>
+
+                    <h2>Trip Details</h2>
+
+                    <p>
+                        Information provided with your vehicle request
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="reason-grid">
+
+            <div class="reason-box">
+
+                <span class="reason-label">
+                    REASON FOR VEHICLE
+                </span>
+
+                <p>
+                    @if (!String.IsNullOrWhiteSpace(Model.ReasonForVehicle))
+                    {
+                        @Model.ReasonForVehicle
+                    }
+                    else
+                    {
+                        <span class="muted-text">
+                            No reason provided.
+                        </span>
+                    }
+                </p>
+
+            </div>
+
+
+            <div class="reason-box">
+
+                <span class="reason-label">
+                    REASON FOR CHOOSING THIS VEHICLE
+                </span>
+
+                <p>
+                    @if (!String.IsNullOrWhiteSpace(
+                        Model.VehicleSelectionReason))
+                    {
+                        @Model.VehicleSelectionReason
+                    }
+                    else
+                    {
+                        <span class="muted-text">
+                            No reason provided.
+                        </span>
+                    }
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- REJECTION INFORMATION -->
+    @if (Model.Status == "Rejected")
+    {
+        <div class="details-card rejection-card">
+
+            <div class="card-title-row">
+
+                <div class="card-title">
+
+                    <div class="section-icon rejection-icon">
+                        !
+                    </div>
+
+                    <div>
+
+                        <h2>Rejection Information</h2>
+
+                        <p>
+                            Information provided by the administrator
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="rejection-content">
+
+                <span class="reason-label">
+                    REASON FOR REJECTION
+                </span>
+
+                <p>
+                    @(String.IsNullOrWhiteSpace(Model.RejectionReason)
+                        ? "No reason was provided."
+                        : Model.RejectionReason)
+                </p>
+
+            </div>
+
+        </div>
+    }
+
+
+    <!-- CANCELLATION INFORMATION -->
+    @if (Model.Status == "Cancelled")
+    {
+        <div class="details-card cancellation-card">
+
+            <div class="card-title-row">
+
+                <div class="card-title">
+
+                    <div class="section-icon cancellation-icon">
+                        ×
+                    </div>
+
+                    <div>
+
+                        <h2>Cancellation Information</h2>
+
+                        <p>
+                            Information recorded when this booking was cancelled
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="rejection-content">
+
+                <span class="reason-label">
+                    CANCELLATION REASON
+                </span>
+
+                <p>
+                    @(String.IsNullOrWhiteSpace(Model.CancellationReason)
+                        ? "No reason was provided."
+                        : Model.CancellationReason)
+                </p>
+
+            </div>
+
+        </div>
+    }
+
+
+    <!-- INSPECTIONS -->
+    @if (Model.Inspections != null &&
+         Model.Inspections.Any())
+    {
+        <div class="details-card inspections-card">
+
+            <div class="card-title-row">
+
+                <div class="card-title">
+
+                    <div class="section-icon inspection-icon">
+                        🔎
+                    </div>
+
+                    <div>
+
+                        <h2>Vehicle Inspections</h2>
+
+                        <p>
+                            Condition records associated with this booking
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="inspection-list">
+
+                @foreach (var inspection in
+                    Model.Inspections.OrderBy(i => i.InspectionDate))
+                {
+
+                    <div class="inspection-item">
+
+                        <div class="inspection-header">
+
+                            <div>
+
+                                @if (inspection.InspectionType == "Before")
+                                {
+                                    <span class="inspection-type before">
+                                        BEFORE INSPECTION
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="inspection-type after">
+                                        AFTER INSPECTION
+                                    </span>
+                                }
+
+                                <h3>
+                                    @inspection.InspectionType Inspection
+                                </h3>
+
+                            </div>
+
+
+                            <span class="inspection-date">
+                                @inspection.InspectionDate.ToString(
+                                    "dd/MM/yyyy HH:mm")
+                            </span>
+
+                        </div>
+
+
+                        <div class="inspection-details">
+
+                            <div class="inspection-detail">
+
+                                <span>
+                                    Mileage
+                                </span>
+
+                                <strong>
+                                    @(inspection.Mileage.HasValue
+                                        ? inspection.Mileage.Value.ToString()
+                                        : "Not recorded")
+                                </strong>
+
+                            </div>
+
+
+                            <div class="inspection-detail">
+
+                                <span>
+                                    General Condition
+                                </span>
+
+                                <strong>
+                                    @(String.IsNullOrWhiteSpace(
+                                        inspection.GeneralCondition)
+                                        ? "Not recorded"
+                                        : inspection.GeneralCondition)
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="damage-grid">
+
+                            <div class="damage-item">
+
+                                <span>
+                                    Scratches
+                                </span>
+
+                                <p>
+                                    @(String.IsNullOrWhiteSpace(
+                                        inspection.Scratches)
+                                        ? "None recorded"
+                                        : inspection.Scratches)
+                                </p>
+
+                            </div>
+
+
+                            <div class="damage-item">
+
+                                <span>
+                                    Dents
+                                </span>
+
+                                <p>
+                                    @(String.IsNullOrWhiteSpace(
+                                        inspection.Dents)
+                                        ? "None recorded"
+                                        : inspection.Dents)
+                                </p>
+
+                            </div>
+
+
+                            <div class="damage-item">
+
+                                <span>
+                                    Other Damage
+                                </span>
+
+                                <p>
+                                    @(String.IsNullOrWhiteSpace(
+                                        inspection.OtherDamage)
+                                        ? "None recorded"
+                                        : inspection.OtherDamage)
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        @if (!String.IsNullOrWhiteSpace(inspection.Notes))
+                        {
+                            <div class="inspection-notes">
+
+                                <strong>
+                                    Notes
+                                </strong>
+
+                                <p>
+                                    @inspection.Notes
+                                </p>
+
+                            </div>
+                        }
+
+                    </div>
+
+                }
+
+            </div>
+
+        </div>
+    }
+    else
+    {
+        <div class="details-card no-inspections">
+
+            <div class="no-inspection-icon">
+                🔎
+            </div>
+
+            <div>
+
+                <h3>No Inspection Records Yet</h3>
+
+                <p>
+                    Vehicle inspection information will appear here when
+                    an inspection has been completed for this booking.
+                </p>
+
+            </div>
+
+        </div>
+    }
+
+
+    <!-- NAVIGATION -->
+    <div class="details-actions">
+
+        @Html.ActionLink(
+            "← Back to My Bookings",
+            "Index",
+            "Booking",
+            null,
+            new
+            {
+                @class = "back-button"
+            }
+        )
+
+
+        @if (Model.Status == "Pending")
+        {
+            @Html.ActionLink(
+                "🚗 Request Another Vehicle",
+                "Create",
+                "Booking",
+                null,
+                new
+                {
+                    @class = "request-button"
+                }
+            )
+        }
+
+    </div>
+
+</div>
+
+
+<style>
+
+    .booking-details-page {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 10px 10px 50px;
+    }
+
+
+    /* HERO */
+
+    .details-hero {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+        padding: 32px 38px;
+        margin-bottom: 24px;
+        border-radius: 18px;
+        color: #fff;
+        background: linear-gradient( 135deg, rgba(25,45,65,0.98), rgba(42,75,105,0.94) );
+        box-shadow: 0 10px 30px rgba(0,0,0,0.10);
+    }
+
+
+    .hero-left {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+
+    .hero-icon {
+        width: 68px;
+        height: 68px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 17px;
+        background: rgba(255,255,255,0.14);
+        font-size: 32px;
+    }
+
+
+    .hero-eyebrow {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 1.8px;
+        opacity: 0.75;
+    }
+
+
+    .details-hero h1 {
+        margin: 5px 0 7px;
+        font-size: 29px;
+        font-weight: 700;
+    }
+
+
+    .details-hero p {
+        margin: 0;
+        font-size: 14px;
+        opacity: 0.84;
+    }
+
+
+    .booking-number {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 3px;
+    }
+
+
+        .booking-number span {
+            font-size: 10px;
+            letter-spacing: 1.5px;
+            opacity: 0.65;
+        }
+
+
+        .booking-number strong {
+            font-size: 25px;
+        }
+
+
+    /* ALERTS */
+
+    .modern-alert {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 14px 17px;
+        margin-bottom: 18px;
+        border-radius: 11px;
+    }
+
+
+    .success-alert {
+        background: #f0faf5;
+        border: 1px solid #ccebdd;
+        color: #176c48;
+    }
+
+
+    .error-alert {
+        background: #fff4f4;
+        border: 1px solid #f0cccc;
+        color: #a92e2e;
+    }
+
+
+    .alert-icon {
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+    }
+
+
+    .modern-alert strong {
+        font-size: 13px;
+    }
+
+
+    .modern-alert p {
+        margin: 3px 0 0;
+        font-size: 12px;
+    }
+
+
+    /* CARDS */
+
+    .details-card {
+        background: #fff;
+        border: 1px solid #e5e9ed;
+        border-radius: 16px;
+        padding: 27px;
+        margin-bottom: 22px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    }
+
+
+    .card-title-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #edf0f2;
+    }
+
+
+    .card-title {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+
+    .section-icon {
+        width: 43px;
+        height: 43px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 11px;
+        font-size: 19px;
+    }
+
+
+    .status-icon {
+        background: #eef5ff;
+    }
+
+
+    .vehicle-icon {
+        background: #f1f8f3;
+    }
+
+
+    .trip-icon {
+        background: #fff6e9;
+    }
+
+
+    .reason-icon {
+        background: #f7f2ff;
+    }
+
+
+    .rejection-icon {
+        background: #fff0f0;
+        color: #c03939;
+        font-weight: 700;
+    }
+
+
+    .cancellation-icon {
+        background: #fff4e8;
+        color: #c56b18;
+        font-weight: 700;
+    }
+
+
+    .inspection-icon {
+        background: #f0f5f8;
+    }
+
+
+    .card-title h2 {
+        margin: 0 0 4px;
+        color: #263238;
+        font-size: 18px;
+        font-weight: 700;
+    }
+
+
+    .card-title p {
+        margin: 0;
+        color: #89939e;
+        font-size: 12px;
+    }
+
+
+    /* STATUS */
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 7px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+
+    .status-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: currentColor;
+    }
+
+
+    .status-badge.pending {
+        background: #fff6df;
+        color: #a66a00;
+    }
+
+
+    .status-badge.approved {
+        background: #eaf8f0;
+        color: #198754;
+    }
+
+
+    .status-badge.rejected {
+        background: #fff0f0;
+        color: #c03939;
+    }
+
+
+    .status-badge.completed {
+        background: #eef1f4;
+        color: #56636f;
+    }
+
+
+    .status-badge.cancelled {
+        background: #fff1e8;
+        color: #c56619;
+    }
+
+
+    .status-badge.neutral {
+        background: #eef1f4;
+        color: #56636f;
+    }
+
+
+    .status-details {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+        padding-top: 20px;
+    }
+
+
+    .status-item {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        padding: 13px 15px;
+        background: #fafbfc;
+        border-radius: 9px;
+    }
+
+
+    .status-label {
+        color: #89939e;
+        font-size: 11px;
+        font-weight: 600;
+    }
+
+
+    .status-item strong {
+        color: #263238;
+        font-size: 13px;
+    }
+
+
+    /* TWO COLUMN */
+
+    .details-two-column {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 22px;
+    }
+
+
+    /* VEHICLE */
+
+    .vehicle-summary {
+        display: flex;
+        align-items: center;
+        gap: 17px;
+        padding-top: 20px;
+    }
+
+
+    .vehicle-image {
+        width: 115px;
+        height: 78px;
+        flex-shrink: 0;
+        border-radius: 11px;
+        overflow: hidden;
+        background: #f2f4f6;
+    }
+
+
+        .vehicle-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+
+    .vehicle-placeholder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 30px;
+    }
+
+
+    .vehicle-main-info h3 {
+        margin: 0 0 8px;
+        color: #263238;
+        font-size: 18px;
+        font-weight: 700;
+    }
+
+
+    .registration-badge {
+        display: inline-block;
+        padding: 5px 9px;
+        border-radius: 5px;
+        background: #263238;
+        color: #fff;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.7px;
+    }
+
+
+    .vehicle-details-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-top: 22px;
+    }
+
+
+    .vehicle-detail {
+        padding: 13px 15px;
+        border: 1px solid #edf0f2;
+        border-radius: 9px;
+    }
+
+
+        .vehicle-detail span {
+            display: block;
+            color: #89939e;
+            font-size: 11px;
+            margin-bottom: 5px;
+        }
+
+
+        .vehicle-detail strong {
+            color: #263238;
+            font-size: 13px;
+        }
+
+
+    /* TRIP */
+
+    .trip-timeline {
+        padding: 24px 10px 5px;
+    }
+
+
+    .timeline-item {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+
+    .timeline-marker {
+        width: 34px;
+        height: 34px;
+        flex-shrink: 0;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+
+    .start-marker {
+        background: #198754;
+    }
+
+
+    .end-marker {
+        background: #2f80ed;
+    }
+
+
+    .timeline-content {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+    }
+
+
+    .timeline-label {
+        color: #89939e;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 1px;
+    }
+
+
+    .timeline-content strong {
+        color: #263238;
+        font-size: 16px;
+    }
+
+
+    .timeline-content span:last-child {
+        color: #697681;
+        font-size: 12px;
+    }
+
+
+    .timeline-line {
+        width: 2px;
+        height: 30px;
+        margin-left: 16px;
+        background: #dce2e6;
+    }
+
+
+    /* REASONS */
+
+    .reason-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+        padding-top: 22px;
+    }
+
+
+    .reason-box {
+        padding: 18px;
+        border: 1px solid #edf0f2;
+        border-radius: 11px;
+        background: #fafbfc;
+    }
+
+
+    .reason-label {
+        display: block;
+        color: #89939e;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.8px;
+        margin-bottom: 9px;
+    }
+
+
+    .reason-box p,
+    .rejection-content p {
+        margin: 0;
+        color: #46545e;
+        font-size: 13px;
+        line-height: 1.7;
+        white-space: pre-line;
+    }
+
+
+    .muted-text {
+        color: #9aa3ab;
+        font-style: italic;
+    }
+
+
+    /* REJECTION / CANCELLATION */
+
+    .rejection-card {
+        border-left: 4px solid #d64545;
+    }
+
+
+    .cancellation-card {
+        border-left: 4px solid #d9822b;
+    }
+
+
+    .rejection-content {
+        padding: 20px 5px 3px;
+    }
+
+
+    /* INSPECTIONS */
+
+    .inspection-list {
+        padding-top: 20px;
+    }
+
+
+    .inspection-item {
+        border: 1px solid #e8ecef;
+        border-radius: 12px;
+        margin-bottom: 15px;
+        overflow: hidden;
+    }
+
+
+        .inspection-item:last-child {
+            margin-bottom: 0;
+        }
+
+
+    .inspection-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        padding: 16px 18px;
+        background: #fafbfc;
+        border-bottom: 1px solid #e8ecef;
+    }
+
+
+    .inspection-type {
+        display: inline-block;
+        padding: 4px 8px;
+        margin-bottom: 6px;
+        border-radius: 4px;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 0.7px;
+    }
+
+
+        .inspection-type.before {
+            background: #eaf8f0;
+            color: #198754;
+        }
+
+
+        .inspection-type.after {
+            background: #eef5ff;
+            color: #2f80ed;
+        }
+
+
+    .inspection-header h3 {
+        margin: 0;
+        color: #263238;
+        font-size: 15px;
+        font-weight: 700;
+    }
+
+
+    .inspection-date {
+        color: #7b8794;
+        font-size: 11px;
+        white-space: nowrap;
+    }
+
+
+    .inspection-details {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        padding: 17px 18px 0;
+    }
+
+
+    .inspection-detail {
+        padding: 12px;
+        background: #fafbfc;
+        border-radius: 8px;
+    }
+
+
+        .inspection-detail span {
+            display: block;
+            color: #89939e;
+            font-size: 10px;
+            margin-bottom: 5px;
+        }
+
+
+        .inspection-detail strong {
+            color: #394750;
+            font-size: 12px;
+        }
+
+
+    .damage-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        padding: 12px 18px 18px;
+    }
+
+
+    .damage-item {
+        padding: 12px;
+        border: 1px solid #edf0f2;
+        border-radius: 8px;
+    }
+
+
+        .damage-item > span {
+            display: block;
+            color: #89939e;
+            font-size: 10px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+
+        .damage-item p {
+            margin: 0;
+            color: #53616b;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+
+    .inspection-notes {
+        margin: 0 18px 18px;
+        padding: 13px 15px;
+        background: #fffaf0;
+        border: 1px solid #f3e3bd;
+        border-radius: 8px;
+    }
+
+
+        .inspection-notes strong {
+            color: #9a6b16;
+            font-size: 11px;
+        }
+
+
+        .inspection-notes p {
+            margin: 4px 0 0;
+            color: #71634a;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+
+    /* NO INSPECTIONS */
+
+    .no-inspections {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        background: #fafbfc;
+    }
+
+
+    .no-inspection-icon {
+        width: 45px;
+        height: 45px;
+        border-radius: 11px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #eef2f5;
+        font-size: 20px;
+        flex-shrink: 0;
+    }
+
+
+    .no-inspections h3 {
+        margin: 0 0 5px;
+        color: #3d4b54;
+        font-size: 14px;
+    }
+
+
+    .no-inspections p {
+        margin: 0;
+        color: #89939e;
+        font-size: 12px;
+    }
+
+
+    .empty-information {
+        padding: 25px 5px 5px;
+        color: #9aa3ab;
+        font-size: 13px;
+    }
+
+
+    /* ACTIONS */
+
+    .details-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-top: 25px;
+    }
+
+
+    .back-button,
+    .request-button {
+        min-height: 44px;
+        padding: 11px 20px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 9px;
+        font-size: 13px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+
+    .back-button {
+        background: #fff;
+        border: 1px solid #d8dee5;
+        color: #5f6b76;
+    }
+
+
+        .back-button:hover {
+            background: #f5f6f7;
+            color: #37474f;
+            text-decoration: none;
+        }
+
+
+    .request-button {
+        background: #198754;
+        border: 1px solid #198754;
+        color: #fff;
+    }
+
+
+        .request-button:hover {
+            background: #157347;
+            border-color: #157347;
+            color: #fff;
+            text-decoration: none;
+            transform: translateY(-1px);
+            box-shadow: 0 5px 12px rgba(25,135,84,0.20);
+        }
+
+
+    /* RESPONSIVE */
+
+    @@media (max-width: 900px) {
+
+        .status-details {
+            grid-template-columns: 1fr 1fr;
+        }
+
+
+        .details-two-column {
+            grid-template-columns: 1fr;
+        }
+
+
+        .permission-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+
+    @@media (max-width: 700px) {
+
+        .details-hero {
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 25px 22px;
+        }
+
+
+        .booking-number {
+            align-items: flex-start;
+        }
+
+
+        .reason-grid {
+            grid-template-columns: 1fr;
+        }
+
+
+        .damage-grid {
+            grid-template-columns: 1fr;
+        }
+
+
+        .inspection-details {
+            grid-template-columns: 1fr;
+        }
+
+
+        .inspection-header {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+    }
+
+
+    @@media (max-width: 500px) {
+
+        .booking-details-page {
+            padding: 5px 5px 35px;
+        }
+
+
+        .details-card {
+            padding: 20px 17px;
+        }
+
+
+        .hero-icon {
+            width: 55px;
+            height: 55px;
+            font-size: 26px;
+        }
+
+
+        .details-hero h1 {
+            font-size: 23px;
+        }
+
+
+        .status-details {
+            grid-template-columns: 1fr;
+        }
+
+
+        .card-title-row {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+
+        .vehicle-summary {
+            align-items: flex-start;
+        }
+
+
+        .vehicle-image {
+            width: 95px;
+            height: 65px;
+        }
+
+
+        .vehicle-details-grid {
+            grid-template-columns: 1fr;
+        }
+
+
+        .details-actions {
+            flex-direction: column-reverse;
+            align-items: stretch;
+        }
+
+
+        .back-button,
+        .request-button {
+            width: 100%;
+        }
+    }
+</style>
+

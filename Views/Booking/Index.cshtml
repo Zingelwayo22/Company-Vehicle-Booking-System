@@ -1,0 +1,1284 @@
+﻿@model IEnumerable<CompanyVehicleBookingSystem.Models.Booking>
+
+@{
+    ViewBag.Title = "My Vehicle Bookings";
+
+    var totalBookings = Model.Count();
+    var pendingBookings = Model.Count(b => b.Status == "Pending");
+    var approvedBookings = Model.Count(b => b.Status == "Approved");
+    var completedBookings = Model.Count(b => b.Status == "Completed");
+    var cancelledBookings = Model.Count(b => b.Status == "Cancelled");
+    var rejectedBookings = Model.Count(b => b.Status == "Rejected");
+}
+
+<style>
+
+    /* =========================================================
+       MY BOOKINGS PAGE
+       ========================================================= */
+
+    .my-bookings-page {
+        max-width: 1500px;
+        margin: 0 auto;
+        padding: 10px 10px 50px 10px;
+    }
+
+
+    /* =========================================================
+       HEADER
+       ========================================================= */
+
+    .bookings-page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 30px;
+        margin-bottom: 30px;
+    }
+
+    .bookings-page-header h1 {
+        margin: 5px 0 8px 0;
+        font-size: 34px;
+        font-weight: 700;
+        color: #142f43;
+    }
+
+    .bookings-page-header p {
+        margin: 0;
+        color: #6b7c8d;
+        font-size: 15px;
+    }
+
+    .bookings-header-action {
+        white-space: nowrap;
+    }
+
+
+    /* =========================================================
+       SUMMARY CARDS
+       ========================================================= */
+
+    .booking-summary-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 18px;
+        margin-bottom: 30px;
+    }
+
+    .booking-summary-card {
+        background: #ffffff;
+        border: 1px solid #e7edf2;
+        border-radius: 16px;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        box-shadow: 0 5px 18px rgba(20, 47, 67, 0.06);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .booking-summary-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(20, 47, 67, 0.10);
+    }
+
+    .booking-summary-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 13px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 21px;
+        flex-shrink: 0;
+    }
+
+    .booking-summary-icon.total {
+        background: #eaf3fb;
+    }
+
+    .booking-summary-icon.pending {
+        background: #fff4d6;
+    }
+
+    .booking-summary-icon.approved {
+        background: #e6f7ef;
+    }
+
+    .booking-summary-icon.completed {
+        background: #e9eef5;
+    }
+
+    .booking-summary-icon.cancelled {
+        background: #fdeaea;
+    }
+
+    .booking-summary-card span {
+        display: block;
+        font-size: 12px;
+        color: #71808e;
+        margin-bottom: 4px;
+        font-weight: 600;
+    }
+
+    .booking-summary-card strong {
+        display: block;
+        font-size: 25px;
+        color: #142f43;
+        line-height: 1;
+    }
+
+
+    /* =========================================================
+       ALERTS
+       ========================================================= */
+
+    .booking-alert {
+        border-radius: 12px;
+        padding: 15px 18px;
+        margin-bottom: 20px;
+        border: none;
+        font-size: 14px;
+    }
+
+
+    /* =========================================================
+       BOOKING SECTION
+       ========================================================= */
+
+    .bookings-section {
+        background: #ffffff;
+        border: 1px solid #e5ebf0;
+        border-radius: 18px;
+        box-shadow: 0 6px 25px rgba(20, 47, 67, 0.06);
+        overflow: hidden;
+    }
+
+    .bookings-section-header {
+        padding: 24px 26px;
+        border-bottom: 1px solid #edf1f4;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .bookings-section-header h2 {
+        margin: 0 0 5px 0;
+        font-size: 20px;
+        font-weight: 700;
+        color: #142f43;
+    }
+
+    .bookings-section-header p {
+        margin: 0;
+        color: #7b8995;
+        font-size: 13px;
+    }
+
+    .booking-count {
+        background: #eef4f8;
+        color: #24455b;
+        border-radius: 20px;
+        padding: 7px 13px;
+        font-size: 12px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+
+    /* =========================================================
+       TABLE
+       ========================================================= */
+
+    .bookings-table-wrapper {
+        overflow-x: auto;
+    }
+
+    .modern-bookings-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 0;
+    }
+
+    .modern-bookings-table thead {
+        background: #f7f9fb;
+    }
+
+    .modern-bookings-table th {
+        padding: 15px 18px;
+        text-align: left;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+        color: #6c7d8c;
+        font-weight: 700;
+        border-bottom: 1px solid #e8edf1;
+        white-space: nowrap;
+    }
+
+    .modern-bookings-table td {
+        padding: 18px;
+        border-bottom: 1px solid #edf1f4;
+        vertical-align: middle;
+        color: #334b5d;
+        font-size: 13px;
+    }
+
+    .modern-bookings-table tbody tr {
+        transition: background 0.2s ease;
+    }
+
+    .modern-bookings-table tbody tr:hover {
+        background: #f9fbfc;
+    }
+
+    .modern-bookings-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+
+    /* =========================================================
+       VEHICLE CELL
+       ========================================================= */
+
+    .booking-vehicle {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 190px;
+    }
+
+    .booking-vehicle-image {
+        width: 58px;
+        height: 46px;
+        border-radius: 9px;
+        overflow: hidden;
+        background: #edf2f5;
+        flex-shrink: 0;
+    }
+
+    .booking-vehicle-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .booking-vehicle-placeholder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+    }
+
+    .booking-vehicle-name {
+        font-weight: 700;
+        color: #142f43;
+        font-size: 14px;
+    }
+
+    .booking-vehicle-make {
+        color: #84929d;
+        font-size: 11px;
+        margin-top: 3px;
+    }
+
+
+    /* =========================================================
+       REGISTRATION
+       ========================================================= */
+
+    .booking-registration {
+        display: inline-block;
+        background: #f3f6f8;
+        color: #203e52;
+        border-radius: 7px;
+        padding: 7px 10px;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+    }
+
+
+    /* =========================================================
+       DATE CELLS
+       ========================================================= */
+
+    .booking-date {
+        white-space: nowrap;
+    }
+
+    .booking-date-main {
+        font-weight: 600;
+        color: #29485d;
+    }
+
+    .booking-date-time {
+        color: #8996a1;
+        font-size: 11px;
+        margin-top: 3px;
+    }
+
+
+    /* =========================================================
+       STATUS BADGES
+       ========================================================= */
+
+    .booking-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 11px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .booking-status-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: currentColor;
+    }
+
+    .booking-status.pending {
+        background: #fff4d6;
+        color: #a66a00;
+    }
+
+    .booking-status.approved {
+        background: #e5f7ee;
+        color: #16804f;
+    }
+
+    .booking-status.rejected {
+        background: #fde9e9;
+        color: #c03939;
+    }
+
+    .booking-status.completed {
+        background: #e9eef3;
+        color: #536675;
+    }
+
+    .booking-status.cancelled {
+        background: #fce8e8;
+        color: #bd3d3d;
+    }
+
+    .booking-status.default {
+        background: #edf1f4;
+        color: #657783;
+    }
+
+
+    /* =========================================================
+       ACTIONS
+       ========================================================= */
+
+    .booking-actions {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        white-space: nowrap;
+    }
+
+    .booking-view-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 8px 13px;
+        border-radius: 7px;
+        background: #287fd0;
+        color: white !important;
+        text-decoration: none !important;
+        font-size: 12px;
+        font-weight: 600;
+        transition: all 0.2s ease;
+    }
+
+    .booking-view-button:hover {
+        background: #1d68ad;
+        transform: translateY(-1px);
+    }
+
+    .booking-cancel-button {
+        border: none;
+        padding: 8px 13px;
+        border-radius: 7px;
+        background: #fdeaea;
+        color: #c03939;
+        font-size: 12px;
+        font-weight: 600;
+        transition: all 0.2s ease;
+    }
+
+    .booking-cancel-button:hover {
+        background: #c03939;
+        color: #ffffff;
+    }
+
+
+    /* =========================================================
+       EMPTY STATE
+       ========================================================= */
+
+    .booking-empty {
+        text-align: center;
+        padding: 70px 30px;
+    }
+
+    .booking-empty-icon {
+        width: 76px;
+        height: 76px;
+        margin: 0 auto 20px auto;
+        border-radius: 20px;
+        background: #edf4f9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 34px;
+    }
+
+    .booking-empty h3 {
+        margin: 0 0 8px 0;
+        color: #142f43;
+        font-size: 21px;
+    }
+
+    .booking-empty p {
+        color: #7c8a96;
+        max-width: 500px;
+        margin: 0 auto 22px auto;
+        font-size: 14px;
+    }
+
+
+    /* =========================================================
+       REQUEST BUTTON
+       ========================================================= */
+
+    .booking-request-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: #287fd0;
+        color: white !important;
+        text-decoration: none !important;
+        border-radius: 9px;
+        padding: 11px 18px;
+        font-size: 13px;
+        font-weight: 600;
+        transition: all 0.2s ease;
+    }
+
+    .booking-request-button:hover {
+        background: #1d68ad;
+        transform: translateY(-1px);
+    }
+
+
+    /* =========================================================
+       MODAL
+       ========================================================= */
+
+    .modern-cancel-modal {
+        border: none;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.20);
+    }
+
+    .modern-cancel-modal .modal-header {
+        padding: 20px 22px;
+        border-bottom: 1px solid #edf1f4;
+    }
+
+    .modern-cancel-modal .modal-title {
+        color: #142f43;
+        font-weight: 700;
+        font-size: 19px;
+    }
+
+    .modern-cancel-modal .modal-body {
+        padding: 24px;
+    }
+
+    .modern-cancel-modal .modal-body p {
+        color: #637582;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    .modern-cancel-modal label {
+        font-weight: 600;
+        color: #29485d;
+        font-size: 13px;
+        margin-bottom: 7px;
+    }
+
+    .modern-cancel-modal textarea {
+        border: 1px solid #dce4e9;
+        border-radius: 9px;
+        resize: vertical;
+        box-shadow: none;
+    }
+
+    .modern-cancel-modal textarea:focus {
+        border-color: #287fd0;
+        box-shadow: 0 0 0 3px rgba(40, 127, 208, 0.10);
+    }
+
+    .modern-cancel-modal .modal-footer {
+        padding: 16px 22px;
+        border-top: 1px solid #edf1f4;
+    }
+
+
+    /* =========================================================
+       RESPONSIVE
+       ========================================================= */
+
+    @@media (max-width: 1100px) {
+
+        .booking-summary-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+    }
+
+
+    @@media (max-width: 768px) {
+
+        .my-bookings-page {
+            padding: 5px 5px 40px 5px;
+        }
+
+        .bookings-page-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .bookings-page-header h1 {
+            font-size: 28px;
+        }
+
+        .booking-summary-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .bookings-section-header {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+    }
+
+
+    @@media (max-width: 480px) {
+
+        .booking-summary-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .booking-summary-card {
+            padding: 16px;
+        }
+
+        .booking-actions {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .booking-view-button,
+        .booking-cancel-button {
+            text-align: center;
+        }
+
+    }
+
+</style>
+
+
+<div class="my-bookings-page">
+
+
+    <!-- =====================================================
+         PAGE HEADER
+         ====================================================== -->
+
+    <div class="bookings-page-header">
+
+        <div>
+
+            <div class="page-eyebrow">
+                EMPLOYEE PORTAL
+            </div>
+
+            <h1>
+                My Vehicle Bookings
+            </h1>
+
+            <p>
+                View, track and manage your company vehicle booking requests.
+            </p>
+
+        </div>
+
+
+        <div class="bookings-header-action">
+
+            @Html.ActionLink(
+                "＋ Request Vehicle",
+                "Create",
+                "Booking",
+                null,
+                new { @class = "booking-request-button" }
+            )
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         ALERTS
+         ====================================================== -->
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success booking-alert">
+
+            ✓
+            @TempData["Success"]
+
+        </div>
+    }
+
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger booking-alert">
+
+            ⚠
+            @TempData["Error"]
+
+        </div>
+    }
+
+
+    <!-- =====================================================
+         SUMMARY
+         ====================================================== -->
+
+    <div class="booking-summary-grid">
+
+
+        <!-- TOTAL -->
+        <div class="booking-summary-card">
+
+            <div class="booking-summary-icon total">
+                📋
+            </div>
+
+            <div>
+
+                <span>
+                    Total Bookings
+                </span>
+
+                <strong>
+                    @totalBookings
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- PENDING -->
+        <div class="booking-summary-card">
+
+            <div class="booking-summary-icon pending">
+                ⏳
+            </div>
+
+            <div>
+
+                <span>
+                    Pending
+                </span>
+
+                <strong>
+                    @pendingBookings
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- APPROVED -->
+        <div class="booking-summary-card">
+
+            <div class="booking-summary-icon approved">
+                ✓
+            </div>
+
+            <div>
+
+                <span>
+                    Approved
+                </span>
+
+                <strong>
+                    @approvedBookings
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- COMPLETED -->
+        <div class="booking-summary-card">
+
+            <div class="booking-summary-icon completed">
+                ✓
+            </div>
+
+            <div>
+
+                <span>
+                    Completed
+                </span>
+
+                <strong>
+                    @completedBookings
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- CANCELLED -->
+        <div class="booking-summary-card">
+
+            <div class="booking-summary-icon cancelled">
+                ×
+            </div>
+
+            <div>
+
+                <span>
+                    Cancelled
+                </span>
+
+                <strong>
+                    @cancelledBookings
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         BOOKINGS
+         ====================================================== -->
+
+    <div class="bookings-section">
+
+
+        <div class="bookings-section-header">
+
+            <div>
+
+                <h2>
+                    Booking History
+                </h2>
+
+                <p>
+                    Your submitted vehicle requests and their current status.
+                </p>
+
+            </div>
+
+            <div class="booking-count">
+                @totalBookings booking(s)
+            </div>
+
+        </div>
+
+
+        @if (!Model.Any())
+        {
+
+            <!-- EMPTY STATE -->
+
+            <div class="booking-empty">
+
+                <div class="booking-empty-icon">
+                    🚗
+                </div>
+
+                <h3>
+                    No vehicle bookings yet
+                </h3>
+
+                <p>
+                    You have not submitted any company vehicle booking requests.
+                    When you make a request, it will appear here so you can track
+                    its progress.
+                </p>
+
+                @Html.ActionLink(
+                    "＋ Request Your First Vehicle",
+                    "Create",
+                    "Booking",
+                    null,
+                    new { @class = "booking-request-button" }
+                )
+
+            </div>
+
+        }
+        else
+        {
+
+            <!-- BOOKINGS TABLE -->
+
+            <div class="bookings-table-wrapper">
+
+                <table class="modern-bookings-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Vehicle
+                            </th>
+
+                            <th>
+                                Registration
+                            </th>
+
+                            <th>
+                                Booking Period
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Requested
+                            </th>
+
+                            <th>
+                                Actions
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        @foreach (var booking in Model)
+                        {
+
+                            <tr>
+
+
+                                <!-- VEHICLE -->
+
+                                <td>
+
+                                    <div class="booking-vehicle">
+
+                                        <div class="booking-vehicle-image">
+
+                                            @if (booking.Vehicle != null &&
+                                                 !String.IsNullOrEmpty(booking.Vehicle.ImagePath))
+                                            {
+                                                <img src="@Url.Content(booking.Vehicle.ImagePath)"
+                                                     alt="@booking.Vehicle.Make @booking.Vehicle.Model" />
+                                            }
+                                            else
+                                            {
+                                                <div class="booking-vehicle-placeholder">
+                                                    🚗
+                                                </div>
+                                            }
+
+                                        </div>
+
+
+                                        <div>
+
+                                            <div class="booking-vehicle-name">
+
+                                                @if (booking.Vehicle != null)
+                                                {
+                                                    @booking.Vehicle.Model
+                                                }
+                                                else
+                                                {
+                                                    <span>
+                                                        Vehicle
+                                                    </span>
+                                                }
+
+                                            </div>
+
+                                            <div class="booking-vehicle-make">
+
+                                                @if (booking.Vehicle != null)
+                                                {
+                                                    @booking.Vehicle.Make
+                                                }
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- REGISTRATION -->
+
+                                <td>
+
+                                    @if (booking.Vehicle != null)
+                                    {
+                                        <span class="booking-registration">
+                                            @booking.Vehicle.RegistrationNumber
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span>
+                                            —
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <!-- BOOKING PERIOD -->
+
+                                <td>
+
+                                    <div class="booking-date">
+
+                                        <div class="booking-date-main">
+                                            @booking.StartDateTime.ToString("dd/MM/yyyy")
+                                        </div>
+
+                                        <div class="booking-date-time">
+                                            @booking.StartDateTime.ToString("HH:mm")
+                                        </div>
+
+                                    </div>
+
+                                    <div style="margin: 5px 0; color: #9aa6ae;">
+                                        ↓
+                                    </div>
+
+                                    <div class="booking-date">
+
+                                        <div class="booking-date-main">
+                                            @booking.EndDateTime.ToString("dd/MM/yyyy")
+                                        </div>
+
+                                        <div class="booking-date-time">
+                                            @booking.EndDateTime.ToString("HH:mm")
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- STATUS -->
+
+                                <td>
+
+                                    @if (booking.Status == "Pending")
+                                    {
+                                        <span class="booking-status pending">
+
+                                            <span class="booking-status-dot"></span>
+
+                                            Pending
+
+                                        </span>
+                                    }
+                                    else if (booking.Status == "Approved")
+                                    {
+                                        <span class="booking-status approved">
+
+                                            <span class="booking-status-dot"></span>
+
+                                            Approved
+
+                                        </span>
+                                    }
+                                    else if (booking.Status == "Rejected")
+                                    {
+                                        <span class="booking-status rejected">
+
+                                            <span class="booking-status-dot"></span>
+
+                                            Rejected
+
+                                        </span>
+                                    }
+                                    else if (booking.Status == "Completed")
+                                    {
+                                        <span class="booking-status completed">
+
+                                            <span class="booking-status-dot"></span>
+
+                                            Completed
+
+                                        </span>
+                                    }
+                                    else if (booking.Status == "Cancelled")
+                                    {
+                                        <span class="booking-status cancelled">
+
+                                            <span class="booking-status-dot"></span>
+
+                                            Cancelled
+
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="booking-status default">
+
+                                            <span class="booking-status-dot"></span>
+
+                                            @booking.Status
+
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <!-- REQUESTED DATE -->
+
+                                <td>
+
+                                    <div class="booking-date">
+
+                                        <div class="booking-date-main">
+                                            @booking.DateCreated.ToString("dd/MM/yyyy")
+                                        </div>
+
+                                        <div class="booking-date-time">
+                                            @booking.DateCreated.ToString("HH:mm")
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- ACTIONS -->
+
+                                <td>
+
+                                    <div class="booking-actions">
+
+
+                                        @Html.ActionLink(
+                                            "View",
+                                            "Details",
+                                            "Booking",
+                                            new { id = booking.BookingId },
+                                            new { @class = "booking-view-button" }
+                                        )
+
+
+                                        @if (booking.Status == "Pending" ||
+                                             booking.Status == "Approved")
+                                        {
+
+                                            <button type="button"
+                                                    class="booking-cancel-button"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#cancelModal-@booking.BookingId">
+
+                                                Cancel
+
+                                            </button>
+
+
+                                            <!-- CANCEL MODAL -->
+
+                                            <div class="modal fade"
+                                                 id="cancelModal-@booking.BookingId"
+                                                 tabindex="-1"
+                                                 aria-labelledby="cancelModalLabel-@booking.BookingId"
+                                                 aria-hidden="true">
+
+                                                <div class="modal-dialog modal-dialog-centered">
+
+                                                    <div class="modal-content modern-cancel-modal">
+
+
+                                                        <div class="modal-header">
+
+                                                            <h5 class="modal-title"
+                                                                id="cancelModalLabel-@booking.BookingId">
+
+                                                                Cancel Vehicle Booking
+
+                                                            </h5>
+
+                                                            <button type="button"
+                                                                    class="btn-close"
+                                                                    data-bs-dismiss="modal"
+                                                                    aria-label="Close">
+                                                            </button>
+
+                                                        </div>
+
+
+                                                        @using (Html.BeginForm(
+                                                            "Cancel",
+                                                            "Booking",
+                                                            FormMethod.Post))
+                                                        {
+
+                                                            @Html.AntiForgeryToken()
+
+
+                                                            <div class="modal-body">
+
+                                                                <p>
+
+                                                                    You are about to cancel your
+                                                                    <strong>
+                                                                        @(booking.Vehicle != null
+                                                                            ? booking.Vehicle.Make + " " + booking.Vehicle.Model
+                                                                            : "vehicle")
+                                                                    </strong>
+                                                                    booking.
+
+                                                                </p>
+
+
+                                                                <p>
+
+                                                                    Please provide a reason for
+                                                                    cancelling this booking.
+
+                                                                </p>
+
+
+                                                                <div class="form-group">
+
+                                                                    <label for="cancellationReason-@booking.BookingId">
+
+                                                                        Cancellation Reason
+
+                                                                    </label>
+
+
+                                                                    <textarea name="cancellationReason"
+                                                                              id="cancellationReason-@booking.BookingId"
+                                                                              class="form-control"
+                                                                              rows="4"
+                                                                              required
+                                                                              placeholder="Enter the reason for cancelling this booking..."></textarea>
+
+                                                                </div>
+
+
+                                                                <input type="hidden"
+                                                                       name="id"
+                                                                       value="@booking.BookingId" />
+
+                                                            </div>
+
+
+                                                            <div class="modal-footer">
+
+                                                                <button type="button"
+                                                                        class="btn btn-secondary"
+                                                                        data-bs-dismiss="modal">
+
+                                                                    Keep Booking
+
+                                                                </button>
+
+
+                                                                <button type="submit"
+                                                                        class="btn btn-danger">
+
+                                                                    Cancel Booking
+
+                                                                </button>
+
+                                                            </div>
+
+                                                        }
+
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
+                                        }
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- BOTTOM ACTION -->
+
+            <div style="padding: 20px 26px; border-top: 1px solid #edf1f4;">
+
+                @Html.ActionLink(
+                    "＋ Request Another Vehicle",
+                    "Create",
+                    "Booking",
+                    null,
+                    new { @class = "booking-request-button" }
+                )
+
+            </div>
+
+        }
+
+    </div>
+
+</div>

@@ -1,0 +1,980 @@
+﻿```cshtml
+@model IEnumerable<CompanyVehicleBookingSystem.Models.ApplicationUser>
+
+@{
+    ViewBag.Title = "Employee Management";
+
+    var employees = Model.ToList();
+
+    var totalEmployees = employees.Count;
+    var activeEmployees = employees.Count(e => e.IsActive);
+    var inactiveEmployees = employees.Count(e => !e.IsActive);
+    var bookingAllowed = employees.Count(e => e.IsVehicleBookingAllowed);
+    var bookingNotAllowed = employees.Count(e => !e.IsVehicleBookingAllowed);
+}
+
+<style>
+
+    /* =========================================================
+       EMPLOYEE MANAGEMENT
+       ========================================================= */
+
+    .employee-management-page {
+        max-width: 1550px;
+        margin: 0 auto;
+        padding: 10px 10px 50px 10px;
+    }
+
+
+    /* =========================================================
+       HEADER
+       ========================================================= */
+
+    .employee-management-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 30px;
+        margin-bottom: 28px;
+    }
+
+    .employee-management-eyebrow {
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 1.4px;
+        color: #287fd0;
+        margin-bottom: 7px;
+    }
+
+    .employee-management-header h1 {
+        margin: 0 0 8px 0;
+        font-size: 34px;
+        font-weight: 700;
+        color: #142f43;
+    }
+
+    .employee-management-header p {
+        margin: 0;
+        color: #71808e;
+        font-size: 14px;
+    }
+
+
+    /* =========================================================
+       ADD EMPLOYEE BUTTON
+       ========================================================= */
+
+    .employee-add-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: #287fd0;
+        color: #ffffff !important;
+        text-decoration: none !important;
+        border-radius: 9px;
+        padding: 11px 18px;
+        font-size: 13px;
+        font-weight: 700;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+    }
+
+        .employee-add-button:hover {
+            background: #1d68ad;
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(40, 127, 208, 0.20);
+        }
+
+
+    /* =========================================================
+       SUMMARY CARDS
+       ========================================================= */
+
+    .employee-summary-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 15px;
+        margin-bottom: 28px;
+    }
+
+    .employee-summary-card {
+        background: #ffffff;
+        border: 1px solid #e5ebf0;
+        border-radius: 15px;
+        padding: 18px;
+        box-shadow: 0 5px 18px rgba(20, 47, 67, 0.05);
+        transition: all 0.2s ease;
+    }
+
+        .employee-summary-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 9px 25px rgba(20, 47, 67, 0.09);
+        }
+
+    .employee-summary-icon {
+        width: 39px;
+        height: 39px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 17px;
+        margin-bottom: 12px;
+    }
+
+        .employee-summary-icon.total {
+            background: #eaf3fb;
+        }
+
+        .employee-summary-icon.active {
+            background: #e5f7ee;
+        }
+
+        .employee-summary-icon.inactive {
+            background: #e9eef3;
+        }
+
+        .employee-summary-icon.allowed {
+            background: #e4f4fb;
+        }
+
+        .employee-summary-icon.not-allowed {
+            background: #fdeaea;
+        }
+
+    .employee-summary-label {
+        color: #788894;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        margin-bottom: 4px;
+    }
+
+    .employee-summary-value {
+        color: #142f43;
+        font-size: 25px;
+        font-weight: 700;
+        line-height: 1;
+    }
+
+
+    /* =========================================================
+       MAIN CARD
+       ========================================================= */
+
+    .employee-management-card {
+        background: #ffffff;
+        border: 1px solid #e4ebf0;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 7px 28px rgba(20, 47, 67, 0.06);
+    }
+
+    .employee-management-card-header {
+        padding: 23px 25px;
+        border-bottom: 1px solid #edf1f4;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+    }
+
+        .employee-management-card-header h2 {
+            margin: 0 0 5px 0;
+            color: #142f43;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .employee-management-card-header p {
+            margin: 0;
+            color: #7a8995;
+            font-size: 13px;
+        }
+
+    .employee-count-badge {
+        background: #eef4f8;
+        color: #24455b;
+        padding: 7px 13px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+
+    /* =========================================================
+       TABLE
+       ========================================================= */
+
+    .employee-table-wrapper {
+        overflow-x: auto;
+    }
+
+    .employee-management-table {
+        width: 100%;
+        min-width: 1050px;
+        border-collapse: collapse;
+        margin: 0;
+    }
+
+        .employee-management-table thead {
+            background: #f7f9fb;
+        }
+
+        .employee-management-table th {
+            padding: 14px 17px;
+            text-align: left;
+            border-bottom: 1px solid #e6edf1;
+            color: #6b7d8b;
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+            white-space: nowrap;
+        }
+
+        .employee-management-table td {
+            padding: 17px;
+            border-bottom: 1px solid #edf1f4;
+            color: #334b5d;
+            font-size: 13px;
+            vertical-align: middle;
+        }
+
+        .employee-management-table tbody tr {
+            transition: background 0.2s ease;
+        }
+
+            .employee-management-table tbody tr:hover {
+                background: #f9fbfc;
+            }
+
+            .employee-management-table tbody tr:last-child td {
+                border-bottom: none;
+            }
+
+
+    /* =========================================================
+       EMPLOYEE ID
+       ========================================================= */
+
+    .employee-number-badge {
+        display: inline-block;
+        background: #f2f5f7;
+        border: 1px solid #e2e8ec;
+        color: #203e52;
+        border-radius: 7px;
+        padding: 7px 10px;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.3px;
+        white-space: nowrap;
+    }
+
+
+    /* =========================================================
+       EMPLOYEE NAME
+       ========================================================= */
+
+    .employee-name-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        min-width: 180px;
+    }
+
+    .employee-avatar {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: #eaf3fb;
+        color: #287fd0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        font-weight: 800;
+        flex-shrink: 0;
+    }
+
+    .employee-name {
+        color: #142f43;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .employee-name-subtitle {
+        color: #8996a1;
+        font-size: 10px;
+        margin-top: 3px;
+    }
+
+
+    /* =========================================================
+       DEPARTMENT / POSITION
+       ========================================================= */
+
+    .employee-info-main {
+        color: #29485d;
+        font-weight: 600;
+    }
+
+    .employee-not-assigned {
+        color: #9aa6ae;
+        font-size: 11px;
+        font-style: italic;
+    }
+
+
+    /* =========================================================
+       STATUS BADGES
+       ========================================================= */
+
+    .employee-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 11px;
+        border-radius: 20px;
+        font-size: 10px;
+        font-weight: 800;
+        white-space: nowrap;
+    }
+
+    .employee-status-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: currentColor;
+    }
+
+    .employee-status.allowed {
+        background: #e5f7ee;
+        color: #16804f;
+    }
+
+    .employee-status.not-allowed {
+        background: #fdeaea;
+        color: #c03939;
+    }
+
+    .employee-status.active {
+        background: #e5f7ee;
+        color: #16804f;
+    }
+
+    .employee-status.inactive {
+        background: #e9eef3;
+        color: #536675;
+    }
+
+
+    /* =========================================================
+       ACTIONS
+       ========================================================= */
+
+    .employee-actions {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        white-space: nowrap;
+    }
+
+    .employee-action-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 8px 12px;
+        border-radius: 7px;
+        font-size: 11px;
+        font-weight: 700;
+        text-decoration: none !important;
+        transition: all 0.2s ease;
+    }
+
+    .employee-action-view {
+        background: #eaf3fb;
+        color: #287fd0 !important;
+    }
+
+        .employee-action-view:hover {
+            background: #287fd0;
+            color: #ffffff !important;
+            transform: translateY(-1px);
+        }
+
+    .employee-action-edit {
+        background: #fff4d6;
+        color: #9b6807 !important;
+    }
+
+        .employee-action-edit:hover {
+            background: #d99a19;
+            color: #ffffff !important;
+            transform: translateY(-1px);
+        }
+
+
+    /* =========================================================
+       EMPTY STATE
+       ========================================================= */
+
+    .employee-empty-state {
+        padding: 75px 30px;
+        text-align: center;
+    }
+
+    .employee-empty-icon {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 20px auto;
+        border-radius: 22px;
+        background: #edf4f9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 34px;
+    }
+
+    .employee-empty-state h3 {
+        margin: 0 0 8px 0;
+        color: #142f43;
+        font-size: 21px;
+        font-weight: 700;
+    }
+
+    .employee-empty-state p {
+        max-width: 500px;
+        margin: 0 auto 22px auto;
+        color: #7b8995;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+
+    /* =========================================================
+       FOOTER
+       ========================================================= */
+
+    .employee-management-footer {
+        padding: 18px 25px;
+        border-top: 1px solid #edf1f4;
+        background: #fafcfd;
+        color: #87949f;
+        font-size: 11px;
+    }
+
+
+    /* =========================================================
+       RESPONSIVE
+       ========================================================= */
+
+    @@media (max-width: 1250px) {
+
+        .employee-summary-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+
+
+    @@media (max-width: 768px) {
+
+        .employee-management-page {
+            padding: 5px 5px 40px 5px;
+        }
+
+        .employee-management-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+            .employee-management-header h1 {
+                font-size: 28px;
+            }
+
+        .employee-add-button {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .employee-summary-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .employee-management-card-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+
+
+    @@media (max-width: 480px) {
+
+        .employee-summary-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .employee-summary-card {
+            padding: 16px;
+        }
+    }
+</style>
+
+
+<div class="employee-management-page">
+
+
+    <!-- =====================================================
+         PAGE HEADER
+         ====================================================== -->
+
+    <div class="employee-management-header">
+
+        <div>
+
+            <div class="employee-management-eyebrow">
+                EMPLOYEE ADMINISTRATION
+            </div>
+
+            <h1>
+                Employee Management
+            </h1>
+
+            <p>
+                Manage employees, departments, account status and vehicle booking permissions.
+            </p>
+
+        </div>
+
+
+        <a href="@Url.Action("Create", "Employee")"
+           class="employee-add-button">
+
+            ＋ Add Employee
+
+        </a>
+
+    </div>
+
+
+    <!-- =====================================================
+         SUMMARY CARDS
+         ====================================================== -->
+
+    <div class="employee-summary-grid">
+
+
+        <!-- TOTAL -->
+
+        <div class="employee-summary-card">
+
+            <div class="employee-summary-icon total">
+                👥
+            </div>
+
+            <div class="employee-summary-label">
+                Total Employees
+            </div>
+
+            <div class="employee-summary-value">
+                @totalEmployees
+            </div>
+
+        </div>
+
+
+        <!-- ACTIVE -->
+
+        <div class="employee-summary-card">
+
+            <div class="employee-summary-icon active">
+                ✓
+            </div>
+
+            <div class="employee-summary-label">
+                Active
+            </div>
+
+            <div class="employee-summary-value">
+                @activeEmployees
+            </div>
+
+        </div>
+
+
+        <!-- INACTIVE -->
+
+        <div class="employee-summary-card">
+
+            <div class="employee-summary-icon inactive">
+                —
+            </div>
+
+            <div class="employee-summary-label">
+                Inactive
+            </div>
+
+            <div class="employee-summary-value">
+                @inactiveEmployees
+            </div>
+
+        </div>
+
+
+        <!-- BOOKING ALLOWED -->
+
+        <div class="employee-summary-card">
+
+            <div class="employee-summary-icon allowed">
+                🚗
+            </div>
+
+            <div class="employee-summary-label">
+                Booking Allowed
+            </div>
+
+            <div class="employee-summary-value">
+                @bookingAllowed
+            </div>
+
+        </div>
+
+
+        <!-- BOOKING NOT ALLOWED -->
+
+        <div class="employee-summary-card">
+
+            <div class="employee-summary-icon not-allowed">
+                🔒
+            </div>
+
+            <div class="employee-summary-label">
+                Not Allowed
+            </div>
+
+            <div class="employee-summary-value">
+                @bookingNotAllowed
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         EMPLOYEE LIST
+         ====================================================== -->
+
+    <div class="employee-management-card">
+
+
+        <div class="employee-management-card-header">
+
+            <div>
+
+                <h2>
+                    Company Employees
+                </h2>
+
+                <p>
+                    Employees registered and managed within the vehicle booking system.
+                </p>
+
+            </div>
+
+            <div class="employee-count-badge">
+                @totalEmployees employee(s)
+            </div>
+
+        </div>
+
+
+        @if (!Model.Any())
+        {
+
+            <!-- EMPTY STATE -->
+
+            <div class="employee-empty-state">
+
+                <div class="employee-empty-icon">
+                    👥
+                </div>
+
+                <h3>
+                    No Employees Found
+                </h3>
+
+                <p>
+                    There are currently no employees registered in the system.
+                    Add an employee to allow authorised staff to use the vehicle booking system.
+                </p>
+
+                <a href="@Url.Action("Create", "Employee")"
+                   class="employee-add-button">
+
+                    ＋ Add First Employee
+
+                </a>
+
+            </div>
+
+        }
+        else
+        {
+
+            <!-- =================================================
+                 TABLE
+                 ================================================== -->
+
+            <div class="employee-table-wrapper">
+
+                <table class="employee-management-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Employee Number
+                            </th>
+
+                            <th>
+                                Employee
+                            </th>
+
+                            <th>
+                                Department
+                            </th>
+
+                            <th>
+                                Position
+                            </th>
+
+                            <th>
+                                Vehicle Booking
+                            </th>
+
+                            <th>
+                                Account Status
+                            </th>
+
+                            <th>
+                                Actions
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        @foreach (var employee in Model)
+                        {
+
+                            <tr>
+
+
+                                <!-- EMPLOYEE NUMBER -->
+
+                                <td>
+
+                                    <span class="employee-number-badge">
+                                        @employee.EmployeeNumber
+                                    </span>
+
+                                </td>
+
+
+                                <!-- EMPLOYEE -->
+
+                                <td>
+
+                                    <div class="employee-name-wrapper">
+
+                                        <div class="employee-avatar">
+
+                                            @(
+                                                !String.IsNullOrEmpty(employee.FirstName)
+                                                    ? employee.FirstName.Substring(0, 1).ToUpper()
+                                                    : "?"
+                                             )
+                                            @(
+                                                !String.IsNullOrEmpty(employee.LastName)
+                                                    ? employee.LastName.Substring(0, 1).ToUpper()
+                                                    : ""
+                                             )
+
+                                        </div>
+
+                                        <div>
+
+                                            <div class="employee-name">
+                                                @employee.FirstName @employee.LastName
+                                            </div>
+
+                                            <div class="employee-name-subtitle">
+                                                Company Employee
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- DEPARTMENT -->
+
+                                <td>
+
+                                    @if (employee.Department != null)
+                                    {
+                                        <span class="employee-info-main">
+                                            @employee.Department.Name
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="employee-not-assigned">
+                                            Not Assigned
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <!-- POSITION -->
+
+                                <td>
+
+                                    @if (!String.IsNullOrEmpty(employee.Position))
+                                    {
+                                        <span class="employee-info-main">
+                                            @employee.Position
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="employee-not-assigned">
+                                            Not specified
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <!-- VEHICLE BOOKING -->
+
+                                <td>
+
+                                    @if (employee.IsVehicleBookingAllowed)
+                                    {
+                                        <span class="employee-status allowed">
+
+                                            <span class="employee-status-dot"></span>
+
+                                            Allowed
+
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="employee-status not-allowed">
+
+                                            <span class="employee-status-dot"></span>
+
+                                            Not Allowed
+
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <!-- ACCOUNT STATUS -->
+
+                                <td>
+
+                                    @if (employee.IsActive)
+                                    {
+                                        <span class="employee-status active">
+
+                                            <span class="employee-status-dot"></span>
+
+                                            Active
+
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="employee-status inactive">
+
+                                            <span class="employee-status-dot"></span>
+
+                                            Inactive
+
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <!-- ACTIONS -->
+
+                                <td>
+
+                                    <div class="employee-actions">
+
+                                        @Html.ActionLink(
+                                            "View",
+                                            "Details",
+                                            new { id = employee.Id },
+                                            new { @class = "employee-action-button employee-action-view" }
+                                        )
+
+                                        @Html.ActionLink(
+                                            "Edit",
+                                            "Edit",
+                                            new { id = employee.Id },
+                                            new { @class = "employee-action-button employee-action-edit" }
+                                        )
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- FOOTER -->
+
+            <div class="employee-management-footer">
+
+                Showing
+                <strong>@totalEmployees</strong>
+                employee(s).
+
+                &nbsp;&nbsp;|&nbsp;&nbsp;
+
+                Active employees with vehicle booking permission can submit
+                company vehicle requests.
+
+            </div>
+
+        }
+
+    </div>
+
+</div>
+```

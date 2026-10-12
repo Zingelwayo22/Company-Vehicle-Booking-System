@@ -1,0 +1,693 @@
+﻿@model CompanyVehicleBookingSystem.Models.CreateEmployeeViewModel
+
+@{
+    ViewBag.Title = "Add Employee";
+}
+
+<style>
+    .create-employee-page {
+        max-width: 1150px;
+        margin: 0 auto;
+        padding: 10px 10px 45px;
+        color: #183247;
+    }
+
+    .ce-header {
+        margin-bottom: 28px;
+    }
+
+    .ce-eyebrow {
+        color: #287fd0;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 1.5px;
+        margin-bottom: 8px;
+    }
+
+    .ce-header h1 {
+        margin: 0 0 9px;
+        color: #142f43;
+        font-size: 31px;
+        font-weight: 800;
+    }
+
+    .ce-header p {
+        margin: 0;
+        color: #788995;
+        font-size: 13px;
+        line-height: 1.7;
+    }
+
+    .ce-back-link {
+        display: inline-block;
+        margin-bottom: 18px;
+        color: #287fd0 !important;
+        text-decoration: none !important;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+        .ce-back-link:hover {
+            color: #1d68ad !important;
+        }
+
+    .ce-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 290px;
+        gap: 22px;
+        align-items: start;
+    }
+
+    .ce-card {
+        background: #fff;
+        border: 1px solid #e3eaf0;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 7px 25px rgba(20, 47, 67, .05);
+        margin-bottom: 20px;
+    }
+
+    .ce-card-header {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        padding: 20px 24px;
+        border-bottom: 1px solid #edf1f4;
+        background: #fcfdfe;
+    }
+
+    .ce-section-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        background: #eaf3fb;
+        font-size: 19px;
+    }
+
+    .ce-card-header h2 {
+        margin: 0 0 5px;
+        color: #183247;
+        font-size: 15px;
+        font-weight: 800;
+    }
+
+    .ce-card-header p {
+        margin: 0;
+        color: #84929d;
+        font-size: 11px;
+        line-height: 1.5;
+    }
+
+    .ce-card-body {
+        padding: 24px;
+    }
+
+    .ce-form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 21px 20px;
+    }
+
+    .ce-form-group {
+        min-width: 0;
+        margin: 0;
+    }
+
+        .ce-form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .ce-form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #365064;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .ce-form-group .form-control {
+            width: 100%;
+            height: 43px;
+            padding: 10px 12px;
+            border: 1px solid #dce5eb;
+            border-radius: 8px;
+            background: #fff;
+            color: #183247;
+            font-size: 12px;
+            box-shadow: none;
+            transition: border-color .2s ease, box-shadow .2s ease;
+        }
+
+        .ce-form-group textarea.form-control {
+            height: auto;
+        }
+
+        .ce-form-group .form-control:focus {
+            border-color: #287fd0;
+            box-shadow: 0 0 0 3px rgba(40, 127, 208, .10);
+            outline: none;
+        }
+
+        .ce-form-group select.form-control {
+            cursor: pointer;
+        }
+
+        .ce-form-group input[type="date"] {
+            min-height: 43px;
+        }
+
+    .ce-validation {
+        display: block;
+        margin-top: 6px;
+        color: #c03939;
+        font-size: 11px;
+    }
+
+    .ce-validation-summary {
+        margin-bottom: 22px;
+        padding: 13px 16px;
+        border: 1px solid #f2cece;
+        border-radius: 9px;
+        background: #fff5f5;
+        color: #b83232;
+        font-size: 12px;
+    }
+
+        .ce-validation-summary ul {
+            margin: 6px 0 0;
+            padding-left: 20px;
+        }
+
+    .ce-access-options {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 13px;
+    }
+
+    .ce-access-option {
+        display: flex;
+        align-items: flex-start;
+        gap: 11px;
+        padding: 15px;
+        border: 1px solid #e1e9ee;
+        border-radius: 10px;
+        background: #fbfcfd;
+        cursor: pointer;
+        transition: border-color .2s ease, background .2s ease;
+    }
+
+        .ce-access-option:hover {
+            border-color: #b9d6ef;
+            background: #f6faff;
+        }
+
+        .ce-access-option input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            margin: 2px 0 0;
+            flex-shrink: 0;
+            accent-color: #287fd0;
+            cursor: pointer;
+        }
+
+        .ce-access-option span {
+            display: block;
+            color: #365064;
+            font-size: 11px;
+            font-weight: 800;
+            line-height: 1.5;
+        }
+
+        .ce-access-option small {
+            display: block;
+            margin-top: 4px;
+            color: #84929d;
+            font-size: 10px;
+            font-weight: 400;
+            line-height: 1.6;
+        }
+
+    .ce-security-note {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        margin-top: 20px;
+        padding: 14px;
+        border: 1px solid #dbeaf6;
+        border-radius: 9px;
+        background: #f2f8fd;
+        color: #42647c;
+        font-size: 11px;
+        line-height: 1.7;
+    }
+
+        .ce-security-note strong {
+            color: #244c69;
+        }
+
+    .ce-sidebar-card {
+        padding: 22px;
+        background: #fff;
+        border: 1px solid #e3eaf0;
+        border-radius: 15px;
+        box-shadow: 0 7px 25px rgba(20, 47, 67, .04);
+        margin-bottom: 18px;
+    }
+
+        .ce-sidebar-card h3 {
+            margin: 0 0 16px;
+            color: #183247;
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+    .ce-step {
+        display: flex;
+        align-items: flex-start;
+        gap: 11px;
+        margin-bottom: 17px;
+    }
+
+        .ce-step:last-child {
+            margin-bottom: 0;
+        }
+
+    .ce-step-number {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 27px;
+        height: 27px;
+        flex-shrink: 0;
+        border-radius: 8px;
+        background: #eaf3fb;
+        color: #287fd0;
+        font-size: 11px;
+        font-weight: 800;
+    }
+
+    .ce-step strong {
+        display: block;
+        margin-bottom: 4px;
+        color: #365064;
+        font-size: 11px;
+    }
+
+    .ce-step p {
+        margin: 0;
+        color: #84929d;
+        font-size: 10px;
+        line-height: 1.6;
+    }
+
+    .ce-sidebar-note {
+        padding: 15px;
+        border-radius: 10px;
+        background: #f0faf5;
+        color: #37775a;
+        font-size: 11px;
+        line-height: 1.7;
+    }
+
+        .ce-sidebar-note strong {
+            display: block;
+            margin-bottom: 5px;
+            color: #20744b;
+        }
+
+    .ce-form-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        padding-top: 5px;
+    }
+
+    .ce-submit {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-height: 43px;
+        padding: 12px 19px;
+        border: 0;
+        border-radius: 8px;
+        background: #287fd0;
+        color: #fff;
+        font-size: 12px;
+        font-weight: 800;
+        cursor: pointer;
+        box-shadow: 0 5px 13px rgba(40, 127, 208, .16);
+        transition: all .2s ease;
+    }
+
+        .ce-submit:hover {
+            background: #1d68ad;
+            transform: translateY(-1px);
+        }
+
+    .ce-cancel {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 43px;
+        padding: 11px 18px;
+        border: 1px solid #dce5eb;
+        border-radius: 8px;
+        background: #fff;
+        color: #526b7b !important;
+        text-decoration: none !important;
+        font-size: 12px;
+        font-weight: 700;
+        transition: background .2s ease;
+    }
+
+        .ce-cancel:hover {
+            background: #f4f7f9;
+        }
+
+    .ce-required-note {
+        margin-top: 15px;
+        color: #8997a2;
+        font-size: 10px;
+    }
+
+    @@media (max-width: 1000px) {
+        .ce-layout {
+            grid-template-columns: minmax(0, 1fr);
+        }
+
+        .ce-sidebar {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 15px;
+        }
+    }
+
+    @@media (max-width: 650px) {
+        .create-employee-page {
+            padding: 5px 5px 30px;
+        }
+
+        .ce-header h1 {
+            font-size: 26px;
+        }
+
+        .ce-card-body {
+            padding: 18px;
+        }
+
+        .ce-card-header {
+            padding: 17px 18px;
+        }
+
+        .ce-form-grid,
+        .ce-access-options,
+        .ce-sidebar {
+            grid-template-columns: minmax(0, 1fr);
+        }
+
+        .ce-form-group.full-width {
+            grid-column: auto;
+        }
+
+        .ce-form-actions {
+            align-items: stretch;
+            flex-direction: column;
+        }
+
+        .ce-submit,
+        .ce-cancel {
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="create-employee-page">
+
+    @Html.ActionLink("← Back to Employee Management", "Index", "UserManagement", null,
+        new { @class = "ce-back-link" })
+
+    <div class="ce-header">
+        <div class="ce-eyebrow">ADMINISTRATION / EMPLOYEES</div>
+        <h1>Add New Employee</h1>
+        <p>Create an employee account, assign a department and configure company vehicle booking access.</p>
+    </div>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.ValidationSummary(true, "Please review the information below.",
+            new { @class = "ce-validation-summary" })
+
+        <div class="ce-layout">
+
+            <div class="ce-main">
+
+                <!-- EMPLOYEE INFORMATION -->
+                <div class="ce-card">
+                    <div class="ce-card-header">
+                        <div class="ce-section-icon">👤</div>
+                        <div>
+                            <h2>Employee Information</h2>
+                            <p>Enter the employee's personal and organisational details.</p>
+                        </div>
+                    </div>
+
+                    <div class="ce-card-body">
+                        <div class="ce-form-grid">
+
+                            <div class="ce-form-group">
+                                @Html.LabelFor(model => model.EmployeeNumber)
+                                @Html.EditorFor(model => model.EmployeeNumber,
+                                    new { htmlAttributes = new { @class = "form-control", placeholder = "e.g. EMP001" } })
+                                @Html.ValidationMessageFor(model => model.EmployeeNumber, "", new { @class = "ce-validation" })
+                            </div>
+
+                            <div class="ce-form-group">
+                                @Html.LabelFor(model => model.DepartmentId)
+                                @Html.DropDownListFor(model => model.DepartmentId,
+                                    Model.Departments,
+                                    "-- Select Department --",
+                                    new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.DepartmentId, "", new { @class = "ce-validation" })
+                            </div>
+
+                            <div class="ce-form-group">
+                                @Html.LabelFor(model => model.FirstName)
+                                @Html.EditorFor(model => model.FirstName,
+                                    new { htmlAttributes = new { @class = "form-control", placeholder = "Enter first name" } })
+                                @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "ce-validation" })
+                            </div>
+
+                            <div class="ce-form-group">
+                                @Html.LabelFor(model => model.LastName)
+                                @Html.EditorFor(model => model.LastName,
+                                    new { htmlAttributes = new { @class = "form-control", placeholder = "Enter surname" } })
+                                @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "ce-validation" })
+                            </div>
+
+                            <div class="ce-form-group">
+                                @Html.LabelFor(model => model.Email)
+                                @Html.EditorFor(model => model.Email,
+                                    new { htmlAttributes = new { @class = "form-control", type = "email", placeholder = "employee@company.com" } })
+                                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "ce-validation" })
+                            </div>
+
+                            <div class="ce-form-group">
+                                @Html.LabelFor(model => model.Position)
+                                @Html.EditorFor(model => model.Position,
+                                    new { htmlAttributes = new { @class = "form-control", placeholder = "e.g. Operations Officer" } })
+                                @Html.ValidationMessageFor(model => model.Position, "", new { @class = "ce-validation" })
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DRIVER LICENCE -->
+                <div class="ce-card">
+                    <div class="ce-card-header">
+                        <div class="ce-section-icon">🚗</div>
+                        <div>
+                            <h2>Driver Licence Details</h2>
+                            <p>Capture the employee's licence information for vehicle bookings.</p>
+                        </div>
+                    </div>
+
+                    <div class="ce-card-body">
+                        <div class="ce-form-grid">
+
+                            <div class="ce-form-group">
+                                @Html.LabelFor(model => model.DriversLicenceNumber)
+                                @Html.EditorFor(model => model.DriversLicenceNumber,
+                                    new { htmlAttributes = new { @class = "form-control", placeholder = "Enter licence number" } })
+                                @Html.ValidationMessageFor(model => model.DriversLicenceNumber, "", new { @class = "ce-validation" })
+                            </div>
+
+                            <div class="ce-form-group">
+                                @Html.LabelFor(model => model.DriversLicenceExpiry)
+                                @Html.EditorFor(model => model.DriversLicenceExpiry,
+                                    new { htmlAttributes = new { @class = "form-control", type = "date" } })
+                                @Html.ValidationMessageFor(model => model.DriversLicenceExpiry, "", new { @class = "ce-validation" })
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ACCOUNT AND ACCESS -->
+                <div class="ce-card">
+                    <div class="ce-card-header">
+                        <div class="ce-section-icon">🔐</div>
+                        <div>
+                            <h2>Account Status & Permissions</h2>
+                            <p>Set the employee's account status and vehicle booking access.</p>
+                        </div>
+                    </div>
+
+                    <div class="ce-card-body">
+
+                        <div class="ce-access-options">
+
+                            <label class="ce-access-option">
+                                @Html.CheckBoxFor(model => model.IsActive)
+                                <span>
+                                    @Html.DisplayNameFor(model => model.IsActive)
+                                    <small>Allow the employee's account to remain active.</small>
+                                </span>
+                            </label>
+
+                            <label class="ce-access-option">
+                                @Html.CheckBoxFor(model => model.IsVehicleBookingAllowed)
+                                <span>
+                                    @Html.DisplayNameFor(model => model.IsVehicleBookingAllowed)
+                                    <small>Permit this employee to request company vehicles.</small>
+                                </span>
+                            </label>
+
+                        </div>
+
+                        <div class="ce-security-note">
+                            <span>🔒</span>
+                            <div>
+                                <strong>Access control reminder</strong>
+                                Only enable vehicle booking for authorised employees. The employee must also meet your system's booking rules before requesting a vehicle.
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- PASSWORD -->
+                <div class="ce-card">
+                    <div class="ce-card-header">
+                        <div class="ce-section-icon">🛡️</div>
+                        <div>
+                            <h2>Account Credentials</h2>
+                            <p>Set the initial password for the employee's account.</p>
+                        </div>
+                    </div>
+
+                    <div class="ce-card-body">
+                        <div class="ce-form-grid">
+
+                            <div class="ce-form-group">
+                                @Html.LabelFor(model => model.Password)
+                                @Html.PasswordFor(model => model.Password,
+                                    new { @class = "form-control", placeholder = "Create initial password", autocomplete = "new-password" })
+                                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "ce-validation" })
+                            </div>
+
+                            <div class="ce-form-group">
+                                @Html.LabelFor(model => model.ConfirmPassword)
+                                @Html.PasswordFor(model => model.ConfirmPassword,
+                                    new { @class = "form-control", placeholder = "Re-enter password", autocomplete = "new-password" })
+                                @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "ce-validation" })
+                            </div>
+
+                        </div>
+
+                        <div class="ce-security-note">
+                            <span>ℹ️</span>
+                            <div>
+                                <strong>Password security</strong>
+                                Use a strong initial password and share it securely with the employee. Follow your application's configured password requirements.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FORM ACTIONS -->
+                <div class="ce-form-actions">
+                    <button type="submit" class="ce-submit">
+                        <span>＋</span> Create Employee Account
+                    </button>
+
+                    @Html.ActionLink("Cancel", "Index", "UserManagement", null,
+                        new { @class = "ce-cancel" })
+                </div>
+
+                <div class="ce-required-note">
+                    Please complete all fields required by your organisation and the application's validation rules.
+                </div>
+
+            </div>
+
+            <!-- RIGHT SIDEBAR -->
+            <aside class="ce-sidebar">
+
+                <div class="ce-sidebar-card">
+                    <h3>Employee Setup Guide</h3>
+
+                    <div class="ce-step">
+                        <div class="ce-step-number">1</div>
+                        <div>
+                            <strong>Employee details</strong>
+                            <p>Enter the employee number, name, email and department.</p>
+                        </div>
+                    </div>
+
+                    <div class="ce-step">
+                        <div class="ce-step-number">2</div>
+                        <div>
+                            <strong>Licence information</strong>
+                            <p>Capture the driver's licence details where applicable.</p>
+                        </div>
+                    </div>
+
+                    <div class="ce-step">
+                        <div class="ce-step-number">3</div>
+                        <div>
+                            <strong>Set permissions</strong>
+                            <p>Choose whether the account is active and allowed to book vehicles.</p>
+                        </div>
+                    </div>
+
+                    <div class="ce-step">
+                        <div class="ce-step-number">4</div>
+                        <div>
+                            <strong>Create credentials</strong>
+                            <p>Enter and confirm the employee's initial password.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ce-sidebar-card">
+                    <h3>Before You Save</h3>
+                    <div class="ce-sidebar-note">
+                        <strong>✓ Check the employee record</strong>
+                        Verify the employee number, email address, department and booking permissions before creating the account.
+                    </div>
+                </div>
+
+            </aside>
+
+        </div>
+    }
+</div>

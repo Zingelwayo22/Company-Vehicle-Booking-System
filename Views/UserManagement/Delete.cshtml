@@ -1,0 +1,554 @@
+﻿@model CompanyVehicleBookingSystem.Models.ApplicationUser
+
+@{
+    ViewBag.Title = "Delete Employee";
+    bool hasBookings = ViewBag.HasBookings != null
+        && (bool)ViewBag.HasBookings;
+}
+
+<div class="container-fluid del-page">
+
+    <div class="del-header">
+        <div>
+            <span class="del-eyebrow">HUMAN RESOURCES</span>
+            <h2>Delete Employee</h2>
+            <p>Review the employee's account before proceeding.</p>
+        </div>
+
+        @Html.ActionLink(
+            "← Employee Directory",
+            "Index",
+            "UserManagement",
+            null,
+            new { @class = "del-back-btn" }
+        )
+    </div>
+
+    <div class="del-warning-banner">
+        <div class="del-warning-icon">!</div>
+        <div>
+            <h4>Important: Account deletion</h4>
+            <p>
+                Deleting an employee is permanent. Check their information
+                and booking history before taking action.
+            </p>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-8">
+
+            <div class="del-card">
+
+                <div class="del-card-heading">
+                    <div class="del-avatar">
+                        @(
+                            ((Model.FirstName ?? "").Length > 0
+                                ? Model.FirstName.Substring(0, 1)
+                                : "") +
+                            ((Model.LastName ?? "").Length > 0
+                                ? Model.LastName.Substring(0, 1)
+                                : "")
+                        )
+                    </div>
+
+                    <div>
+                        <h3>@Model.FirstName @Model.LastName</h3>
+                        <p>Employee account details</p>
+                    </div>
+                </div>
+
+                <div class="del-details">
+
+                    <div class="del-detail-row">
+                        <span>Employee Number</span>
+                        <strong>
+                            @(String.IsNullOrWhiteSpace(Model.EmployeeNumber)
+                                ? "Not assigned"
+                                : Model.EmployeeNumber)
+                        </strong>
+                    </div>
+
+                    <div class="del-detail-row">
+                        <span>First Name</span>
+                        <strong>@Model.FirstName</strong>
+                    </div>
+
+                    <div class="del-detail-row">
+                        <span>Last Name</span>
+                        <strong>@Model.LastName</strong>
+                    </div>
+
+                    <div class="del-detail-row">
+                        <span>Email Address</span>
+                        <strong class="del-email">@Model.Email</strong>
+                    </div>
+
+                    <div class="del-detail-row">
+                        <span>Position</span>
+                        <strong>
+                            @(String.IsNullOrWhiteSpace(Model.Position)
+                                ? "Not specified"
+                                : Model.Position)
+                        </strong>
+                    </div>
+
+                    <div class="del-detail-row">
+                        <span>Department</span>
+                        <strong>
+                            @if (Model.Department != null)
+                            {
+                                @Model.Department.Name
+                            }
+                            else
+                            {
+                                @:Not assigned
+                            }
+                        </strong>
+                    </div>
+
+                </div>
+            </div>
+
+            @if (hasBookings)
+            {
+                <div class="del-blocked-card">
+                    <div class="del-blocked-icon">!</div>
+                    <div>
+                        <h3>Employee Cannot Be Deleted</h3>
+                        <p>
+                            This employee has existing vehicle booking records.
+                            Deleting the account could compromise historical
+                            records and reporting.
+                        </p>
+                        <p>
+                            <strong>Recommended action:</strong>
+                            deactivate the employee's account using Manage
+                            Employee so their booking history is preserved.
+                        </p>
+
+                        <div class="del-actions">
+                            @Html.ActionLink(
+                                "Manage Employee",
+                                "Manage",
+                                "UserManagement",
+                                new { id = Model.Id },
+                                new { @class = "del-primary-btn" }
+                            )
+
+                            @Html.ActionLink(
+                                "Back to Employees",
+                                "Index",
+                                "UserManagement",
+                                null,
+                                new { @class = "del-secondary-btn" }
+                            )
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="del-confirm-card">
+                    <h3>Confirm Permanent Deletion</h3>
+                    <p>
+                        No existing bookings were reported for this employee.
+                        If you proceed, the account will be submitted for
+                        permanent deletion.
+                    </p>
+
+                    <p class="del-confirm-note">
+                        This action cannot be undone.
+                    </p>
+
+                    @using (Html.BeginForm(
+                        "DeleteConfirmed",
+                        "UserManagement",
+                        FormMethod.Post,
+                        new { @class = "del-form" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.Hidden("id", Model.Id)
+
+                        <button type="submit"
+                                class="del-danger-btn"
+                                onclick="return confirm('Are you sure you want to permanently delete this employee account?');">
+                            Delete Employee
+                        </button>
+
+                        @Html.ActionLink(
+                            "Cancel",
+                            "Index",
+                            "UserManagement",
+                            null,
+                            new { @class = "del-secondary-btn" }
+                        )
+                    }
+                </div>
+            }
+
+        </div>
+
+        <div class="col-md-4">
+
+            <div class="del-sidebar-card">
+                <h3>Before You Proceed</h3>
+
+                <div class="del-tip">
+                    <span class="del-tip-number">01</span>
+                    <div>
+                        <strong>Check booking history</strong>
+                        <p>Existing bookings should remain linked to the employee.</p>
+                    </div>
+                </div>
+
+                <div class="del-tip">
+                    <span class="del-tip-number">02</span>
+                    <div>
+                        <strong>Consider deactivation</strong>
+                        <p>Disable access while retaining the employee's records.</p>
+                    </div>
+                </div>
+
+                <div class="del-tip">
+                    <span class="del-tip-number">03</span>
+                    <div>
+                        <strong>Verify the account</strong>
+                        <p>Confirm the employee number and email before deleting.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<style>
+    .del-page {
+        padding: 25px 30px 40px;
+        color: #26364c;
+    }
+
+    .del-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 16px;
+        margin-bottom: 25px;
+    }
+
+    .del-eyebrow {
+        color: #77849a;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 1.7px;
+    }
+
+    .del-header h2 {
+        margin: 8px 0;
+        color: #1c2f4b;
+        font-size: 29px;
+        font-weight: 800;
+    }
+
+    .del-header p {
+        margin: 0;
+        color: #77849a;
+        font-size: 13px;
+    }
+
+    .del-back-btn,
+    .del-secondary-btn {
+        display: inline-block;
+        padding: 11px 15px;
+        border: 1px solid #dce3ed;
+        border-radius: 9px;
+        background: #fff;
+        color: #35465e;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+        .del-back-btn:hover,
+        .del-secondary-btn:hover {
+            background: #f4f7fb;
+            text-decoration: none;
+        }
+
+    .del-warning-banner {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+        padding: 18px 20px;
+        margin-bottom: 24px;
+        background: #fff5f3;
+        border: 1px solid #f3d5d0;
+        border-radius: 12px;
+    }
+
+    .del-warning-icon,
+    .del-blocked-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        flex-shrink: 0;
+        border-radius: 50%;
+        background: #fde2dd;
+        color: #b33d30;
+        font-size: 22px;
+        font-weight: 800;
+    }
+
+    .del-warning-banner h4 {
+        margin: 0 0 5px;
+        color: #a83229;
+        font-weight: 800;
+    }
+
+    .del-warning-banner p {
+        margin: 0;
+        color: #805d59;
+        font-size: 13px;
+        line-height: 1.7;
+    }
+
+    .del-card,
+    .del-sidebar-card,
+    .del-blocked-card,
+    .del-confirm-card {
+        padding: 24px;
+        margin-bottom: 24px;
+        background: #fff;
+        border: 1px solid #e5eaf1;
+        border-radius: 14px;
+        box-shadow: 0 5px 18px rgba(20, 39, 70, .04);
+    }
+
+    .del-card-heading {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding-bottom: 22px;
+        margin-bottom: 6px;
+        border-bottom: 1px solid #edf0f5;
+    }
+
+    .del-avatar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 58px;
+        height: 58px;
+        flex-shrink: 0;
+        border-radius: 16px;
+        background: #263f65;
+        color: #fff;
+        font-size: 20px;
+        font-weight: 800;
+    }
+
+    .del-card-heading h3 {
+        margin: 0 0 6px;
+        color: #203451;
+        font-size: 19px;
+        font-weight: 800;
+    }
+
+    .del-card-heading p {
+        margin: 0;
+        color: #78859a;
+        font-size: 12px;
+    }
+
+    .del-detail-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 15px;
+        padding: 15px 0;
+        border-bottom: 1px solid #f0f2f6;
+    }
+
+        .del-detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .del-detail-row > span {
+            color: #78859a;
+            font-size: 13px;
+        }
+
+        .del-detail-row strong {
+            max-width: 60%;
+            color: #2b3b53;
+            font-size: 13px;
+            text-align: right;
+            overflow-wrap: anywhere;
+        }
+
+    .del-email {
+        overflow-wrap: anywhere;
+    }
+
+    .del-blocked-card {
+        display: flex;
+        align-items: flex-start;
+        gap: 15px;
+        background: #fffaf0;
+        border-color: #f0dfb9;
+    }
+
+        .del-blocked-card h3,
+        .del-confirm-card h3 {
+            margin: 0 0 12px;
+            color: #293a53;
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        .del-blocked-card p,
+        .del-confirm-card p {
+            color: #6d798c;
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        .del-blocked-card strong {
+            color: #37475e;
+        }
+
+    .del-actions,
+    .del-form {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px;
+        margin-top: 18px;
+    }
+
+    .del-primary-btn,
+    .del-danger-btn {
+        display: inline-block;
+        padding: 12px 17px;
+        border: none;
+        border-radius: 9px;
+        background: #244a7c;
+        color: #fff;
+        font-weight: 800;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+        .del-primary-btn:hover {
+            background: #19365b;
+            color: #fff;
+            text-decoration: none;
+        }
+
+    .del-danger-btn {
+        background: #b9382d;
+    }
+
+        .del-danger-btn:hover {
+            background: #92291f;
+        }
+
+    .del-confirm-note {
+        padding: 11px 13px;
+        background: #fff5f3;
+        border-radius: 8px;
+        color: #a83229 !important;
+        font-weight: 700;
+    }
+
+    .del-sidebar-card h3 {
+        margin: 0 0 22px;
+        color: #203451;
+        font-size: 17px;
+        font-weight: 800;
+    }
+
+    .del-tip {
+        display: flex;
+        gap: 12px;
+        padding: 17px 0;
+        border-bottom: 1px solid #edf0f5;
+    }
+
+        .del-tip:last-child {
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+    .del-tip-number {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        flex-shrink: 0;
+        border-radius: 9px;
+        background: #edf3fc;
+        color: #2a4e7e;
+        font-size: 11px;
+        font-weight: 800;
+    }
+
+    .del-tip strong {
+        color: #2d3e56;
+        font-size: 13px;
+    }
+
+    .del-tip p {
+        margin: 6px 0 0;
+        color: #778398;
+        font-size: 12px;
+        line-height: 1.7;
+    }
+
+    @@media (max-width: 767px) {
+        .del-page {
+            padding: 18px 10px 30px;
+        }
+
+        .del-card,
+        .del-sidebar-card,
+        .del-blocked-card,
+        .del-confirm-card {
+            padding: 18px;
+        }
+
+        .del-detail-row {
+            flex-direction: column;
+            gap: 6px;
+        }
+
+            .del-detail-row strong {
+                max-width: 100%;
+                text-align: left;
+            }
+
+        .del-blocked-card {
+            flex-direction: column;
+        }
+
+        .del-actions,
+        .del-form {
+            align-items: stretch;
+            flex-direction: column;
+        }
+
+            .del-actions a,
+            .del-form button,
+            .del-form a {
+                width: 100%;
+                text-align: center;
+            }
+    }
+</style>

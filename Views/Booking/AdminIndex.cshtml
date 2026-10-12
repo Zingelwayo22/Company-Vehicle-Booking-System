@@ -1,0 +1,1198 @@
+﻿@model IEnumerable<CompanyVehicleBookingSystem.Models.Booking>
+
+@{
+    ViewBag.Title = "Booking Management";
+
+    var bookings = Model.ToList();
+
+    var totalBookings = bookings.Count;
+    var pendingBookings = bookings.Count(b => b.Status == "Pending");
+    var approvedBookings = bookings.Count(b => b.Status == "Approved");
+    var rejectedBookings = bookings.Count(b => b.Status == "Rejected");
+    var completedBookings = bookings.Count(b => b.Status == "Completed");
+    var cancelledBookings = bookings.Count(b => b.Status == "Cancelled");
+}
+
+<style>
+
+    /* =========================================================
+       ADMIN BOOKING MANAGEMENT
+       ========================================================= */
+
+    .admin-bookings-page {
+        max-width: 1550px;
+        margin: 0 auto;
+        padding: 10px 10px 50px 10px;
+    }
+
+
+    /* =========================================================
+       PAGE HEADER
+       ========================================================= */
+
+    .admin-bookings-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 30px;
+        margin-bottom: 28px;
+    }
+
+    .admin-bookings-eyebrow {
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 1.4px;
+        color: #287fd0;
+        margin-bottom: 7px;
+    }
+
+    .admin-bookings-header h1 {
+        margin: 0 0 8px 0;
+        font-size: 34px;
+        font-weight: 700;
+        color: #142f43;
+    }
+
+    .admin-bookings-header p {
+        margin: 0;
+        color: #71808e;
+        font-size: 14px;
+    }
+
+
+    /* =========================================================
+       HEADER BADGE
+       ========================================================= */
+
+    .admin-booking-header-badge {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: #ffffff;
+        border: 1px solid #e4ebf0;
+        border-radius: 12px;
+        padding: 12px 16px;
+        box-shadow: 0 5px 18px rgba(20, 47, 67, 0.05);
+    }
+
+    .admin-booking-header-badge-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        background: #eaf3fb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+    }
+
+    .admin-booking-header-badge span {
+        display: block;
+        color: #788894;
+        font-size: 11px;
+        margin-bottom: 2px;
+    }
+
+    .admin-booking-header-badge strong {
+        display: block;
+        color: #142f43;
+        font-size: 16px;
+    }
+
+
+    /* =========================================================
+       SUMMARY CARDS
+       ========================================================= */
+
+    .admin-booking-summary {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 15px;
+        margin-bottom: 28px;
+    }
+
+    .admin-booking-stat {
+        background: #ffffff;
+        border: 1px solid #e5ebf0;
+        border-radius: 15px;
+        padding: 18px;
+        box-shadow: 0 5px 18px rgba(20, 47, 67, 0.05);
+        transition: all 0.2s ease;
+    }
+
+        .admin-booking-stat:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 9px 25px rgba(20, 47, 67, 0.09);
+        }
+
+    .admin-booking-stat-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+    }
+
+    .admin-booking-stat-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 17px;
+    }
+
+        .admin-booking-stat-icon.total {
+            background: #eaf3fb;
+        }
+
+        .admin-booking-stat-icon.pending {
+            background: #fff4d6;
+        }
+
+        .admin-booking-stat-icon.approved {
+            background: #e6f7ef;
+        }
+
+        .admin-booking-stat-icon.rejected {
+            background: #fdeaea;
+        }
+
+        .admin-booking-stat-icon.completed {
+            background: #e9eef3;
+        }
+
+        .admin-booking-stat-icon.cancelled {
+            background: #fce8e8;
+        }
+
+    .admin-booking-stat-label {
+        color: #788894;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+    }
+
+    .admin-booking-stat-value {
+        color: #142f43;
+        font-size: 25px;
+        font-weight: 700;
+        line-height: 1;
+    }
+
+
+    /* =========================================================
+       MAIN CARD
+       ========================================================= */
+
+    .admin-bookings-card {
+        background: #ffffff;
+        border: 1px solid #e4ebf0;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 7px 28px rgba(20, 47, 67, 0.06);
+    }
+
+    .admin-bookings-card-header {
+        padding: 23px 25px;
+        border-bottom: 1px solid #edf1f4;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+    }
+
+        .admin-bookings-card-header h2 {
+            margin: 0 0 5px 0;
+            color: #142f43;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .admin-bookings-card-header p {
+            margin: 0;
+            color: #7a8995;
+            font-size: 13px;
+        }
+
+    .admin-booking-count {
+        background: #eef4f8;
+        color: #24455b;
+        padding: 7px 13px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+
+    /* =========================================================
+       TABLE
+       ========================================================= */
+
+    .admin-bookings-table-wrapper {
+        overflow-x: auto;
+    }
+
+    .admin-bookings-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 0;
+        min-width: 1050px;
+    }
+
+        .admin-bookings-table thead {
+            background: #f7f9fb;
+        }
+
+        .admin-bookings-table th {
+            padding: 14px 17px;
+            text-align: left;
+            border-bottom: 1px solid #e6edf1;
+            color: #6b7d8b;
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+            white-space: nowrap;
+        }
+
+        .admin-bookings-table td {
+            padding: 17px;
+            border-bottom: 1px solid #edf1f4;
+            color: #334b5d;
+            font-size: 13px;
+            vertical-align: middle;
+        }
+
+        .admin-bookings-table tbody tr {
+            transition: background 0.2s ease;
+        }
+
+            .admin-bookings-table tbody tr:hover {
+                background: #f9fbfc;
+            }
+
+            .admin-bookings-table tbody tr:last-child td {
+                border-bottom: none;
+            }
+
+
+    /* =========================================================
+       EMPLOYEE
+       ========================================================= */
+
+    .admin-employee-cell {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        min-width: 175px;
+    }
+
+    .admin-employee-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 11px;
+        background: #eaf3fb;
+        color: #287fd0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 15px;
+        font-weight: 800;
+        flex-shrink: 0;
+    }
+
+    .admin-employee-name {
+        font-size: 13px;
+        font-weight: 700;
+        color: #142f43;
+    }
+
+    .admin-employee-label {
+        font-size: 10px;
+        color: #8996a1;
+        margin-top: 3px;
+    }
+
+
+    /* =========================================================
+       VEHICLE
+       ========================================================= */
+
+    .admin-vehicle-cell {
+        min-width: 175px;
+    }
+
+    .admin-vehicle-name {
+        color: #142f43;
+        font-weight: 700;
+        font-size: 13px;
+    }
+
+    .admin-vehicle-make {
+        color: #87949f;
+        font-size: 10px;
+        margin-top: 3px;
+    }
+
+    .admin-registration {
+        display: inline-block;
+        padding: 6px 9px;
+        background: #f2f5f7;
+        border: 1px solid #e2e8ec;
+        border-radius: 6px;
+        color: #203e52;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.3px;
+    }
+
+
+    /* =========================================================
+       DATES
+       ========================================================= */
+
+    .admin-date {
+        white-space: nowrap;
+    }
+
+    .admin-date-main {
+        color: #29485d;
+        font-weight: 600;
+        font-size: 12px;
+    }
+
+    .admin-date-time {
+        color: #8a98a3;
+        font-size: 10px;
+        margin-top: 3px;
+    }
+
+
+    /* =========================================================
+       STATUS
+       ========================================================= */
+
+    .admin-booking-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 11px;
+        border-radius: 20px;
+        font-size: 10px;
+        font-weight: 800;
+        white-space: nowrap;
+    }
+
+    .admin-status-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: currentColor;
+    }
+
+    .admin-booking-status.pending {
+        background: #fff4d6;
+        color: #a66a00;
+    }
+
+    .admin-booking-status.approved {
+        background: #e5f7ee;
+        color: #16804f;
+    }
+
+    .admin-booking-status.rejected {
+        background: #fde9e9;
+        color: #c03939;
+    }
+
+    .admin-booking-status.completed {
+        background: #e9eef3;
+        color: #536675;
+    }
+
+    .admin-booking-status.cancelled {
+        background: #fce8e8;
+        color: #bd3d3d;
+    }
+
+    .admin-booking-status.default {
+        background: #edf1f4;
+        color: #657783;
+    }
+
+
+    /* =========================================================
+       ACTION BUTTONS
+       ========================================================= */
+
+    .admin-booking-actions {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        white-space: nowrap;
+    }
+
+    .admin-action-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 8px 12px;
+        border-radius: 7px;
+        text-decoration: none !important;
+        font-size: 11px;
+        font-weight: 700;
+        transition: all 0.2s ease;
+        border: none;
+    }
+
+    .admin-action-review {
+        background: #287fd0;
+        color: #ffffff !important;
+    }
+
+        .admin-action-review:hover {
+            background: #1d68ad;
+            transform: translateY(-1px);
+        }
+
+    .admin-action-inspection {
+        background: #e5f7ee;
+        color: #16804f !important;
+    }
+
+        .admin-action-inspection:hover {
+            background: #16804f;
+            color: #ffffff !important;
+        }
+
+    .admin-action-view {
+        background: #eaf3fb;
+        color: #287fd0 !important;
+    }
+
+        .admin-action-view:hover {
+            background: #287fd0;
+            color: #ffffff !important;
+        }
+
+    .admin-action-none {
+        color: #9aa6ae;
+        font-size: 11px;
+        font-weight: 600;
+    }
+
+
+    /* =========================================================
+       EMPTY STATE
+       ========================================================= */
+
+    .admin-booking-empty {
+        padding: 75px 30px;
+        text-align: center;
+    }
+
+    .admin-booking-empty-icon {
+        width: 78px;
+        height: 78px;
+        margin: 0 auto 20px auto;
+        border-radius: 21px;
+        background: #edf4f9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 34px;
+    }
+
+    .admin-booking-empty h3 {
+        margin: 0 0 8px 0;
+        color: #142f43;
+        font-size: 21px;
+        font-weight: 700;
+    }
+
+    .admin-booking-empty p {
+        max-width: 480px;
+        margin: 0 auto;
+        color: #7b8995;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+
+    /* =========================================================
+       FOOTER
+       ========================================================= */
+
+    .admin-bookings-footer {
+        padding: 18px 25px;
+        border-top: 1px solid #edf1f4;
+        background: #fafcfd;
+        color: #87949f;
+        font-size: 11px;
+    }
+
+
+    /* =========================================================
+       RESPONSIVE
+       ========================================================= */
+
+    @@media (max-width: 1250px) {
+
+        .admin-booking-summary {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+
+
+    @@media (max-width: 768px) {
+
+        .admin-bookings-page {
+            padding: 5px 5px 40px 5px;
+        }
+
+        .admin-bookings-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+            .admin-bookings-header h1 {
+                font-size: 28px;
+            }
+
+        .admin-booking-header-badge {
+            width: 100%;
+        }
+
+        .admin-booking-summary {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .admin-bookings-card-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+
+
+    @@media (max-width: 480px) {
+
+        .admin-booking-summary {
+            grid-template-columns: 1fr;
+        }
+
+        .admin-booking-stat {
+            padding: 16px;
+        }
+    }
+</style>
+
+
+<div class="admin-bookings-page">
+
+
+    <!-- =====================================================
+         PAGE HEADER
+         ====================================================== -->
+
+    <div class="admin-bookings-header">
+
+        <div>
+
+            <div class="admin-bookings-eyebrow">
+                ADMINISTRATION
+            </div>
+
+            <h1>
+                Booking Management
+            </h1>
+
+            <p>
+                Review, approve and manage company vehicle booking requests.
+            </p>
+
+        </div>
+
+
+        <div class="admin-booking-header-badge">
+
+            <div class="admin-booking-header-badge-icon">
+                📋
+            </div>
+
+            <div>
+
+                <span>
+                    Total Requests
+                </span>
+
+                <strong>
+                    @totalBookings
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         SUMMARY CARDS
+         ====================================================== -->
+
+    <div class="admin-booking-summary">
+
+
+        <div class="admin-booking-stat">
+
+            <div class="admin-booking-stat-top">
+
+                <div class="admin-booking-stat-icon total">
+                    📋
+                </div>
+
+            </div>
+
+            <div class="admin-booking-stat-label">
+                Total
+            </div>
+
+            <div class="admin-booking-stat-value">
+                @totalBookings
+            </div>
+
+        </div>
+
+
+        <div class="admin-booking-stat">
+
+            <div class="admin-booking-stat-top">
+
+                <div class="admin-booking-stat-icon pending">
+                    ⏳
+                </div>
+
+            </div>
+
+            <div class="admin-booking-stat-label">
+                Pending
+            </div>
+
+            <div class="admin-booking-stat-value">
+                @pendingBookings
+            </div>
+
+        </div>
+
+
+        <div class="admin-booking-stat">
+
+            <div class="admin-booking-stat-top">
+
+                <div class="admin-booking-stat-icon approved">
+                    ✓
+                </div>
+
+            </div>
+
+            <div class="admin-booking-stat-label">
+                Approved
+            </div>
+
+            <div class="admin-booking-stat-value">
+                @approvedBookings
+            </div>
+
+        </div>
+
+
+        <div class="admin-booking-stat">
+
+            <div class="admin-booking-stat-top">
+
+                <div class="admin-booking-stat-icon rejected">
+                    !
+                </div>
+
+            </div>
+
+            <div class="admin-booking-stat-label">
+                Rejected
+            </div>
+
+            <div class="admin-booking-stat-value">
+                @rejectedBookings
+            </div>
+
+        </div>
+
+
+        <div class="admin-booking-stat">
+
+            <div class="admin-booking-stat-top">
+
+                <div class="admin-booking-stat-icon completed">
+                    ✓
+                </div>
+
+            </div>
+
+            <div class="admin-booking-stat-label">
+                Completed
+            </div>
+
+            <div class="admin-booking-stat-value">
+                @completedBookings
+            </div>
+
+        </div>
+
+
+        <div class="admin-booking-stat">
+
+            <div class="admin-booking-stat-top">
+
+                <div class="admin-booking-stat-icon cancelled">
+                    ×
+                </div>
+
+            </div>
+
+            <div class="admin-booking-stat-label">
+                Cancelled
+            </div>
+
+            <div class="admin-booking-stat-value">
+                @cancelledBookings
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         BOOKINGS CARD
+         ====================================================== -->
+
+    <div class="admin-bookings-card">
+
+
+        <div class="admin-bookings-card-header">
+
+            <div>
+
+                <h2>
+                    Vehicle Booking Requests
+                </h2>
+
+                <p>
+                    Review employee requests and manage their approval workflow.
+                </p>
+
+            </div>
+
+            <div class="admin-booking-count">
+                @totalBookings request(s)
+            </div>
+
+        </div>
+
+
+        @if (!Model.Any())
+        {
+
+            <!-- EMPTY STATE -->
+
+            <div class="admin-booking-empty">
+
+                <div class="admin-booking-empty-icon">
+                    🚗
+                </div>
+
+                <h3>
+                    No Booking Requests
+                </h3>
+
+                <p>
+                    There are currently no company vehicle booking requests
+                    waiting to be managed.
+                </p>
+
+            </div>
+
+        }
+        else
+        {
+
+            <!-- =================================================
+                 TABLE
+                 ================================================== -->
+
+            <div class="admin-bookings-table-wrapper">
+
+                <table class="admin-bookings-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Employee
+                            </th>
+
+                            <th>
+                                Vehicle
+                            </th>
+
+                            <th>
+                                Registration
+                            </th>
+
+                            <th>
+                                Start
+                            </th>
+
+                            <th>
+                                End
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Requested
+                            </th>
+
+                            <th>
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        @foreach (var booking in Model)
+                        {
+
+                            <tr>
+
+
+                                <!-- EMPLOYEE -->
+
+                                <td>
+
+                                    <div class="admin-employee-cell">
+
+                                        <div class="admin-employee-avatar">
+
+                                            @if (booking.User != null &&
+                                                 !String.IsNullOrEmpty(booking.User.FirstName) &&
+                                                 !String.IsNullOrEmpty(booking.User.LastName))
+                                            {
+                                                @booking.User.FirstName.Substring(0, 1).ToUpper()
+                                            }
+                                            else
+                                            {
+                                                <text>U</text>
+                                            }
+
+                                        </div>
+
+
+                                        <div>
+
+                                            <div class="admin-employee-name">
+
+                                                @if (booking.User != null)
+                                                {
+                                                    @booking.User.FirstName
+                                                    @:
+                                                    @booking.User.LastName
+                                                }
+                                                else
+                                                {
+                                                    <span>
+                                                        Unknown Employee
+                                                    </span>
+                                                }
+
+                                            </div>
+
+                                            <div class="admin-employee-label">
+                                                Employee
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- VEHICLE -->
+
+                                <td>
+
+                                    <div class="admin-vehicle-cell">
+
+                                        <div class="admin-vehicle-name">
+
+                                            @if (booking.Vehicle != null)
+                                            {
+                                                @booking.Vehicle.Make
+                                                @:
+                                                @booking.Vehicle.Model
+                                            }
+                                            else
+                                            {
+                                                <span>
+                                                    Vehicle unavailable
+                                                </span>
+                                            }
+
+                                        </div>
+
+                                        <div class="admin-vehicle-make">
+
+                                            @if (booking.Vehicle != null)
+                                            {
+                                                @booking.Vehicle.Year
+                                            }
+
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- REGISTRATION -->
+
+                                <td>
+
+                                    @if (booking.Vehicle != null)
+                                    {
+                                        <span class="admin-registration">
+                                            @booking.Vehicle.RegistrationNumber
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="admin-action-none">
+                                            —
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <!-- START -->
+
+                                <td>
+
+                                    <div class="admin-date">
+
+                                        <div class="admin-date-main">
+                                            @booking.StartDateTime.ToString("dd/MM/yyyy")
+                                        </div>
+
+                                        <div class="admin-date-time">
+                                            @booking.StartDateTime.ToString("HH:mm")
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- END -->
+
+                                <td>
+
+                                    <div class="admin-date">
+
+                                        <div class="admin-date-main">
+                                            @booking.EndDateTime.ToString("dd/MM/yyyy")
+                                        </div>
+
+                                        <div class="admin-date-time">
+                                            @booking.EndDateTime.ToString("HH:mm")
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- STATUS -->
+
+                                <td>
+
+                                    @if (booking.Status == "Pending")
+                                    {
+                                        <span class="admin-booking-status pending">
+
+                                            <span class="admin-status-dot"></span>
+
+                                            Pending
+
+                                        </span>
+                                    }
+                                    else if (booking.Status == "Approved")
+                                    {
+                                        <span class="admin-booking-status approved">
+
+                                            <span class="admin-status-dot"></span>
+
+                                            Approved
+
+                                        </span>
+                                    }
+                                    else if (booking.Status == "Rejected")
+                                    {
+                                        <span class="admin-booking-status rejected">
+
+                                            <span class="admin-status-dot"></span>
+
+                                            Rejected
+
+                                        </span>
+                                    }
+                                    else if (booking.Status == "Completed")
+                                    {
+                                        <span class="admin-booking-status completed">
+
+                                            <span class="admin-status-dot"></span>
+
+                                            Completed
+
+                                        </span>
+                                    }
+                                    else if (booking.Status == "Cancelled")
+                                    {
+                                        <span class="admin-booking-status cancelled">
+
+                                            <span class="admin-status-dot"></span>
+
+                                            Cancelled
+
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="admin-booking-status default">
+
+                                            <span class="admin-status-dot"></span>
+
+                                            @booking.Status
+
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <!-- REQUESTED -->
+
+                                <td>
+
+                                    <div class="admin-date">
+
+                                        <div class="admin-date-main">
+                                            @booking.DateCreated.ToString("dd/MM/yyyy")
+                                        </div>
+
+                                        <div class="admin-date-time">
+                                            @booking.DateCreated.ToString("HH:mm")
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- ACTION -->
+
+                                <td>
+
+                                    <div class="admin-booking-actions">
+
+                                        @if (booking.Status == "Pending")
+                                        {
+                                            @Html.ActionLink(
+                                                "Review",
+                                                "Review",
+                                                "Booking",
+                                                new { id = booking.BookingId },
+                                                new { @class = "admin-action-button admin-action-review" }
+                                            )
+                                        }
+                                        else if (booking.Status == "Approved")
+                                        {
+                                            @Html.ActionLink(
+                                                "Inspection",
+                                                "Index",
+                                                "VehicleInspection",
+                                                new { bookingId = booking.BookingId },
+                                                new { @class = "admin-action-button admin-action-inspection" }
+                                            )
+                                        }
+                                        else if (booking.Status == "Completed")
+                                        {
+                                            @Html.ActionLink(
+                                                "View Inspection",
+                                                "Index",
+                                                "VehicleInspection",
+                                                new { bookingId = booking.BookingId },
+                                                new { @class = "admin-action-button admin-action-view" }
+                                            )
+                                        }
+                                        else
+                                        {
+                                            <span class="admin-action-none">
+                                                No action
+                                            </span>
+                                        }
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- FOOTER -->
+
+            <div class="admin-bookings-footer">
+
+                Showing
+                <strong>@totalBookings</strong>
+                booking request(s) in the system.
+
+                &nbsp;&nbsp;|&nbsp;&nbsp;
+                <a href="~/Views/Booking/Review.cshtml">~/Views/Booking/Review.cshtml</a>
+                Pending requests require administrator review.
+
+            </div>
+
+        }
+
+    </div>
+
+</div>

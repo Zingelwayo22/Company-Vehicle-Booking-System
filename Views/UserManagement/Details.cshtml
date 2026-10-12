@@ -1,0 +1,1001 @@
+﻿@model CompanyVehicleBookingSystem.Models.ApplicationUser
+
+@{
+    ViewBag.Title = "Employee Details";
+
+    var bookings = ViewBag.Bookings as IEnumerable<CompanyVehicleBookingSystem.Models.Booking>
+        ?? Enumerable.Empty<CompanyVehicleBookingSystem.Models.Booking>();
+
+    var bookingList = bookings.ToList();
+
+    var totalBookings = bookingList.Count;
+    var pendingBookings = bookingList.Count(b => b.Status == "Pending");
+    var approvedBookings = bookingList.Count(b => b.Status == "Approved");
+    var completedBookings = bookingList.Count(b => b.Status == "Completed");
+
+    var firstName = Model.FirstName ?? "";
+    var lastName = Model.LastName ?? "";
+
+    var initials = (firstName.Length > 0 ? firstName.Substring(0, 1) : "")
+        + (lastName.Length > 0 ? lastName.Substring(0, 1) : "");
+
+    if (String.IsNullOrWhiteSpace(initials))
+    {
+        initials = "E";
+    }
+}
+
+<style>
+    .ed-page {
+        max-width: 1450px;
+        margin: 0 auto;
+        padding: 10px 10px 45px;
+        color: #183247;
+    }
+
+    .ed-back-link {
+        display: inline-block;
+        margin-bottom: 20px;
+        color: #287fd0 !important;
+        text-decoration: none !important;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .ed-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        margin-bottom: 26px;
+    }
+
+    .ed-eyebrow {
+        color: #287fd0;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 1.5px;
+        margin-bottom: 8px;
+    }
+
+    .ed-header h1 {
+        margin: 0 0 8px;
+        color: #142f43;
+        font-size: 31px;
+        font-weight: 800;
+    }
+
+    .ed-header p {
+        margin: 0;
+        color: #788995;
+        font-size: 13px;
+        line-height: 1.7;
+    }
+
+    .ed-edit-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 12px 17px;
+        border-radius: 9px;
+        background: #287fd0;
+        color: #fff !important;
+        text-decoration: none !important;
+        font-size: 12px;
+        font-weight: 800;
+        white-space: nowrap;
+        box-shadow: 0 5px 13px rgba(40, 127, 208, .16);
+        transition: all .2s ease;
+    }
+
+        .ed-edit-button:hover {
+            background: #1d68ad;
+            transform: translateY(-1px);
+        }
+
+    .ed-profile-card {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        margin-bottom: 23px;
+        padding: 25px;
+        background: #fff;
+        border: 1px solid #e3eaf0;
+        border-radius: 16px;
+        box-shadow: 0 7px 25px rgba(20, 47, 67, .05);
+    }
+
+    .ed-profile-main {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        min-width: 0;
+    }
+
+    .ed-avatar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 75px;
+        height: 75px;
+        flex-shrink: 0;
+        border-radius: 20px;
+        background: #e7f1fb;
+        color: #287fd0;
+        font-size: 24px;
+        font-weight: 800;
+        text-transform: uppercase;
+    }
+
+    .ed-profile-name {
+        margin: 0 0 6px;
+        color: #142f43;
+        font-size: 22px;
+        font-weight: 800;
+        overflow-wrap: anywhere;
+    }
+
+    .ed-profile-email {
+        margin-bottom: 10px;
+        color: #788995;
+        font-size: 12px;
+        overflow-wrap: anywhere;
+    }
+
+    .ed-profile-meta {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .ed-employee-number {
+        display: inline-block;
+        padding: 6px 9px;
+        border: 1px solid #e1e8ed;
+        border-radius: 6px;
+        background: #f5f8fa;
+        color: #365469;
+        font-size: 10px;
+        font-weight: 800;
+    }
+
+    .ed-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 10px;
+        border-radius: 20px;
+        font-size: 10px;
+        font-weight: 800;
+        white-space: nowrap;
+    }
+
+    .ed-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: currentColor;
+    }
+
+    .ed-active {
+        background: #e5f7ee;
+        color: #16804f;
+    }
+
+    .ed-inactive {
+        background: #fdeaea;
+        color: #bf3939;
+    }
+
+    .ed-allowed {
+        background: #eaf3fb;
+        color: #287fd0;
+    }
+
+    .ed-restricted {
+        background: #fff4d6;
+        color: #986400;
+    }
+
+    .ed-summary-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+
+    .ed-stat {
+        padding: 19px;
+        background: #fff;
+        border: 1px solid #e3eaf0;
+        border-radius: 13px;
+        box-shadow: 0 5px 18px rgba(20, 47, 67, .04);
+    }
+
+    .ed-stat-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        margin-bottom: 13px;
+        border-radius: 10px;
+        background: #eaf3fb;
+        font-size: 16px;
+    }
+
+    .ed-stat-label {
+        margin-bottom: 7px;
+        color: #788995;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: .5px;
+        text-transform: uppercase;
+    }
+
+    .ed-stat-value {
+        color: #142f43;
+        font-size: 27px;
+        font-weight: 800;
+        line-height: 1.2;
+    }
+
+    .ed-content-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 21px;
+        margin-bottom: 23px;
+    }
+
+    .ed-card {
+        min-width: 0;
+        overflow: hidden;
+        background: #fff;
+        border: 1px solid #e3eaf0;
+        border-radius: 15px;
+        box-shadow: 0 7px 25px rgba(20, 47, 67, .04);
+    }
+
+    .ed-card-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 19px 22px;
+        border-bottom: 1px solid #edf1f4;
+        background: #fcfdfe;
+    }
+
+    .ed-card-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 39px;
+        height: 39px;
+        flex-shrink: 0;
+        border-radius: 11px;
+        background: #eaf3fb;
+        font-size: 17px;
+    }
+
+    .ed-card-header h2 {
+        margin: 0 0 5px;
+        color: #183247;
+        font-size: 15px;
+        font-weight: 800;
+    }
+
+    .ed-card-header p {
+        margin: 0;
+        color: #84929d;
+        font-size: 11px;
+        line-height: 1.5;
+    }
+
+    .ed-card-body {
+        padding: 7px 22px 15px;
+    }
+
+    .ed-detail-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 15px;
+        padding: 15px 0;
+        border-bottom: 1px solid #edf1f4;
+    }
+
+        .ed-detail-row:last-child {
+            border-bottom: none;
+        }
+
+    .ed-detail-label {
+        color: #788995;
+        font-size: 11px;
+        line-height: 1.6;
+    }
+
+    .ed-detail-value {
+        max-width: 62%;
+        color: #29475b;
+        font-size: 12px;
+        font-weight: 700;
+        text-align: right;
+        overflow-wrap: anywhere;
+        line-height: 1.6;
+    }
+
+    .ed-muted {
+        color: #9aa6af;
+        font-weight: 500;
+    }
+
+    .ed-history-card {
+        overflow: hidden;
+        background: #fff;
+        border: 1px solid #e3eaf0;
+        border-radius: 16px;
+        box-shadow: 0 7px 25px rgba(20, 47, 67, .05);
+    }
+
+    .ed-history-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+        padding: 22px 24px;
+        border-bottom: 1px solid #edf1f4;
+    }
+
+        .ed-history-header h2 {
+            margin: 0 0 6px;
+            color: #142f43;
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        .ed-history-header p {
+            margin: 0;
+            color: #788995;
+            font-size: 11px;
+        }
+
+    .ed-count {
+        padding: 8px 12px;
+        border-radius: 20px;
+        background: #eef4f8;
+        color: #365469;
+        font-size: 10px;
+        font-weight: 800;
+        white-space: nowrap;
+    }
+
+    .ed-table-wrapper {
+        overflow-x: auto;
+    }
+
+    .ed-table {
+        width: 100%;
+        min-width: 920px;
+        margin: 0;
+        border-collapse: collapse;
+    }
+
+        .ed-table thead {
+            background: #f7f9fb;
+        }
+
+        .ed-table th {
+            padding: 14px 16px;
+            border-bottom: 1px solid #e6edf1;
+            color: #718391;
+            font-size: 10px;
+            font-weight: 800;
+            text-align: left;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            white-space: nowrap;
+        }
+
+        .ed-table td {
+            padding: 16px;
+            border-bottom: 1px solid #edf1f4;
+            color: #365064;
+            font-size: 11px;
+            vertical-align: middle;
+        }
+
+        .ed-table tbody tr:hover {
+            background: #f9fbfc;
+        }
+
+        .ed-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+    .ed-vehicle-name {
+        margin-bottom: 4px;
+        color: #183247;
+        font-size: 12px;
+        font-weight: 800;
+    }
+
+    .ed-vehicle-subtitle {
+        color: #8997a2;
+        font-size: 10px;
+    }
+
+    .ed-registration {
+        display: inline-block;
+        padding: 6px 9px;
+        border: 1px solid #dce5eb;
+        border-radius: 6px;
+        background: #f7f9fb;
+        color: #29475b;
+        font-size: 10px;
+        font-weight: 800;
+        white-space: nowrap;
+    }
+
+    .ed-booking-status {
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 9px;
+        border-radius: 20px;
+        font-size: 10px;
+        font-weight: 800;
+        white-space: nowrap;
+    }
+
+    .ed-pending {
+        background: #fff4d6;
+        color: #986400;
+    }
+
+    .ed-approved {
+        background: #e5f7ee;
+        color: #16804f;
+    }
+
+    .ed-rejected {
+        background: #fdeaea;
+        color: #bf3939;
+    }
+
+    .ed-completed {
+        background: #edf0f3;
+        color: #526574;
+    }
+
+    .ed-cancelled {
+        background: #fff0e5;
+        color: #b45a19;
+    }
+
+    .ed-unknown {
+        background: #edf0f3;
+        color: #526574;
+    }
+
+    .ed-empty {
+        padding: 55px 25px;
+        text-align: center;
+    }
+
+    .ed-empty-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 70px;
+        height: 70px;
+        margin: 0 auto 17px;
+        border-radius: 20px;
+        background: #edf4f9;
+        font-size: 30px;
+    }
+
+    .ed-empty h3 {
+        margin: 0 0 9px;
+        color: #183247;
+        font-size: 18px;
+        font-weight: 800;
+    }
+
+    .ed-empty p {
+        max-width: 420px;
+        margin: 0 auto;
+        color: #788995;
+        font-size: 12px;
+        line-height: 1.7;
+    }
+
+    .ed-history-footer {
+        padding: 15px 24px;
+        border-top: 1px solid #edf1f4;
+        background: #fafcfd;
+        color: #788995;
+        font-size: 11px;
+    }
+
+    .ed-bottom-actions {
+        display: flex;
+        justify-content: flex-start;
+        gap: 10px;
+        margin-top: 23px;
+    }
+
+    .ed-secondary-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 11px 17px;
+        border: 1px solid #dce5eb;
+        border-radius: 8px;
+        background: #fff;
+        color: #526b7b !important;
+        text-decoration: none !important;
+        font-size: 11px;
+        font-weight: 800;
+    }
+
+        .ed-secondary-button:hover {
+            background: #f4f7f9;
+        }
+
+    @@media (max-width: 900px) {
+        .ed-summary-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .ed-content-grid {
+            grid-template-columns: minmax(0, 1fr);
+        }
+    }
+
+    @@media (max-width: 600px) {
+        .ed-page {
+            padding: 5px 5px 30px;
+        }
+
+        .ed-header {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+            .ed-header h1 {
+                font-size: 26px;
+            }
+
+        .ed-profile-card {
+            align-items: flex-start;
+            flex-direction: column;
+            padding: 19px;
+        }
+
+        .ed-profile-main {
+            align-items: flex-start;
+        }
+
+        .ed-avatar {
+            width: 58px;
+            height: 58px;
+            border-radius: 15px;
+        }
+
+        .ed-profile-name {
+            font-size: 18px;
+        }
+
+        .ed-summary-grid {
+            gap: 10px;
+        }
+
+        .ed-stat {
+            padding: 15px;
+        }
+
+        .ed-stat-value {
+            font-size: 23px;
+        }
+
+        .ed-card-header,
+        .ed-history-header {
+            padding: 17px;
+        }
+
+        .ed-card-body {
+            padding-right: 17px;
+            padding-left: 17px;
+        }
+
+        .ed-history-header {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .ed-detail-row {
+            gap: 10px;
+        }
+
+        .ed-detail-value {
+            max-width: 60%;
+        }
+    }
+</style>
+
+<div class="ed-page">
+
+    @Html.ActionLink("← Back to Employees", "Index", "UserManagement",
+        null, new { @class = "ed-back-link" })
+
+    <div class="ed-header">
+        <div>
+            <div class="ed-eyebrow">ADMINISTRATION / EMPLOYEE PROFILE</div>
+            <h1>Employee Details</h1>
+            <p>Review employee information, account access and company vehicle booking history.</p>
+        </div>
+
+        @Html.ActionLink("✎ Edit Employee", "Edit", "UserManagement",
+            new { id = Model.Id }, new { @class = "ed-edit-button" })
+    </div>
+
+    <!-- EMPLOYEE PROFILE -->
+    <div class="ed-profile-card">
+        <div class="ed-profile-main">
+            <div class="ed-avatar">@initials.ToUpper()</div>
+
+            <div>
+                <h2 class="ed-profile-name">
+                    @if (String.IsNullOrWhiteSpace(firstName) &&
+                         String.IsNullOrWhiteSpace(lastName))
+                    {
+                        <text>Employee Account</text>
+                    }
+                    else
+                    {
+                        @firstName @: @lastName
+                    }
+                </h2>
+
+                <div class="ed-profile-email">
+                    @(String.IsNullOrWhiteSpace(Model.Email) ? "No email provided" : Model.Email)
+                </div>
+
+                <div class="ed-profile-meta">
+                    <span class="ed-employee-number">
+                        Employee No: @(String.IsNullOrWhiteSpace(Model.EmployeeNumber)
+                            ? "Not assigned"
+                            : Model.EmployeeNumber)
+                    </span>
+
+                    @if (Model.IsActive)
+                    {
+                        <span class="ed-status ed-active">
+                            <span class="ed-dot"></span>Active Account
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="ed-status ed-inactive">
+                            <span class="ed-dot"></span>Inactive Account
+                        </span>
+                    }
+
+                    @if (Model.IsVehicleBookingAllowed)
+                    {
+                        <span class="ed-status ed-allowed">Vehicle Booking Allowed</span>
+                    }
+                    else
+                    {
+                        <span class="ed-status ed-restricted">Vehicle Booking Restricted</span>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOOKING SUMMARY -->
+    <div class="ed-summary-grid">
+        <div class="ed-stat">
+            <div class="ed-stat-icon">📋</div>
+            <div class="ed-stat-label">Total Bookings</div>
+            <div class="ed-stat-value">@totalBookings</div>
+        </div>
+
+        <div class="ed-stat">
+            <div class="ed-stat-icon">⏳</div>
+            <div class="ed-stat-label">Pending</div>
+            <div class="ed-stat-value">@pendingBookings</div>
+        </div>
+
+        <div class="ed-stat">
+            <div class="ed-stat-icon">✓</div>
+            <div class="ed-stat-label">Approved</div>
+            <div class="ed-stat-value">@approvedBookings</div>
+        </div>
+
+        <div class="ed-stat">
+            <div class="ed-stat-icon">🚗</div>
+            <div class="ed-stat-label">Completed</div>
+            <div class="ed-stat-value">@completedBookings</div>
+        </div>
+    </div>
+
+    <!-- EMPLOYEE INFORMATION -->
+    <div class="ed-content-grid">
+
+        <div class="ed-card">
+            <div class="ed-card-header">
+                <div class="ed-card-icon">👤</div>
+                <div>
+                    <h2>Employee Information</h2>
+                    <p>Personal and organisational details.</p>
+                </div>
+            </div>
+
+            <div class="ed-card-body">
+
+                <div class="ed-detail-row">
+                    <div class="ed-detail-label">Employee Number</div>
+                    <div class="ed-detail-value">
+                        @(String.IsNullOrWhiteSpace(Model.EmployeeNumber)
+                            ? "Not assigned"
+                            : Model.EmployeeNumber)
+                    </div>
+                </div>
+
+                <div class="ed-detail-row">
+                    <div class="ed-detail-label">First Name</div>
+                    <div class="ed-detail-value">
+                        @(String.IsNullOrWhiteSpace(Model.FirstName) ? "Not provided" : Model.FirstName)
+                    </div>
+                </div>
+
+                <div class="ed-detail-row">
+                    <div class="ed-detail-label">Last Name</div>
+                    <div class="ed-detail-value">
+                        @(String.IsNullOrWhiteSpace(Model.LastName) ? "Not provided" : Model.LastName)
+                    </div>
+                </div>
+
+                <div class="ed-detail-row">
+                    <div class="ed-detail-label">Email Address</div>
+                    <div class="ed-detail-value">
+                        @(String.IsNullOrWhiteSpace(Model.Email) ? "Not provided" : Model.Email)
+                    </div>
+                </div>
+
+                <div class="ed-detail-row">
+                    <div class="ed-detail-label">Position</div>
+                    <div class="ed-detail-value">
+                        @(String.IsNullOrWhiteSpace(Model.Position) ? "Not assigned" : Model.Position)
+                    </div>
+                </div>
+
+                <div class="ed-detail-row">
+                    <div class="ed-detail-label">Department</div>
+                    <div class="ed-detail-value">
+                        @if (Model.Department != null)
+                        {
+                            @Model.Department.Name
+                        }
+                        else
+                        {
+                            <span class="ed-muted">Not assigned</span>
+                        }
+                    </div>
+                </div>
+
+                <div class="ed-detail-row">
+                    <div class="ed-detail-label">Date Added</div>
+                    <div class="ed-detail-value">@Model.DateAdded.ToString("dd/MM/yyyy")</div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- DRIVER INFORMATION -->
+        <div class="ed-card">
+            <div class="ed-card-header">
+                <div class="ed-card-icon">🚗</div>
+                <div>
+                    <h2>Driver Information</h2>
+                    <p>Licence details relevant to vehicle use.</p>
+                </div>
+            </div>
+
+            <div class="ed-card-body">
+
+                <div class="ed-detail-row">
+                    <div class="ed-detail-label">Driver's Licence Number</div>
+                    <div class="ed-detail-value">
+                        @if (!String.IsNullOrWhiteSpace(Model.DriversLicenceNumber))
+                        {
+                            @Model.DriversLicenceNumber
+                        }
+                        else
+                        {
+                            <span class="ed-muted">Not provided</span>
+                        }
+                    </div>
+                </div>
+
+                <div class="ed-detail-row">
+                    <div class="ed-detail-label">Driver's Licence Expiry</div>
+                    <div class="ed-detail-value">
+                        @if (Model.DriversLicenceExpiry.HasValue)
+                        {
+                            @Model.DriversLicenceExpiry.Value.ToString("dd/MM/yyyy")
+                        }
+                        else
+                        {
+                            <span class="ed-muted">Not provided</span>
+                        }
+                    </div>
+                </div>
+
+                <div class="ed-detail-row">
+                    <div class="ed-detail-label">Account Status</div>
+                    <div class="ed-detail-value">
+                        @if (Model.IsActive)
+                        {
+                            <span class="ed-status ed-active">Active</span>
+                        }
+                        else
+                        {
+                            <span class="ed-status ed-inactive">Inactive</span>
+                        }
+                    </div>
+                </div>
+
+                <div class="ed-detail-row">
+                    <div class="ed-detail-label">Vehicle Booking Permission</div>
+                    <div class="ed-detail-value">
+                        @if (Model.IsVehicleBookingAllowed)
+                        {
+                            <span class="ed-status ed-allowed">Allowed</span>
+                        }
+                        else
+                        {
+                            <span class="ed-status ed-restricted">Not Allowed</span>
+                        }
+                    </div>
+                </div>
+
+                <div class="ed-detail-row">
+                    <div class="ed-detail-label">Booking Records</div>
+                    <div class="ed-detail-value">@totalBookings recorded</div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- VEHICLE BOOKING HISTORY -->
+    <div class="ed-history-card">
+
+        <div class="ed-history-header">
+            <div>
+                <h2>Vehicle Booking History</h2>
+                <p>Historical and current vehicle booking records for this employee.</p>
+            </div>
+
+            <div class="ed-count">@totalBookings booking(s)</div>
+        </div>
+
+        @if (!bookingList.Any())
+        {
+            <div class="ed-empty">
+                <div class="ed-empty-icon">🚘</div>
+                <h3>No Booking History</h3>
+                <p>This employee has no vehicle booking records yet. Bookings will appear here when they are created.</p>
+            </div>
+        }
+        else
+        {
+            <div class="ed-table-wrapper">
+                <table class="ed-table">
+                    <thead>
+                        <tr>
+                            <th>Vehicle</th>
+                            <th>Registration</th>
+                            <th>Booking Start</th>
+                            <th>Booking End</th>
+                            <th>Status</th>
+                            <th>Date Requested</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var booking in bookingList.OrderByDescending(b => b.DateCreated))
+                        {
+                            <tr>
+                                <td>
+                                    @if (booking.Vehicle != null)
+                                    {
+                                        <div class="ed-vehicle-name">
+                                            @booking.Vehicle.Make @booking.Vehicle.Model
+                                        </div>
+                                        <div class="ed-vehicle-subtitle">
+                                            @booking.Vehicle.Year
+                                            : "Company vehicle")
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="ed-vehicle-name">Unknown Vehicle</div>
+                                        <div class="ed-vehicle-subtitle">Vehicle details unavailable</div>
+                                    }
+                                </td>
+
+                                <td>
+                                    @if (booking.Vehicle != null &&
+                                         !String.IsNullOrWhiteSpace(booking.Vehicle.RegistrationNumber))
+                                    {
+                                        <span class="ed-registration">
+                                            @booking.Vehicle.RegistrationNumber
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="ed-muted">—</span>
+                                    }
+                                </td>
+
+                                <td>@booking.StartDateTime.ToString("dd/MM/yyyy HH:mm")</td>
+
+                                <td>@booking.EndDateTime.ToString("dd/MM/yyyy HH:mm")</td>
+
+                                <td>
+                                    @if (booking.Status == "Pending")
+                                    {
+                                        <span class="ed-booking-status ed-pending">Pending</span>
+                                    }
+                                    else if (booking.Status == "Approved")
+                                    {
+                                        <span class="ed-booking-status ed-approved">Approved</span>
+                                    }
+                                    else if (booking.Status == "Rejected")
+                                    {
+                                        <span class="ed-booking-status ed-rejected">Rejected</span>
+                                    }
+                                    else if (booking.Status == "Completed")
+                                    {
+                                        <span class="ed-booking-status ed-completed">Completed</span>
+                                    }
+                                    else if (booking.Status == "Cancelled")
+                                    {
+                                        <span class="ed-booking-status ed-cancelled">Cancelled</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="ed-booking-status ed-unknown">
+                                            @(String.IsNullOrWhiteSpace(booking.Status)
+                                                ? "Unknown"
+                                                : booking.Status)
+                                        </span>
+                                    }
+                                </td>
+
+                                <td>@booking.DateCreated.ToString("dd/MM/yyyy HH:mm")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="ed-history-footer">
+                Showing @totalBookings booking record(s), including historical bookings.
+            </div>
+        }
+
+    </div>
+
+    <div class="ed-bottom-actions">
+        @Html.ActionLink("← Back to Employee Management", "Index", "UserManagement",
+            null, new { @class = "ed-secondary-button" })
+    </div>
+
+</div>

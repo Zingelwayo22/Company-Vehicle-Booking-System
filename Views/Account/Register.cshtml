@@ -1,0 +1,367 @@
+﻿@model CompanyVehicleBookingSystem.Models.RegisterViewModel
+
+@{
+    ViewBag.Title = "Register";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Create Account | Company Vehicle Booking System</title>
+
+    @Styles.Render("~/Content/css")
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+
+        .register-wrapper {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 35px 20px;
+        }
+
+        .register-card {
+            width: 100%;
+            max-width: 960px;
+            display: grid;
+            grid-template-columns: 0.9fr 1.1fr;
+            overflow: hidden;
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(15, 23, 42, 0.12);
+        }
+
+        .register-brand {
+            padding: 50px 38px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            color: #fff;
+            background: linear-gradient(145deg, #102a43, #176b87);
+        }
+
+        .brand-icon {
+            width: 66px;
+            height: 66px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 28px;
+            border: 1px solid rgba(255,255,255,.25);
+            border-radius: 17px;
+            background: rgba(255,255,255,.12);
+            font-size: 32px;
+        }
+
+        .register-brand h1 {
+            margin: 0 0 18px;
+            font-size: 29px;
+            line-height: 1.4;
+            font-weight: 700;
+        }
+
+        .register-brand p {
+            color: #d8e8f2;
+            font-size: 14px;
+            line-height: 1.9;
+        }
+
+        .brand-note {
+            margin-top: 28px;
+            padding-top: 22px;
+            border-top: 1px solid rgba(255,255,255,.2);
+            color: #d8e8f2;
+            font-size: 12px;
+            line-height: 1.8;
+        }
+
+        .register-form-panel {
+            padding: 48px 45px;
+        }
+
+        .register-heading {
+            margin-bottom: 30px;
+        }
+
+            .register-heading .eyebrow {
+                margin-bottom: 10px;
+                color: #167d9a;
+                font-size: 11px;
+                font-weight: 700;
+                letter-spacing: 2px;
+                text-transform: uppercase;
+            }
+
+            .register-heading h2 {
+                margin: 0 0 10px;
+                color: #102a43;
+                font-size: 28px;
+                font-weight: 700;
+            }
+
+            .register-heading p {
+                margin: 0;
+                color: #718096;
+                font-size: 14px;
+                line-height: 1.7;
+            }
+
+        .form-group {
+            margin-bottom: 21px;
+        }
+
+            .form-group label {
+                display: block;
+                margin-bottom: 8px;
+                color: #334155;
+                font-size: 13px;
+                font-weight: 600;
+            }
+
+        .form-control {
+            width: 100%;
+            height: 47px;
+            padding: 10px 13px;
+            border: 1px solid #dbe3ed;
+            border-radius: 9px;
+            background: #fff;
+            box-shadow: none;
+            font-size: 14px;
+            transition: border-color .2s, box-shadow .2s;
+        }
+
+            .form-control:focus {
+                border-color: #167d9a;
+                box-shadow: 0 0 0 3px rgba(22,125,154,.12);
+                outline: none;
+            }
+
+        .field-validation-error {
+            display: block;
+            margin-top: 6px;
+            color: #dc2626;
+            font-size: 12px;
+        }
+
+        .validation-summary-errors {
+            margin-bottom: 20px;
+            padding: 12px 15px;
+            border: 1px solid #fecaca;
+            border-radius: 9px;
+            background: #fef2f2;
+            color: #b91c1c;
+            font-size: 13px;
+        }
+
+            .validation-summary-errors ul {
+                margin: 0;
+                padding-left: 18px;
+            }
+
+        .validation-summary-valid {
+            display: none;
+        }
+
+        .register-button {
+            width: 100%;
+            min-height: 48px;
+            margin-top: 5px;
+            border: none;
+            border-radius: 9px;
+            background: #126782;
+            color: #fff;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background .2s, transform .2s;
+        }
+
+            .register-button:hover {
+                background: #0d5269;
+                transform: translateY(-1px);
+            }
+
+        .login-link {
+            margin-top: 24px;
+            text-align: center;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+            .login-link a {
+                color: #126782;
+                font-weight: 700;
+                text-decoration: none;
+            }
+
+                .login-link a:hover {
+                    text-decoration: underline;
+                }
+
+        .register-footer {
+            margin-top: 28px;
+            color: #94a3b8;
+            font-size: 11px;
+            text-align: center;
+        }
+
+        @@media (max-width: 760px) {
+            .register-card {
+                max-width: 520px;
+                grid-template-columns: 1fr;
+            }
+
+            .register-brand {
+                padding: 30px;
+            }
+
+            .brand-icon {
+                margin-bottom: 16px;
+            }
+
+            .register-brand h1 {
+                font-size: 24px;
+            }
+
+            .register-form-panel {
+                padding: 32px 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="register-wrapper">
+        <div class="register-card">
+
+            <section class="register-brand">
+                <div class="brand-icon">&#128663;</div>
+
+                <h1>Company Vehicle Booking System</h1>
+
+                <p>
+                    Manage company transport through a secure,
+                    organised and professional vehicle booking platform.
+                </p>
+
+                <div class="brand-note">
+                    <strong>Secure employee access</strong>
+                    <br />
+                    Company accounts and vehicle booking permissions
+                    should be managed by an authorised administrator.
+                </div>
+            </section>
+
+            <section class="register-form-panel">
+                <div class="register-heading">
+                    <div class="eyebrow">Account Registration</div>
+
+                    <h2>Create an Account</h2>
+
+                    <p>
+                        Complete the details below to continue.
+                    </p>
+                </div>
+
+                @using (Html.BeginForm(
+                    "Register",
+                    "Account",
+                    FormMethod.Post,
+                    new { role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    @Html.ValidationSummary(
+                        false,
+                        "",
+                        new { @class = "validation-summary-errors" })
+
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Email, "Work Email Address")
+
+                        @Html.TextBoxFor(m => m.Email, new
+                        {
+                            @class = "form-control",
+                            type = "email",
+                            placeholder = "name@company.com",
+                            autocomplete = "email"
+                        })
+
+                        @Html.ValidationMessageFor(
+                            m => m.Email,
+                            "",
+                            new { @class = "field-validation-error" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Password, "Password")
+
+                        @Html.PasswordFor(m => m.Password, new
+                        {
+                            @class = "form-control",
+                            placeholder = "Create a password",
+                            autocomplete = "new-password"
+                        })
+
+                        @Html.ValidationMessageFor(
+                            m => m.Password,
+                            "",
+                            new { @class = "field-validation-error" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(
+                            m => m.ConfirmPassword,
+                            "Confirm Password")
+
+                        @Html.PasswordFor(m => m.ConfirmPassword, new
+                        {
+                            @class = "form-control",
+                            placeholder = "Enter your password again",
+                            autocomplete = "new-password"
+                        })
+
+                        @Html.ValidationMessageFor(
+                            m => m.ConfirmPassword,
+                            "",
+                            new { @class = "field-validation-error" })
+                    </div>
+
+                    <button type="submit" class="register-button">
+                        Create Account
+                    </button>
+                }
+
+                <div class="login-link">
+                    Already have an account?
+                    @Html.ActionLink("Sign in", "Login", "Account")
+                </div>
+
+                <div class="register-footer">
+                    Company Vehicle Booking System &copy; @DateTime.Now.Year
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+</body>
+</html>

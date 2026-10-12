@@ -1,0 +1,261 @@
+﻿```cshtml
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        @ViewBag.Title - Company Vehicle Booking System
+    </title>
+
+    @Styles.Render("~/Content/css")
+
+    <link href="~/Content/modern.css"
+          rel="stylesheet"
+          type="text/css" />
+
+    @Scripts.Render("~/bundles/modernizr")
+
+</head>
+
+<body>
+
+    <!-- =========================================
+         TOP NAVBAR
+         ========================================= -->
+
+    <nav class="navbar navbar-dark modern-navbar fixed-top">
+
+        <div class="container-fluid">
+
+            <a class="navbar-brand"
+               href="@Url.Action("Index", "Home")">
+
+                <span class="brand-icon">🚗</span>
+
+                Company Vehicle Booking System
+
+            </a>
+
+            <div class="d-flex align-items-center">
+
+                @Html.Partial("_LoginPartial")
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+    <!-- =========================================
+         SIDEBAR
+         ========================================= -->
+
+    <aside class="sidebar">
+
+        <div class="sidebar-title">
+            Navigation
+        </div>
+
+
+        <!-- GENERAL -->
+
+        <a href="@Url.Action("Index", "Home")">
+
+            <span class="sidebar-icon">⌂</span>
+
+            Home
+
+        </a>
+
+
+        <!-- EMPLOYEE NAVIGATION -->
+
+        @if (Request.IsAuthenticated &&
+             !User.IsInRole("Admin"))
+        {
+
+            <div class="sidebar-title">
+                Employee
+            </div>
+
+
+            <a href="@Url.Action("Index", "Booking")">
+
+                <span class="sidebar-icon">▣</span>
+
+                My Bookings
+
+            </a>
+
+
+            <a href="@Url.Action("Create", "Booking")">
+
+                <span class="sidebar-icon">＋</span>
+
+                Request Vehicle
+
+            </a>
+
+
+            <a href="@Url.Action("Availability", "Vehicle")">
+
+                <span class="sidebar-icon">🚙</span>
+
+                Vehicle Availability
+
+            </a>
+
+
+            <a href="@Url.Action("Index", "Profile")">
+
+                <span class="sidebar-icon">♙</span>
+
+                My Profile
+
+            </a>
+
+        }
+
+
+        <!-- ADMIN NAVIGATION -->
+
+        @if (Request.IsAuthenticated &&
+             User.IsInRole("Admin"))
+        {
+
+            <div class="sidebar-title">
+                Administration
+            </div>
+
+
+            <a href="@Url.Action("Dashboard", "Booking")">
+
+                <span class="sidebar-icon">▦</span>
+
+                Dashboard
+
+            </a>
+
+
+            <a href="@Url.Action("AdminIndex", "Booking")">
+
+                <span class="sidebar-icon">▤</span>
+
+                Bookings
+
+            </a>
+
+
+            <a href="@Url.Action("Index", "Vehicle")">
+
+                <span class="sidebar-icon">🚗</span>
+
+                Vehicles
+
+            </a>
+
+
+            <a href="@Url.Action("Index", "UserManagement")">
+
+                <span class="sidebar-icon">♟</span>
+
+                Employees
+
+            </a>
+
+
+            <a href="@Url.Action("Index", "Department")">
+
+                <span class="sidebar-icon">▥</span>
+
+                Departments
+
+            </a>
+
+
+            <a href="@Url.Action("Manage", "VehicleInspection")">
+
+                <span class="sidebar-icon">✓</span>
+
+                Inspections
+
+            </a>
+
+        }
+
+
+        <!-- SIDEBAR FOOTER -->
+
+        <div class="sidebar-system-info">
+
+            <div>
+                🚗
+            </div>
+
+            <div>
+                <strong>
+                    Company Vehicle
+                </strong>
+            </div>
+
+            <small>
+                Booking System
+            </small>
+
+            <small>
+                Version 1.0
+            </small>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =========================================
+         MAIN CONTENT
+         ========================================= -->
+
+    <main class="main-content">
+
+        @RenderBody()
+
+    </main>
+
+
+    <!-- =========================================
+         FOOTER
+         ========================================= -->
+
+    <footer class="modern-footer">
+
+        <span>
+            © @DateTime.Now.Year
+            Company Vehicle Booking System
+        </span>
+
+        <span class="pull-right">
+            Internal Fleet Management System
+        </span>
+
+    </footer>
+
+
+    <!-- =========================================
+         SCRIPTS
+         ========================================= -->
+
+    @Scripts.Render("~/bundles/jquery")
+
+    @Scripts.Render("~/bundles/bootstrap")
+
+    @RenderSection("scripts", required: false)
+
+</body>
+</html>
+```

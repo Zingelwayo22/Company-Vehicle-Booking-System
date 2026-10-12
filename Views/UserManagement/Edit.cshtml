@@ -1,0 +1,620 @@
+﻿@model CompanyVehicleBookingSystem.Models.EditEmployeeViewModel
+
+@{
+    ViewBag.Title = "Edit Employee";
+
+    var firstName = Model.FirstName ?? "";
+    var lastName = Model.LastName ?? "";
+    var initials = (firstName.Length > 0 ? firstName.Substring(0, 1) : "")
+        + (lastName.Length > 0 ? lastName.Substring(0, 1) : "");
+
+    if (String.IsNullOrWhiteSpace(initials))
+    {
+        initials = "E";
+    }
+}
+
+<style>
+    .edit-employee-page {
+        max-width: 1150px;
+        margin: 0 auto;
+        padding: 10px 10px 45px;
+        color: #183247;
+    }
+
+    .ee-back-link {
+        display: inline-block;
+        margin-bottom: 18px;
+        color: #287fd0 !important;
+        text-decoration: none !important;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .ee-header {
+        margin-bottom: 28px;
+    }
+
+    .ee-eyebrow {
+        color: #287fd0;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 1.5px;
+        margin-bottom: 8px;
+    }
+
+    .ee-header h1 {
+        margin: 0 0 9px;
+        color: #142f43;
+        font-size: 31px;
+        font-weight: 800;
+    }
+
+    .ee-header p {
+        margin: 0;
+        color: #788995;
+        font-size: 13px;
+        line-height: 1.7;
+    }
+
+    .ee-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 290px;
+        gap: 22px;
+        align-items: start;
+    }
+
+    .ee-card {
+        margin-bottom: 20px;
+        overflow: hidden;
+        background: #fff;
+        border: 1px solid #e3eaf0;
+        border-radius: 16px;
+        box-shadow: 0 7px 25px rgba(20, 47, 67, .05);
+    }
+
+    .ee-card-header {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        padding: 20px 24px;
+        border-bottom: 1px solid #edf1f4;
+        background: #fcfdfe;
+    }
+
+    .ee-section-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 42px;
+        height: 42px;
+        flex-shrink: 0;
+        border-radius: 12px;
+        background: #eaf3fb;
+        font-size: 19px;
+    }
+
+    .ee-card-header h2 {
+        margin: 0 0 5px;
+        color: #183247;
+        font-size: 15px;
+        font-weight: 800;
+    }
+
+    .ee-card-header p {
+        margin: 0;
+        color: #84929d;
+        font-size: 11px;
+        line-height: 1.5;
+    }
+
+    .ee-card-body {
+        padding: 24px;
+    }
+
+    .ee-form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 21px 20px;
+    }
+
+    .ee-form-group {
+        min-width: 0;
+        margin: 0;
+    }
+
+        .ee-form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #365064;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .ee-form-group .form-control {
+            width: 100%;
+            height: 43px;
+            padding: 10px 12px;
+            border: 1px solid #dce5eb;
+            border-radius: 8px;
+            background: #fff;
+            color: #183247;
+            font-size: 12px;
+            box-shadow: none;
+            transition: border-color .2s ease, box-shadow .2s ease;
+        }
+
+            .ee-form-group .form-control:focus {
+                border-color: #287fd0;
+                box-shadow: 0 0 0 3px rgba(40, 127, 208, .10);
+                outline: none;
+            }
+
+        .ee-form-group select.form-control {
+            cursor: pointer;
+        }
+
+    .ee-validation {
+        display: block;
+        margin-top: 6px;
+        color: #c03939;
+        font-size: 11px;
+    }
+
+    .ee-validation-summary {
+        margin-bottom: 22px;
+        padding: 13px 16px;
+        border: 1px solid #f2cece;
+        border-radius: 9px;
+        background: #fff5f5;
+        color: #b83232;
+        font-size: 12px;
+    }
+
+        .ee-validation-summary ul {
+            margin: 6px 0 0;
+            padding-left: 20px;
+        }
+
+    .ee-employee-banner {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 23px;
+        padding: 17px;
+        border: 1px solid #e3ebf1;
+        border-radius: 12px;
+        background: #f8fafc;
+    }
+
+    .ee-avatar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 52px;
+        height: 52px;
+        flex-shrink: 0;
+        border-radius: 14px;
+        background: #e2effb;
+        color: #287fd0;
+        font-size: 17px;
+        font-weight: 800;
+        text-transform: uppercase;
+    }
+
+    .ee-employee-name {
+        color: #183247;
+        font-size: 15px;
+        font-weight: 800;
+        margin-bottom: 5px;
+    }
+
+    .ee-employee-subtitle {
+        color: #84929d;
+        font-size: 11px;
+        overflow-wrap: anywhere;
+    }
+
+    .ee-info-note {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        margin-top: 20px;
+        padding: 14px;
+        border: 1px solid #dbeaf6;
+        border-radius: 9px;
+        background: #f2f8fd;
+        color: #42647c;
+        font-size: 11px;
+        line-height: 1.7;
+    }
+
+        .ee-info-note strong {
+            display: block;
+            margin-bottom: 3px;
+            color: #244c69;
+        }
+
+    .ee-sidebar-card {
+        margin-bottom: 18px;
+        padding: 22px;
+        background: #fff;
+        border: 1px solid #e3eaf0;
+        border-radius: 15px;
+        box-shadow: 0 7px 25px rgba(20, 47, 67, .04);
+    }
+
+        .ee-sidebar-card h3 {
+            margin: 0 0 16px;
+            color: #183247;
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+    .ee-tip {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        margin-bottom: 17px;
+    }
+
+        .ee-tip:last-child {
+            margin-bottom: 0;
+        }
+
+    .ee-tip-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        flex-shrink: 0;
+        border-radius: 8px;
+        background: #eaf3fb;
+        color: #287fd0;
+        font-size: 12px;
+        font-weight: 800;
+    }
+
+    .ee-tip strong {
+        display: block;
+        margin-bottom: 4px;
+        color: #365064;
+        font-size: 11px;
+    }
+
+    .ee-tip p {
+        margin: 0;
+        color: #84929d;
+        font-size: 10px;
+        line-height: 1.6;
+    }
+
+    .ee-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        padding-top: 5px;
+    }
+
+    .ee-save {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-height: 43px;
+        padding: 12px 19px;
+        border: 0;
+        border-radius: 8px;
+        background: #287fd0;
+        color: #fff;
+        font-size: 12px;
+        font-weight: 800;
+        cursor: pointer;
+        box-shadow: 0 5px 13px rgba(40, 127, 208, .16);
+        transition: all .2s ease;
+    }
+
+        .ee-save:hover {
+            background: #1d68ad;
+            transform: translateY(-1px);
+        }
+
+    .ee-cancel {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 43px;
+        padding: 11px 18px;
+        border: 1px solid #dce5eb;
+        border-radius: 8px;
+        background: #fff;
+        color: #526b7b !important;
+        text-decoration: none !important;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+        .ee-cancel:hover {
+            background: #f4f7f9;
+        }
+
+    .ee-footnote {
+        margin-top: 15px;
+        color: #8997a2;
+        font-size: 10px;
+        line-height: 1.6;
+    }
+
+    @@media (max-width: 1000px) {
+        .ee-layout {
+            grid-template-columns: minmax(0, 1fr);
+        }
+
+        .ee-sidebar {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 15px;
+        }
+    }
+
+    @@media (max-width: 650px) {
+        .edit-employee-page {
+            padding: 5px 5px 30px;
+        }
+
+        .ee-header h1 {
+            font-size: 26px;
+        }
+
+        .ee-card-body {
+            padding: 18px;
+        }
+
+        .ee-card-header {
+            padding: 17px 18px;
+        }
+
+        .ee-form-grid,
+        .ee-sidebar {
+            grid-template-columns: minmax(0, 1fr);
+        }
+
+        .ee-actions {
+            align-items: stretch;
+            flex-direction: column;
+        }
+
+        .ee-save,
+        .ee-cancel {
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="edit-employee-page">
+
+    @Html.ActionLink("← Back to Employee Management", "Index", "UserManagement",
+        null, new { @class = "ee-back-link" })
+
+    <div class="ee-header">
+        <div class="ee-eyebrow">ADMINISTRATION / EMPLOYEES</div>
+        <h1>Edit Employee</h1>
+        <p>Update employee information, department assignment and driver licence details.</p>
+    </div>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.Id)
+
+        @Html.ValidationSummary(true, "Please review the information below.",
+            new { @class = "ee-validation-summary" })
+
+        <div class="ee-layout">
+
+            <div class="ee-main">
+
+                <div class="ee-card">
+                    <div class="ee-card-header">
+                        <div class="ee-section-icon">👤</div>
+                        <div>
+                            <h2>Employee Information</h2>
+                            <p>Review and update the employee's personal and organisational details.</p>
+                        </div>
+                    </div>
+
+                    <div class="ee-card-body">
+
+                        <div class="ee-employee-banner">
+                            <div class="ee-avatar">@initials.ToUpper()</div>
+                            <div>
+                                <div class="ee-employee-name">
+                                    @if (String.IsNullOrWhiteSpace(firstName) &&
+                                         String.IsNullOrWhiteSpace(lastName))
+                                    {
+                                        <text>Employee Account</text>
+                                    }
+                                    else
+                                    {
+                                        @firstName @: @lastName
+                                    }
+                                </div>
+                                <div class="ee-employee-subtitle">
+                                    Employee Number:
+                                    @(String.IsNullOrWhiteSpace(Model.EmployeeNumber)
+                                        ? "Not assigned"
+                                        : Model.EmployeeNumber)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ee-form-grid">
+
+                            <div class="ee-form-group">
+                                @Html.LabelFor(model => model.EmployeeNumber)
+                                @Html.EditorFor(model => model.EmployeeNumber,
+                                    new { htmlAttributes = new { @class = "form-control", placeholder = "Employee number" } })
+                                @Html.ValidationMessageFor(model => model.EmployeeNumber, "",
+                                    new { @class = "ee-validation" })
+                            </div>
+
+                            <div class="ee-form-group">
+                                @Html.LabelFor(model => model.DepartmentId)
+                                @Html.DropDownListFor(model => model.DepartmentId,
+                                    Model.Departments,
+                                    "-- Select Department --",
+                                    new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.DepartmentId, "",
+                                    new { @class = "ee-validation" })
+                            </div>
+
+                            <div class="ee-form-group">
+                                @Html.LabelFor(model => model.FirstName)
+                                @Html.EditorFor(model => model.FirstName,
+                                    new { htmlAttributes = new { @class = "form-control", placeholder = "First name" } })
+                                @Html.ValidationMessageFor(model => model.FirstName, "",
+                                    new { @class = "ee-validation" })
+                            </div>
+
+                            <div class="ee-form-group">
+                                @Html.LabelFor(model => model.LastName)
+                                @Html.EditorFor(model => model.LastName,
+                                    new { htmlAttributes = new { @class = "form-control", placeholder = "Surname" } })
+                                @Html.ValidationMessageFor(model => model.LastName, "",
+                                    new { @class = "ee-validation" })
+                            </div>
+
+                            <div class="ee-form-group">
+                                @Html.LabelFor(model => model.Email)
+                                @Html.EditorFor(model => model.Email,
+                                    new { htmlAttributes = new { @class = "form-control", type = "email", placeholder = "employee@company.com" } })
+                                @Html.ValidationMessageFor(model => model.Email, "",
+                                    new { @class = "ee-validation" })
+                            </div>
+
+                            <div class="ee-form-group">
+                                @Html.LabelFor(model => model.Position)
+                                @Html.EditorFor(model => model.Position,
+                                    new { htmlAttributes = new { @class = "form-control", placeholder = "Job title or position" } })
+                                @Html.ValidationMessageFor(model => model.Position, "",
+                                    new { @class = "ee-validation" })
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ee-card">
+                    <div class="ee-card-header">
+                        <div class="ee-section-icon">🚗</div>
+                        <div>
+                            <h2>Driver Licence Details</h2>
+                            <p>Update the employee's licence information for company vehicle use.</p>
+                        </div>
+                    </div>
+
+                    <div class="ee-card-body">
+                        <div class="ee-form-grid">
+
+                            <div class="ee-form-group">
+                                @Html.LabelFor(model => model.DriversLicenceNumber)
+                                @Html.EditorFor(model => model.DriversLicenceNumber,
+                                    new { htmlAttributes = new { @class = "form-control", placeholder = "Driver licence number" } })
+                                @Html.ValidationMessageFor(model => model.DriversLicenceNumber, "",
+                                    new { @class = "ee-validation" })
+                            </div>
+
+                            <div class="ee-form-group">
+                                @Html.LabelFor(model => model.DriversLicenceExpiry)
+                                @Html.EditorFor(model => model.DriversLicenceExpiry,
+                                    new { htmlAttributes = new { @class = "form-control", type = "date" } })
+                                @Html.ValidationMessageFor(model => model.DriversLicenceExpiry, "",
+                                    new { @class = "ee-validation" })
+                            </div>
+
+                        </div>
+
+                        <div class="ee-info-note">
+                            <span>ℹ️</span>
+                            <div>
+                                <strong>Keep licence information current</strong>
+                                Check the licence details and expiry date before approving future vehicle use.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ee-actions">
+                    <button type="submit" class="ee-save">
+                        <span>✓</span> Save Changes
+                    </button>
+
+                    @Html.ActionLink("Cancel", "Index", "UserManagement", null,
+                        new { @class = "ee-cancel" })
+                </div>
+
+                <div class="ee-footnote">
+                    Changes will be submitted for server-side validation before being saved.
+                </div>
+
+            </div>
+
+            <aside class="ee-sidebar">
+
+                <div class="ee-sidebar-card">
+                    <h3>Editing Checklist</h3>
+
+                    <div class="ee-tip">
+                        <div class="ee-tip-icon">1</div>
+                        <div>
+                            <strong>Verify employee details</strong>
+                            <p>Ensure the employee number and email address are correct.</p>
+                        </div>
+                    </div>
+
+                    <div class="ee-tip">
+                        <div class="ee-tip-icon">2</div>
+                        <div>
+                            <strong>Confirm department</strong>
+                            <p>Choose the department that matches the employee's current assignment.</p>
+                        </div>
+                    </div>
+
+                    <div class="ee-tip">
+                        <div class="ee-tip-icon">3</div>
+                        <div>
+                            <strong>Check licence details</strong>
+                            <p>Update the licence number and expiry date when necessary.</p>
+                        </div>
+                    </div>
+
+                    <div class="ee-tip">
+                        <div class="ee-tip-icon">4</div>
+                        <div>
+                            <strong>Save your changes</strong>
+                            <p>Review the information before submitting the form.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ee-sidebar-card">
+                    <h3>Important</h3>
+                    <div class="ee-info-note" style="margin-top:0;">
+                        <span>🔒</span>
+                        <div>
+                            Employee access permissions and account status should be managed through your application's designated employee-management workflow.
+                        </div>
+                    </div>
+                </div>
+
+            </aside>
+
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

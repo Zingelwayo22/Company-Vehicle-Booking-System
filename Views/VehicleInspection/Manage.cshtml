@@ -1,0 +1,772 @@
+﻿@model IEnumerable<CompanyVehicleBookingSystem.Models.Booking>
+
+@{
+    ViewBag.Title = "Vehicle Inspections";
+
+    var totalBookings = Model.Count();
+    var approvedBookings = Model.Count(b => b.Status == "Approved");
+    var completedBookings = Model.Count(b => b.Status == "Completed");
+
+    var beforeCompleted = Model.Count(b =>
+        b.Inspections != null &&
+        b.Inspections.Any(i => i.InspectionType == "Before"));
+
+    var afterCompleted = Model.Count(b =>
+        b.Inspections != null &&
+        b.Inspections.Any(i => i.InspectionType == "After"));
+}
+
+<style>
+
+    .inspection-page {
+        padding-bottom: 40px;
+    }
+
+    .inspection-hero {
+        background: linear-gradient(135deg, #1f3c88, #3159b7);
+        border-radius: 16px;
+        padding: 32px;
+        color: white;
+        margin-bottom: 28px;
+        box-shadow: 0 10px 30px rgba(31, 60, 136, 0.18);
+    }
+
+        .inspection-hero h1 {
+            margin: 0 0 8px 0;
+            font-size: 30px;
+            font-weight: 700;
+        }
+
+        .inspection-hero p {
+            margin: 0;
+            color: rgba(255,255,255,0.85);
+            font-size: 15px;
+        }
+
+    .inspection-icon {
+        width: 58px;
+        height: 58px;
+        border-radius: 14px;
+        background: rgba(255,255,255,0.15);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+        margin-bottom: 18px;
+    }
+
+    .inspection-stats {
+        margin-bottom: 28px;
+    }
+
+    .inspection-stat-card {
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        padding: 20px;
+        height: 100%;
+        box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+    }
+
+    .inspection-stat-label {
+        color: #6b7280;
+        font-size: 13px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 8px;
+    }
+
+    .inspection-stat-number {
+        font-size: 28px;
+        font-weight: 700;
+        color: #1f2937;
+    }
+
+    .inspection-stat-icon {
+        float: right;
+        font-size: 24px;
+        opacity: 0.65;
+    }
+
+    .inspection-card {
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 16px;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+        overflow: hidden;
+    }
+
+    .inspection-card-header {
+        padding: 20px 24px;
+        border-bottom: 1px solid #e5e7eb;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+        .inspection-card-header h3 {
+            margin: 0;
+            font-size: 19px;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .inspection-card-header p {
+            margin: 5px 0 0 0;
+            color: #6b7280;
+            font-size: 13px;
+        }
+
+    .inspection-table-wrapper {
+        overflow-x: auto;
+    }
+
+    .inspection-table {
+        margin: 0;
+        min-width: 1050px;
+    }
+
+        .inspection-table thead th {
+            background: #f8fafc;
+            border-top: none;
+            border-bottom: 1px solid #e5e7eb;
+            color: #6b7280;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+            padding: 15px 14px;
+            white-space: nowrap;
+        }
+
+        .inspection-table tbody td {
+            padding: 17px 14px;
+            vertical-align: middle;
+            border-color: #edf0f3;
+            color: #374151;
+            font-size: 13px;
+        }
+
+        .inspection-table tbody tr:hover {
+            background: #f8fafc;
+        }
+
+    .employee-name {
+        font-weight: 700;
+        color: #1f2937;
+    }
+
+    .vehicle-name {
+        font-weight: 600;
+        color: #374151;
+    }
+
+    .registration-badge {
+        display: inline-block;
+        background: #f3f4f6;
+        color: #1f2937;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        padding: 5px 9px;
+        font-weight: 700;
+        font-size: 12px;
+        letter-spacing: 0.4px;
+    }
+
+    .date-range {
+        line-height: 1.6;
+        white-space: nowrap;
+    }
+
+        .date-range .date-main {
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .date-range .date-arrow {
+            color: #9ca3af;
+            font-size: 11px;
+        }
+
+    .status-badge {
+        display: inline-block;
+        border-radius: 20px;
+        padding: 6px 10px;
+        font-size: 11px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .status-pending {
+        background: #fff7ed;
+        color: #c2410c;
+    }
+
+    .status-approved {
+        background: #ecfdf5;
+        color: #047857;
+    }
+
+    .status-rejected {
+        background: #fef2f2;
+        color: #b91c1c;
+    }
+
+    .status-completed {
+        background: #f3f4f6;
+        color: #374151;
+    }
+
+    .status-cancelled {
+        background: #fef2f2;
+        color: #b91c1c;
+    }
+
+    .inspection-complete {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        background: #ecfdf5;
+        color: #047857;
+        border-radius: 20px;
+        padding: 6px 10px;
+        font-size: 11px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .inspection-pending {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        background: #fff7ed;
+        color: #c2410c;
+        border-radius: 20px;
+        padding: 6px 10px;
+        font-size: 11px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .inspection-action {
+        white-space: nowrap;
+    }
+
+        .inspection-action .btn {
+            border-radius: 7px;
+            font-weight: 600;
+            font-size: 12px;
+            padding: 7px 11px;
+        }
+
+    .inspection-footer {
+        padding: 20px 0 0 0;
+    }
+
+    .inspection-back {
+        border-radius: 8px;
+        padding: 9px 16px;
+        font-weight: 600;
+    }
+
+    .empty-inspection {
+        text-align: center;
+        padding: 60px 25px;
+    }
+
+    .empty-inspection-icon {
+        font-size: 45px;
+        margin-bottom: 15px;
+        opacity: 0.55;
+    }
+
+    .empty-inspection h3 {
+        margin-bottom: 8px;
+        color: #374151;
+        font-weight: 700;
+    }
+
+    .empty-inspection p {
+        color: #6b7280;
+        margin-bottom: 0;
+    }
+
+    @@media (max-width: 767px) {
+
+        .inspection-hero {
+            padding: 25px 20px;
+        }
+
+            .inspection-hero h1 {
+                font-size: 24px;
+            }
+
+        .inspection-stat-card {
+            margin-bottom: 15px;
+        }
+
+        .inspection-card-header {
+            display: block;
+        }
+
+            .inspection-card-header h3 {
+                margin-bottom: 5px;
+            }
+    }
+</style>
+
+<div class="container inspection-page">
+
+    <!-- HERO -->
+    <div class="inspection-hero">
+
+        <div class="inspection-icon">
+            🔍
+        </div>
+
+        <h1>Vehicle Inspections</h1>
+
+        <p>
+            Manage pre-trip and post-trip vehicle inspections for company bookings.
+            Record vehicle condition, damage and inspection details.
+        </p>
+
+    </div>
+
+
+    <!-- SUMMARY CARDS -->
+    <div class="row inspection-stats">
+
+        <div class="col-md-3 col-sm-6">
+            <div class="inspection-stat-card">
+
+                <div class="inspection-stat-icon">
+                    📋
+                </div>
+
+                <div class="inspection-stat-label">
+                    Total Bookings
+                </div>
+
+                <div class="inspection-stat-number">
+                    @totalBookings
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="col-md-3 col-sm-6">
+            <div class="inspection-stat-card">
+
+                <div class="inspection-stat-icon">
+                    🚗
+                </div>
+
+                <div class="inspection-stat-label">
+                    Approved
+                </div>
+
+                <div class="inspection-stat-number">
+                    @approvedBookings
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="col-md-3 col-sm-6">
+            <div class="inspection-stat-card">
+
+                <div class="inspection-stat-icon">
+                    🔎
+                </div>
+
+                <div class="inspection-stat-label">
+                    Before Inspections
+                </div>
+
+                <div class="inspection-stat-number">
+                    @beforeCompleted
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="col-md-3 col-sm-6">
+            <div class="inspection-stat-card">
+
+                <div class="inspection-stat-icon">
+                    ✅
+                </div>
+
+                <div class="inspection-stat-label">
+                    After Inspections
+                </div>
+
+                <div class="inspection-stat-number">
+                    @afterCompleted
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- INSPECTION TABLE -->
+    <div class="inspection-card">
+
+        <div class="inspection-card-header">
+
+            <div>
+                <h3>Inspection Management</h3>
+
+                <p>
+                    Review inspection progress for company vehicle bookings.
+                </p>
+            </div>
+
+            <div>
+                <span class="label label-default">
+                    @totalBookings booking(s)
+                </span>
+            </div>
+
+        </div>
+
+
+        @if (!Model.Any())
+        {
+            <div class="empty-inspection">
+
+                <div class="empty-inspection-icon">
+                    🔍
+                </div>
+
+                <h3>No Vehicle Bookings</h3>
+
+                <p>
+                    There are currently no vehicle bookings available for inspection.
+                </p>
+
+            </div>
+        }
+        else
+        {
+            <div class="inspection-table-wrapper">
+
+                <table class="table inspection-table">
+
+                    <thead>
+
+                        <tr>
+                            <th>Employee</th>
+                            <th>Vehicle</th>
+                            <th>Registration</th>
+                            <th>Booking Period</th>
+                            <th>Status</th>
+                            <th>Before Inspection</th>
+                            <th>After Inspection</th>
+                            <th>Action</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var booking in Model)
+                        {
+                            var beforeInspection = booking.Inspections
+                                .FirstOrDefault(i => i.InspectionType == "Before");
+
+                            var afterInspection = booking.Inspections
+                                .FirstOrDefault(i => i.InspectionType == "After");
+
+                            <tr>
+
+                                <!-- EMPLOYEE -->
+                                <td>
+
+                                    @if (booking.User != null)
+                                    {
+                                        <div class="employee-name">
+                                            @booking.User.FirstName @booking.User.LastName
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="employee-name">
+                                            Unknown Employee
+                                        </div>
+                                    }
+
+                                </td>
+
+
+                                <!-- VEHICLE -->
+                                <td>
+
+                                    @if (booking.Vehicle != null)
+                                    {
+                                        <div class="vehicle-name">
+                                            @booking.Vehicle.Make @booking.Vehicle.Model
+                                        </div>
+
+                                        <small class="text-muted">
+                                            @booking.Vehicle.Year
+                                        </small>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">
+                                            Unknown Vehicle
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <!-- REGISTRATION -->
+                                <td>
+
+                                    @if (booking.Vehicle != null)
+                                    {
+                                        <span class="registration-badge">
+                                            @booking.Vehicle.RegistrationNumber
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">
+                                            N/A
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <!-- BOOKING PERIOD -->
+                                <td>
+
+                                    <div class="date-range">
+
+                                        <div class="date-main">
+                                            @booking.StartDateTime.ToString("dd/MM/yyyy")
+                                        </div>
+
+                                        <small class="text-muted">
+                                            @booking.StartDateTime.ToString("HH:mm")
+                                        </small>
+
+                                        <div class="date-arrow">
+                                            ↓
+                                        </div>
+
+                                        <div class="date-main">
+                                            @booking.EndDateTime.ToString("dd/MM/yyyy")
+                                        </div>
+
+                                        <small class="text-muted">
+                                            @booking.EndDateTime.ToString("HH:mm")
+                                        </small>
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- BOOKING STATUS -->
+                                <td>
+
+                                    @if (booking.Status == "Pending")
+                                    {
+                                        <span class="status-badge status-pending">
+                                            Pending
+                                        </span>
+                                    }
+                                    else if (booking.Status == "Approved")
+                                    {
+                                        <span class="status-badge status-approved">
+                                            Approved
+                                        </span>
+                                    }
+                                    else if (booking.Status == "Rejected")
+                                    {
+                                        <span class="status-badge status-rejected">
+                                            Rejected
+                                        </span>
+                                    }
+                                    else if (booking.Status == "Completed")
+                                    {
+                                        <span class="status-badge status-completed">
+                                            Completed
+                                        </span>
+                                    }
+                                    else if (booking.Status == "Cancelled")
+                                    {
+                                        <span class="status-badge status-cancelled">
+                                            Cancelled
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="status-badge status-completed">
+                                            @booking.Status
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <!-- BEFORE INSPECTION -->
+                                <td>
+
+                                    @if (beforeInspection != null)
+                                    {
+                                        <span class="inspection-complete">
+                                            ✓ Completed
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="inspection-pending">
+                                            ○ Pending
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <!-- AFTER INSPECTION -->
+                                <td>
+
+                                    @if (afterInspection != null)
+                                    {
+                                        <span class="inspection-complete">
+                                            ✓ Completed
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="inspection-pending">
+                                            ○ Pending
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <!-- ACTION -->
+                                <td class="inspection-action">
+
+                                    @if (booking.Status == "Approved")
+                                    {
+                                        if (beforeInspection == null)
+                                        {
+                                            @Html.ActionLink(
+                                                "Before Inspection",
+                                                "Create",
+                                                "VehicleInspection",
+                                                new
+                                                {
+                                                    bookingId = booking.BookingId,
+                                                    type = "Before"
+                                                },
+                                                new
+                                                {
+                                                    @class = "btn btn-primary btn-sm"
+                                                }
+                                            )
+                                        }
+                                        else if (afterInspection == null)
+                                        {
+                                            @Html.ActionLink(
+                                                "After Inspection",
+                                                "Create",
+                                                "VehicleInspection",
+                                                new
+                                                {
+                                                    bookingId = booking.BookingId,
+                                                    type = "After"
+                                                },
+                                                new
+                                                {
+                                                    @class = "btn btn-warning btn-sm"
+                                                }
+                                            )
+                                        }
+                                        else
+                                        {
+                                            @Html.ActionLink(
+                                                "View Inspections",
+                                                "Index",
+                                                "VehicleInspection",
+                                                new
+                                                {
+                                                    bookingId = booking.BookingId
+                                                },
+                                                new
+                                                {
+                                                    @class = "btn btn-info btn-sm"
+                                                }
+                                            )
+                                        }
+                                    }
+                                    else if (booking.Status == "Completed")
+                                    {
+                                        @Html.ActionLink(
+                                            "View Inspections",
+                                            "Index",
+                                            "VehicleInspection",
+                                            new
+                                            {
+                                                bookingId = booking.BookingId
+                                            },
+                                            new
+                                            {
+                                                @class = "btn btn-info btn-sm"
+                                            }
+                                        )
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">
+                                            Not Available
+                                        </span>
+                                    }
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        }
+
+    </div>
+
+
+    <!-- FOOTER -->
+    <div class="inspection-footer">
+
+        @Html.ActionLink(
+            "← Back to Dashboard",
+            "Dashboard",
+            "Booking",
+            null,
+            new
+            {
+                @class = "btn btn-default inspection-back"
+            }
+        )
+
+    </div>
+
+</div>

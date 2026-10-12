@@ -1,0 +1,950 @@
+﻿@model CompanyVehicleBookingSystem.Models.Booking
+
+@{
+    ViewBag.Title = "Vehicle Inspection";
+
+    var beforeInspection = Model.Inspections?
+        .FirstOrDefault(i => i.InspectionType == "Before");
+
+    var afterInspection = Model.Inspections?
+        .FirstOrDefault(i => i.InspectionType == "After");
+
+    var hasBefore = beforeInspection != null;
+    var hasAfter = afterInspection != null;
+}
+
+<style>
+
+    .inspection-detail-page {
+        padding-bottom: 40px;
+    }
+
+    /* HERO */
+
+    .inspection-detail-hero {
+        background: linear-gradient(135deg, #1f3c88, #3159b7);
+        border-radius: 16px;
+        padding: 30px;
+        color: white;
+        margin-bottom: 25px;
+        box-shadow: 0 10px 30px rgba(31, 60, 136, 0.18);
+    }
+
+    .inspection-detail-icon {
+        width: 58px;
+        height: 58px;
+        border-radius: 14px;
+        background: rgba(255,255,255,0.15);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+        margin-bottom: 17px;
+    }
+
+    .inspection-detail-hero h1 {
+        margin: 0 0 7px 0;
+        font-size: 30px;
+        font-weight: 700;
+    }
+
+    .inspection-detail-hero p {
+        margin: 0;
+        color: rgba(255,255,255,0.85);
+        font-size: 14px;
+    }
+
+    .booking-number {
+        display: inline-block;
+        margin-top: 16px;
+        padding: 6px 11px;
+        border-radius: 20px;
+        background: rgba(255,255,255,0.14);
+        color: white;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    /* ALERT */
+
+    .inspection-success {
+        border-radius: 10px;
+        border: none;
+        margin-bottom: 22px;
+    }
+
+    /* BOOKING INFORMATION */
+
+    .detail-card {
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 15px;
+        margin-bottom: 25px;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+        overflow: hidden;
+    }
+
+    .detail-card-header {
+        padding: 19px 23px;
+        border-bottom: 1px solid #e5e7eb;
+        background: #f8fafc;
+    }
+
+        .detail-card-header h3 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .detail-card-header p {
+            margin: 5px 0 0 0;
+            color: #6b7280;
+            font-size: 13px;
+        }
+
+    .detail-card-body {
+        padding: 24px;
+    }
+
+    .booking-detail-item {
+        padding: 15px;
+        background: #f8fafc;
+        border: 1px solid #edf0f3;
+        border-radius: 10px;
+        height: 100%;
+        margin-bottom: 15px;
+    }
+
+    .booking-detail-label {
+        display: block;
+        color: #6b7280;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-weight: 700;
+        margin-bottom: 6px;
+    }
+
+    .booking-detail-value {
+        color: #1f2937;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .registration-display {
+        display: inline-block;
+        background: #1f2937;
+        color: white;
+        padding: 5px 9px;
+        border-radius: 5px;
+        font-size: 12px;
+        letter-spacing: 0.5px;
+    }
+
+    /* INSPECTION SUMMARY */
+
+    .inspection-progress {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+
+    .inspection-progress-item {
+        flex: 1;
+        border-radius: 12px;
+        padding: 18px;
+        border: 1px solid #e5e7eb;
+        background: white;
+        box-shadow: 0 3px 12px rgba(0,0,0,0.04);
+    }
+
+    .inspection-progress-title {
+        font-size: 12px;
+        color: #6b7280;
+        text-transform: uppercase;
+        font-weight: 700;
+        letter-spacing: 0.4px;
+        margin-bottom: 8px;
+    }
+
+    .inspection-progress-status {
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    .inspection-progress-complete {
+        color: #047857;
+    }
+
+    .inspection-progress-pending {
+        color: #c2410c;
+    }
+
+    /* INSPECTION RECORD */
+
+    .inspection-record {
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        margin-bottom: 20px;
+        overflow: hidden;
+        background: white;
+        box-shadow: 0 3px 12px rgba(0,0,0,0.04);
+    }
+
+    .inspection-record-header {
+        padding: 17px 20px;
+        background: #f8fafc;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+        .inspection-record-header:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+    .inspection-type {
+        font-size: 16px;
+        font-weight: 700;
+        color: #1f2937;
+    }
+
+    .inspection-date {
+        float: right;
+        color: #6b7280;
+        font-size: 12px;
+        padding-top: 2px;
+    }
+
+    .inspection-record-body {
+        padding: 22px;
+    }
+
+    .inspection-field {
+        margin-bottom: 18px;
+    }
+
+    .inspection-field-label {
+        display: block;
+        color: #6b7280;
+        font-size: 11px;
+        text-transform: uppercase;
+        font-weight: 700;
+        letter-spacing: 0.4px;
+        margin-bottom: 6px;
+    }
+
+    .inspection-field-value {
+        color: #374151;
+        font-size: 14px;
+        line-height: 1.6;
+        word-break: break-word;
+    }
+
+    .inspection-field-empty {
+        color: #9ca3af;
+        font-style: italic;
+    }
+
+    .inspection-notes {
+        background: #f8fafc;
+        border-left: 4px solid #3159b7;
+        border-radius: 6px;
+        padding: 13px 15px;
+    }
+
+    /* NO INSPECTIONS */
+
+    .no-inspections {
+        text-align: center;
+        padding: 45px 20px;
+    }
+
+    .no-inspections-icon {
+        font-size: 42px;
+        opacity: 0.5;
+        margin-bottom: 12px;
+    }
+
+    .no-inspections h4 {
+        margin: 0 0 7px 0;
+        font-size: 17px;
+        font-weight: 700;
+        color: #374151;
+    }
+
+    .no-inspections p {
+        margin: 0;
+        color: #6b7280;
+        font-size: 13px;
+    }
+
+    /* ACTIONS */
+
+    .action-card {
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 15px;
+        margin-bottom: 25px;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+        overflow: hidden;
+    }
+
+    .action-card-header {
+        padding: 19px 23px;
+        background: #fffaf0;
+        border-bottom: 1px solid #f1e5c8;
+    }
+
+        .action-card-header h3 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 700;
+            color: #92400e;
+        }
+
+        .action-card-header p {
+            margin: 5px 0 0 0;
+            color: #92400e;
+            font-size: 13px;
+        }
+
+    .action-card-body {
+        padding: 24px;
+    }
+
+    .inspection-action-button {
+        border-radius: 9px;
+        padding: 13px 18px;
+        font-size: 13px;
+        font-weight: 700;
+        border: none;
+    }
+
+    .completed-button {
+        cursor: not-allowed;
+        opacity: 0.75;
+    }
+
+    .back-button {
+        border-radius: 8px;
+        padding: 9px 16px;
+        font-weight: 600;
+    }
+
+    @@media (max-width: 767px) {
+
+        .inspection-detail-hero {
+            padding: 25px 20px;
+        }
+
+            .inspection-detail-hero h1 {
+                font-size: 24px;
+            }
+
+        .inspection-progress {
+            display: block;
+        }
+
+        .inspection-progress-item {
+            margin-bottom: 12px;
+        }
+
+        .inspection-record-header {
+            display: block;
+        }
+
+        .inspection-date {
+            float: none;
+            display: block;
+            margin-top: 6px;
+        }
+
+        .detail-card-body,
+        .inspection-record-body,
+        .action-card-body {
+            padding: 18px;
+        }
+    }
+</style>
+
+
+<div class="container inspection-detail-page">
+
+    <!-- HERO -->
+
+    <div class="inspection-detail-hero">
+
+        <div class="inspection-detail-icon">
+            🔍
+        </div>
+
+        <h1>Vehicle Inspection</h1>
+
+        <p>
+            Review and manage the inspection records for this vehicle booking.
+        </p>
+
+        <span class="booking-number">
+            Booking #@Model.BookingId
+        </span>
+
+    </div>
+
+
+    <!-- SUCCESS MESSAGE -->
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success inspection-success">
+            <strong>Success:</strong>
+            @TempData["Success"]
+        </div>
+    }
+
+
+    <!-- BOOKING INFORMATION -->
+
+    <div class="detail-card">
+
+        <div class="detail-card-header">
+
+            <h3>Booking Information</h3>
+
+            <p>
+                Vehicle and employee information associated with this inspection.
+            </p>
+
+        </div>
+
+        <div class="detail-card-body">
+
+            <div class="row">
+
+                <div class="col-md-4">
+
+                    <div class="booking-detail-item">
+
+                        <span class="booking-detail-label">
+                            Employee
+                        </span>
+
+                        <div class="booking-detail-value">
+
+                            @if (Model.User != null)
+                            {
+                                @Model.User.FirstName @Model.User.LastName
+                            }
+                            else
+                            {
+                                <span class="text-muted">
+                                    Unknown Employee
+                                </span>
+                            }
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-4">
+
+                    <div class="booking-detail-item">
+
+                        <span class="booking-detail-label">
+                            Vehicle
+                        </span>
+
+                        <div class="booking-detail-value">
+
+                            @if (Model.Vehicle != null)
+                            {
+                                @Model.Vehicle.Make @Model.Vehicle.Model
+                            }
+                            else
+                            {
+                                <span class="text-muted">
+                                    Unknown Vehicle
+                                </span>
+                            }
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-4">
+
+                    <div class="booking-detail-item">
+
+                        <span class="booking-detail-label">
+                            Registration
+                        </span>
+
+                        <div class="booking-detail-value">
+
+                            @if (Model.Vehicle != null)
+                            {
+                                <span class="registration-display">
+                                    @Model.Vehicle.RegistrationNumber
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="text-muted">
+                                    N/A
+                                </span>
+                            }
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="row">
+
+                <div class="col-md-6">
+
+                    <div class="booking-detail-item">
+
+                        <span class="booking-detail-label">
+                            Booking Start
+                        </span>
+
+                        <div class="booking-detail-value">
+                            @Model.StartDateTime.ToString("dd/MM/yyyy HH:mm")
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-6">
+
+                    <div class="booking-detail-item">
+
+                        <span class="booking-detail-label">
+                            Booking End
+                        </span>
+
+                        <div class="booking-detail-value">
+                            @Model.EndDateTime.ToString("dd/MM/yyyy HH:mm")
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- INSPECTION PROGRESS -->
+
+    <div class="inspection-progress">
+
+        <div class="inspection-progress-item">
+
+            <div class="inspection-progress-title">
+                Before Trip Inspection
+            </div>
+
+            @if (hasBefore)
+            {
+                <div class="inspection-progress-status inspection-progress-complete">
+                    ✓ Completed
+                </div>
+            }
+            else
+            {
+                <div class="inspection-progress-status inspection-progress-pending">
+                    ○ Not Completed
+                </div>
+            }
+
+        </div>
+
+
+        <div class="inspection-progress-item">
+
+            <div class="inspection-progress-title">
+                After Trip Inspection
+            </div>
+
+            @if (hasAfter)
+            {
+                <div class="inspection-progress-status inspection-progress-complete">
+                    ✓ Completed
+                </div>
+            }
+            else
+            {
+                <div class="inspection-progress-status inspection-progress-pending">
+                    ○ Not Completed
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+
+    <!-- INSPECTION RECORDS -->
+
+    <div class="detail-card">
+
+        <div class="detail-card-header">
+
+            <h3>Inspection Records</h3>
+
+            <p>
+                Recorded vehicle condition before and after the booking.
+            </p>
+
+        </div>
+
+        <div class="detail-card-body">
+
+            @if (Model.Inspections == null || !Model.Inspections.Any())
+            {
+                <div class="no-inspections">
+
+                    <div class="no-inspections-icon">
+                        🔎
+                    </div>
+
+                    <h4>No Inspections Recorded</h4>
+
+                    <p>
+                        No inspection has been recorded for this booking yet.
+                    </p>
+
+                </div>
+            }
+            else
+            {
+                foreach (var inspection in Model.Inspections.OrderBy(i => i.InspectionDate))
+                {
+                    <div class="inspection-record">
+
+                        <div class="inspection-record-header">
+
+                            <span class="inspection-type">
+
+                                @if (inspection.InspectionType == "Before")
+                                {
+                                    <span>🚗 Before Trip Inspection</span>
+                                }
+                                else if (inspection.InspectionType == "After")
+                                {
+                                    <span>🔧 After Trip Inspection</span>
+                                }
+                                else
+                                {
+                                    @inspection.InspectionType @:Inspection
+                                }
+
+                            </span>
+
+                            <span class="inspection-date">
+                                Inspected:
+                                @inspection.InspectionDate.ToString("dd/MM/yyyy HH:mm")
+                            </span>
+
+                        </div>
+
+
+                        <div class="inspection-record-body">
+
+                            <div class="row">
+
+                                <div class="col-md-4">
+
+                                    <div class="inspection-field">
+
+                                        <span class="inspection-field-label">
+                                            Mileage
+                                        </span>
+
+                                        <div class="inspection-field-value">
+
+                                            @if (inspection.Mileage.HasValue)
+                                            {
+                                                @inspection.Mileage.Value.ToString("N0")
+                                            }
+                                            else
+                                            {
+                                                <span class="inspection-field-empty">
+                                                    Not recorded
+                                                </span>
+                                            }
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="col-md-4">
+
+                                    <div class="inspection-field">
+
+                                        <span class="inspection-field-label">
+                                            Scratches
+                                        </span>
+
+                                        <div class="inspection-field-value">
+
+                                            @if (string.IsNullOrWhiteSpace(inspection.Scratches))
+                                            {
+                                                <span class="inspection-field-empty">
+                                                    None recorded
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                @inspection.Scratches
+                                            }
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="col-md-4">
+
+                                    <div class="inspection-field">
+
+                                        <span class="inspection-field-label">
+                                            Dents
+                                        </span>
+
+                                        <div class="inspection-field-value">
+
+                                            @if (string.IsNullOrWhiteSpace(inspection.Dents))
+                                            {
+                                                <span class="inspection-field-empty">
+                                                    None recorded
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                @inspection.Dents
+                                            }
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="row">
+
+                                <div class="col-md-6">
+
+                                    <div class="inspection-field">
+
+                                        <span class="inspection-field-label">
+                                            Other Damage
+                                        </span>
+
+                                        <div class="inspection-field-value">
+
+                                            @if (string.IsNullOrWhiteSpace(inspection.OtherDamage))
+                                            {
+                                                <span class="inspection-field-empty">
+                                                    None recorded
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                @inspection.OtherDamage
+                                            }
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="col-md-6">
+
+                                    <div class="inspection-field">
+
+                                        <span class="inspection-field-label">
+                                            General Condition
+                                        </span>
+
+                                        <div class="inspection-field-value">
+
+                                            @if (string.IsNullOrWhiteSpace(inspection.GeneralCondition))
+                                            {
+                                                <span class="inspection-field-empty">
+                                                    Not recorded
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                @inspection.GeneralCondition
+                                            }
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            @if (!string.IsNullOrWhiteSpace(inspection.Notes))
+                            {
+                                <div class="inspection-field">
+
+                                    <span class="inspection-field-label">
+                                        Notes
+                                    </span>
+
+                                    <div class="inspection-notes">
+                                        @inspection.Notes
+                                    </div>
+
+                                </div>
+                            }
+
+                        </div>
+
+                    </div>
+                }
+            }
+
+        </div>
+
+    </div>
+
+
+    <!-- INSPECTION ACTIONS -->
+
+    <div class="action-card">
+
+        <div class="action-card-header">
+
+            <h3>Inspection Actions</h3>
+
+            <p>
+                Record the vehicle condition before and after the employee's trip.
+            </p>
+
+        </div>
+
+
+        <div class="action-card-body">
+
+            <div class="row">
+
+                <!-- BEFORE -->
+
+                <div class="col-md-6">
+
+                    @if (!hasBefore)
+                    {
+                        @Html.ActionLink(
+                            "Record Before Trip Inspection",
+                            "Create",
+                            "VehicleInspection",
+                            new
+                            {
+                                bookingId = Model.BookingId,
+                                type = "Before"
+                            },
+                            new
+                            {
+                                @class = "btn btn-primary btn-lg btn-block inspection-action-button"
+                            }
+                        )
+                    }
+                    else
+                    {
+                        <button type="button"
+                                class="btn btn-default btn-lg btn-block inspection-action-button completed-button"
+                                disabled>
+                            ✓ Before Inspection Completed
+                        </button>
+                    }
+
+                </div>
+
+
+                <!-- AFTER -->
+
+                <div class="col-md-6">
+
+                    @if (!hasAfter)
+                    {
+                        @Html.ActionLink(
+                            "Record After Trip Inspection",
+                            "Create",
+                            "VehicleInspection",
+                            new
+                            {
+                                bookingId = Model.BookingId,
+                                type = "After"
+                            },
+                            new
+                            {
+                                @class = "btn btn-success btn-lg btn-block inspection-action-button"
+                            }
+                        )
+                    }
+                    else
+                    {
+                        <button type="button"
+                                class="btn btn-default btn-lg btn-block inspection-action-button completed-button"
+                                disabled>
+                            ✓ After Inspection Completed
+                        </button>
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- NAVIGATION -->
+
+    @Html.ActionLink(
+        "← Back to Booking Management",
+        "AdminIndex",
+        "Booking",
+        null,
+        new
+        {
+            @class = "btn btn-default back-button"
+        }
+    )
+
+</div>

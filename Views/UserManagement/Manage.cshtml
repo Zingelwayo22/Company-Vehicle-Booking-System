@@ -1,0 +1,643 @@
+﻿@model CompanyVehicleBookingSystem.Models.ApplicationUser
+
+@{
+    ViewBag.Title = "Manage Employee";
+    var initials =
+        ((Model.FirstName ?? "").Length > 0
+            ? Model.FirstName.Substring(0, 1)
+            : "") +
+        ((Model.LastName ?? "").Length > 0
+            ? Model.LastName.Substring(0, 1)
+            : "");
+}
+
+<div class="container-fluid em-page">
+
+    <div class="em-header">
+        <div>
+            <span class="em-eyebrow">HUMAN RESOURCES</span>
+            <h2>Manage Employee</h2>
+            <p>Manage account access and vehicle booking permissions.</p>
+        </div>
+
+        <div class="em-header-actions">
+            @Html.ActionLink(
+                "← Employee Directory",
+                "Index",
+                "UserManagement",
+                null,
+                new { @class = "em-back-btn" }
+            )
+        </div>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Success"]
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["Error"]
+        </div>
+    }
+
+    <div class="em-profile-card">
+        <div class="em-avatar">
+            @(String.IsNullOrWhiteSpace(initials) ? "EM" : initials.ToUpper())
+        </div>
+
+        <div class="em-profile-info">
+            <h3>@Model.FirstName @Model.LastName</h3>
+            <p>@Model.Email</p>
+            <span class="em-employee-number">
+                Employee No: @(String.IsNullOrWhiteSpace(Model.EmployeeNumber)
+                    ? "Not assigned"
+                    : Model.EmployeeNumber)
+            </span>
+        </div>
+
+        <div class="em-profile-status">
+            @if (Model.IsActive)
+            {
+                <span class="em-status em-active">Active Account</span>
+            }
+            else
+            {
+                <span class="em-status em-inactive">Inactive Account</span>
+            }
+        </div>
+    </div>
+
+    <div class="row em-content-row">
+
+        <div class="col-md-7">
+
+            <div class="em-card">
+                <div class="em-card-heading">
+                    <div class="em-heading-icon">01</div>
+                    <div>
+                        <h3>Employee Information</h3>
+                        <p>Review the employee's registered details.</p>
+                    </div>
+                </div>
+
+                <div class="em-details">
+
+                    <div class="em-detail-row">
+                        <span>First Name</span>
+                        <strong>@Model.FirstName</strong>
+                    </div>
+
+                    <div class="em-detail-row">
+                        <span>Last Name</span>
+                        <strong>@Model.LastName</strong>
+                    </div>
+
+                    <div class="em-detail-row">
+                        <span>Employee Number</span>
+                        <strong>
+                            @(String.IsNullOrWhiteSpace(Model.EmployeeNumber)
+                                ? "Not assigned"
+                                : Model.EmployeeNumber)
+                        </strong>
+                    </div>
+
+                    <div class="em-detail-row">
+                        <span>Department</span>
+                        <strong>
+                            @(Model.Department == null
+                                 ? "Not assigned"
+                                 : Model.Department.ToString())
+                        </strong>
+                    </div>
+
+                    <div class="em-detail-row">
+                        <span>Email Address</span>
+                        <strong class="em-email">@Model.Email</strong>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="em-card em-permissions-card">
+                <div class="em-card-heading">
+                    <div class="em-heading-icon">02</div>
+                    <div>
+                        <h3>Account Permissions</h3>
+                        <p>Control access to the company vehicle booking system.</p>
+                    </div>
+                </div>
+
+                @using (Html.BeginForm(
+                    "UpdatePermissions",
+                    "UserManagement",
+                    FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(model => model.Id)
+
+                    <div class="em-permission-option">
+                        <div class="em-permission-description">
+                            <div class="em-permission-title">
+                                <span class="em-permission-symbol">●</span>
+                                Active Account
+                            </div>
+                            <p>
+                                Allow this employee to access their account.
+                                Deactivate the account to suspend access.
+                            </p>
+                        </div>
+
+                        <label class="em-switch">
+                            @Html.CheckBoxFor(model => model.IsActive)
+                            <span class="em-switch-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="em-permission-option">
+                        <div class="em-permission-description">
+                            <div class="em-permission-title">
+                                <span class="em-permission-symbol">🚗</span>
+                                Vehicle Booking Permission
+                            </div>
+                            <p>
+                                Allow this employee to request company vehicles.
+                                The account must also be active.
+                            </p>
+                        </div>
+
+                        <label class="em-switch">
+                            @Html.CheckBoxFor(
+                                model => model.IsVehicleBookingAllowed)
+                            <span class="em-switch-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="em-permissions-note">
+                        <strong>Important:</strong>
+                        Changes apply when you save. Make sure the employee
+                        is authorised to use company vehicles before enabling
+                        booking permission.
+                    </div>
+
+                    <div class="em-form-actions">
+                        <button type="submit" class="em-save-btn">
+                            Save Permission Changes
+                        </button>
+
+                        @Html.ActionLink(
+                            "Cancel",
+                            "Index",
+                            "UserManagement",
+                            null,
+                            new { @class = "em-cancel-btn" }
+                        )
+                    </div>
+                }
+            </div>
+
+        </div>
+
+        <div class="col-md-5">
+
+            <div class="em-card em-access-card">
+                <div class="em-card-heading">
+                    <div class="em-heading-icon">03</div>
+                    <div>
+                        <h3>Access Overview</h3>
+                        <p>Current permission summary.</p>
+                    </div>
+                </div>
+
+                <div class="em-access-item">
+                    <span>System Account</span>
+                    @if (Model.IsActive)
+                    {
+                        <span class="em-status em-active">Active</span>
+                    }
+                    else
+                    {
+                        <span class="em-status em-inactive">Inactive</span>
+                    }
+                </div>
+
+                <div class="em-access-item">
+                    <span>Vehicle Requests</span>
+                    @if (Model.IsVehicleBookingAllowed)
+                    {
+                        <span class="em-status em-active">Allowed</span>
+                    }
+                    else
+                    {
+                        <span class="em-status em-inactive">Restricted</span>
+                    }
+                </div>
+
+                <div class="em-access-item">
+                    <span>Employee</span>
+                    <strong>Registered</strong>
+                </div>
+
+                <div class="em-access-tip">
+                    <strong>HR guidance</strong>
+                    <p>
+                        Only enable vehicle booking for authorised employees.
+                        When an employee leaves the organisation, deactivate
+                        their account rather than deleting their booking history.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<style>
+    .em-page {
+        padding: 25px 30px 40px;
+        color: #243247;
+    }
+
+    .em-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 18px;
+        margin-bottom: 25px;
+    }
+
+    .em-eyebrow {
+        color: #64748b;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 1.8px;
+    }
+
+    .em-header h2 {
+        margin: 8px 0;
+        font-size: 29px;
+        font-weight: 800;
+        color: #172b4d;
+    }
+
+    .em-header p,
+    .em-card-heading p {
+        margin: 0;
+        color: #748197;
+        font-size: 13px;
+    }
+
+    .em-back-btn,
+    .em-cancel-btn {
+        display: inline-block;
+        padding: 11px 16px;
+        border: 1px solid #dce3ed;
+        border-radius: 9px;
+        color: #34445c;
+        background: #fff;
+        text-decoration: none;
+        font-weight: 700;
+    }
+
+        .em-back-btn:hover,
+        .em-cancel-btn:hover {
+            background: #f4f7fb;
+            text-decoration: none;
+        }
+
+    .em-profile-card {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        padding: 24px;
+        margin-bottom: 25px;
+        background: #fff;
+        border: 1px solid #e5eaf1;
+        border-radius: 15px;
+        box-shadow: 0 5px 18px rgba(20, 39, 70, .04);
+    }
+
+    .em-avatar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 66px;
+        height: 66px;
+        flex-shrink: 0;
+        border-radius: 18px;
+        color: #fff;
+        background: #233e67;
+        font-size: 22px;
+        font-weight: 800;
+    }
+
+    .em-profile-info {
+        min-width: 0;
+        flex: 1;
+    }
+
+        .em-profile-info h3 {
+            margin: 0 0 7px;
+            font-size: 21px;
+            font-weight: 800;
+            color: #1d304d;
+        }
+
+        .em-profile-info p {
+            margin: 0 0 7px;
+            color: #65748b;
+            overflow-wrap: anywhere;
+        }
+
+    .em-employee-number {
+        color: #758197;
+        font-size: 12px;
+    }
+
+    .em-status {
+        display: inline-block;
+        padding: 6px 10px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 800;
+        white-space: nowrap;
+    }
+
+    .em-active {
+        background: #e4f7ec;
+        color: #187548;
+    }
+
+    .em-inactive {
+        background: #fff0ed;
+        color: #b6382c;
+    }
+
+    .em-card {
+        margin-bottom: 24px;
+        padding: 24px;
+        background: #fff;
+        border: 1px solid #e5eaf1;
+        border-radius: 14px;
+        box-shadow: 0 5px 18px rgba(20, 39, 70, .04);
+    }
+
+    .em-card-heading {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        padding-bottom: 20px;
+        margin-bottom: 8px;
+        border-bottom: 1px solid #edf0f5;
+    }
+
+    .em-heading-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 42px;
+        height: 42px;
+        flex-shrink: 0;
+        border-radius: 12px;
+        background: #edf3fc;
+        color: #244c80;
+        font-size: 13px;
+        font-weight: 800;
+    }
+
+    .em-card-heading h3 {
+        margin: 0 0 6px;
+        color: #203451;
+        font-size: 17px;
+        font-weight: 800;
+    }
+
+    .em-detail-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 15px;
+        padding: 15px 0;
+        border-bottom: 1px solid #f0f2f6;
+    }
+
+        .em-detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .em-detail-row > span {
+            color: #778398;
+            font-size: 13px;
+        }
+
+        .em-detail-row strong {
+            color: #293a53;
+            font-size: 13px;
+            text-align: right;
+            overflow-wrap: anywhere;
+        }
+
+    .em-email {
+        max-width: 60%;
+    }
+
+    .em-permission-option {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 18px;
+        padding: 20px 0;
+        border-bottom: 1px solid #edf0f5;
+    }
+
+    .em-permission-title {
+        color: #263953;
+        font-size: 14px;
+        font-weight: 800;
+    }
+
+    .em-permission-symbol {
+        margin-right: 7px;
+        color: #3867a2;
+    }
+
+    .em-permission-description p {
+        margin: 8px 0 0;
+        color: #778398;
+        font-size: 12px;
+        line-height: 1.7;
+    }
+
+    .em-switch {
+        position: relative;
+        display: inline-block;
+        width: 48px;
+        height: 27px;
+        flex-shrink: 0;
+        margin: 0;
+    }
+
+        .em-switch input {
+            width: 0;
+            height: 0;
+            opacity: 0;
+        }
+
+    .em-switch-slider {
+        position: absolute;
+        inset: 0;
+        cursor: pointer;
+        background: #cbd3df;
+        border-radius: 30px;
+        transition: .2s;
+    }
+
+        .em-switch-slider:before {
+            position: absolute;
+            content: "";
+            width: 19px;
+            height: 19px;
+            left: 4px;
+            top: 4px;
+            background: #fff;
+            border-radius: 50%;
+            transition: .2s;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, .15);
+        }
+
+    .em-switch input:checked + .em-switch-slider {
+        background: #26734d;
+    }
+
+        .em-switch input:checked + .em-switch-slider:before {
+            transform: translateX(21px);
+        }
+
+    .em-switch input:focus + .em-switch-slider {
+        outline: 2px solid #8ab4ed;
+        outline-offset: 3px;
+    }
+
+    .em-permissions-note {
+        margin-top: 20px;
+        padding: 14px;
+        background: #f2f6fc;
+        border-radius: 9px;
+        color: #56677e;
+        font-size: 12px;
+        line-height: 1.7;
+    }
+
+        .em-permissions-note strong {
+            color: #294d7d;
+        }
+
+    .em-form-actions {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 23px;
+    }
+
+    .em-save-btn {
+        padding: 12px 18px;
+        color: #fff;
+        background: #244a7c;
+        border: none;
+        border-radius: 9px;
+        font-weight: 800;
+        transition: background .2s;
+    }
+
+        .em-save-btn:hover {
+            background: #18365d;
+        }
+
+    .em-access-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 16px 0;
+        border-bottom: 1px solid #edf0f5;
+        color: #69778c;
+        font-size: 13px;
+    }
+
+        .em-access-item strong {
+            color: #293a53;
+        }
+
+    .em-access-tip {
+        margin-top: 20px;
+        padding: 17px;
+        background: #f7f9fc;
+        border-radius: 10px;
+        border-left: 3px solid #41699c;
+    }
+
+        .em-access-tip strong {
+            color: #2a456b;
+            font-size: 13px;
+        }
+
+        .em-access-tip p {
+            margin: 8px 0 0;
+            color: #6d7b90;
+            font-size: 12px;
+            line-height: 1.8;
+        }
+
+    @@media (max-width: 767px) {
+        .em-page {
+            padding: 18px 10px 30px;
+        }
+
+        .em-profile-card {
+            align-items: flex-start;
+            flex-wrap: wrap;
+            padding: 18px;
+        }
+
+        .em-profile-status {
+            width: 100%;
+        }
+
+        .em-card {
+            padding: 18px;
+        }
+
+        .em-detail-row {
+            flex-direction: column;
+            gap: 6px;
+        }
+
+            .em-detail-row strong {
+                text-align: left;
+                max-width: 100%;
+            }
+
+        .em-email {
+            max-width: 100%;
+        }
+
+        .em-form-actions {
+            align-items: stretch;
+            flex-direction: column;
+        }
+
+        .em-save-btn,
+        .em-cancel-btn {
+            text-align: center;
+            width: 100%;
+        }
+    }
+</style>

@@ -1,0 +1,418 @@
+﻿@model CompanyVehicleBookingSystem.Models.Department
+
+@{
+    ViewBag.Title = "Delete Department";
+}
+
+<div class="container-fluid dept-delete-page">
+
+    <div class="dept-delete-header">
+        <div>
+            <span class="dept-delete-eyebrow">HUMAN RESOURCES</span>
+            <h2>Delete Department</h2>
+            <p>Review the department details before confirming deletion.</p>
+        </div>
+
+        @Html.ActionLink(
+            "← Departments",
+            "Index",
+            "Department",
+            null,
+            new { @class = "dept-delete-back" }
+        )
+    </div>
+
+    <div class="dept-delete-warning">
+        <div class="dept-delete-warning-icon">!</div>
+        <div>
+            <h4>Warning: Permanent deletion</h4>
+            <p>
+                Deleting a department may affect employee records and
+                historical information. Confirm that it is safe to proceed.
+            </p>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-8">
+
+            <div class="dept-delete-card">
+
+                <div class="dept-delete-card-heading">
+                    <div class="dept-delete-icon">D</div>
+                    <div>
+                        <h3>Department Details</h3>
+                        <p>Confirm that this is the correct department.</p>
+                    </div>
+                </div>
+
+                <div class="dept-delete-detail">
+                    <span>Department Name</span>
+                    <strong>@Model.Name</strong>
+                </div>
+
+                <div class="dept-delete-detail">
+                    <span>Description</span>
+                    <div class="dept-delete-description">
+                        @if (String.IsNullOrWhiteSpace(Model.Description))
+                        {
+                            <span class="dept-delete-muted">No description provided</span>
+                        }
+                        else
+                        {
+                            @Model.Description
+                        }
+                    </div>
+                </div>
+
+                <div class="dept-delete-confirmation">
+                    <h4>Are you sure you want to delete this department?</h4>
+                    <p>
+                        This action may be irreversible. Make sure no employees
+                        or other records still depend on this department.
+                    </p>
+                </div>
+
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="dept-delete-actions">
+                        <button type="submit"
+                                class="dept-delete-danger"
+                                onclick="return confirm('Are you sure you want to permanently delete this department?');">
+                            Delete Department
+                        </button>
+
+                        @Html.ActionLink(
+                            "Cancel",
+                            "Index",
+                            "Department",
+                            null,
+                            new { @class = "dept-delete-cancel" }
+                        )
+                    </div>
+                }
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4">
+
+            <div class="dept-delete-sidebar">
+                <div class="dept-delete-sidebar-icon">i</div>
+
+                <h3>Before You Delete</h3>
+
+                <div class="dept-delete-tip">
+                    <strong>Check employee assignments</strong>
+                    <p>
+                        Make sure no employees are still assigned to this
+                        department.
+                    </p>
+                </div>
+
+                <div class="dept-delete-tip">
+                    <strong>Consider your alternatives</strong>
+                    <p>
+                        If the department is no longer active, consider how
+                        existing employee and booking records should be retained.
+                    </p>
+                </div>
+
+                <div class="dept-delete-tip">
+                    <strong>Verify the department</strong>
+                    <p>
+                        Double-check the name and description before proceeding.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<style>
+    .dept-delete-page {
+        padding: 25px 30px 40px;
+        color: #26364c;
+    }
+
+    .dept-delete-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 18px;
+        margin-bottom: 26px;
+    }
+
+    .dept-delete-eyebrow {
+        color: #718096;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 1.7px;
+    }
+
+    .dept-delete-header h2 {
+        margin: 8px 0;
+        color: #1d304d;
+        font-size: 29px;
+        font-weight: 800;
+    }
+
+    .dept-delete-header p {
+        margin: 0;
+        color: #778398;
+        font-size: 13px;
+    }
+
+    .dept-delete-back,
+    .dept-delete-cancel {
+        display: inline-block;
+        padding: 11px 16px;
+        border: 1px solid #dce3ed;
+        border-radius: 9px;
+        background: #fff;
+        color: #35465e;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+        .dept-delete-back:hover,
+        .dept-delete-cancel:hover {
+            background: #f4f7fb;
+            text-decoration: none;
+        }
+
+    .dept-delete-warning {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 18px 20px;
+        margin-bottom: 24px;
+        background: #fff5f3;
+        border: 1px solid #f3d5d0;
+        border-radius: 12px;
+    }
+
+    .dept-delete-warning-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 42px;
+        height: 42px;
+        flex-shrink: 0;
+        border-radius: 50%;
+        background: #fde2dd;
+        color: #b33d30;
+        font-size: 23px;
+        font-weight: 800;
+    }
+
+    .dept-delete-warning h4 {
+        margin: 0 0 6px;
+        color: #a83229;
+        font-weight: 800;
+    }
+
+    .dept-delete-warning p {
+        margin: 0;
+        color: #805d59;
+        font-size: 13px;
+        line-height: 1.7;
+    }
+
+    .dept-delete-card,
+    .dept-delete-sidebar {
+        padding: 26px;
+        margin-bottom: 24px;
+        background: #fff;
+        border: 1px solid #e5eaf1;
+        border-radius: 15px;
+        box-shadow: 0 5px 18px rgba(20, 39, 70, .04);
+    }
+
+    .dept-delete-card-heading {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding-bottom: 22px;
+        margin-bottom: 8px;
+        border-bottom: 1px solid #edf0f5;
+    }
+
+    .dept-delete-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 48px;
+        height: 48px;
+        border-radius: 13px;
+        background: #edf3fc;
+        color: #244a7c;
+        font-size: 20px;
+        font-weight: 800;
+    }
+
+    .dept-delete-card-heading h3 {
+        margin: 0 0 6px;
+        color: #203451;
+        font-size: 18px;
+        font-weight: 800;
+    }
+
+    .dept-delete-card-heading p {
+        margin: 0;
+        color: #778398;
+        font-size: 12px;
+    }
+
+    .dept-delete-detail {
+        padding: 19px 0;
+        border-bottom: 1px solid #edf0f5;
+    }
+
+        .dept-delete-detail > span {
+            display: block;
+            margin-bottom: 9px;
+            color: #778398;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .dept-delete-detail strong {
+            display: block;
+            color: #263953;
+            font-size: 16px;
+            overflow-wrap: anywhere;
+        }
+
+    .dept-delete-description {
+        color: #45566e;
+        font-size: 13px;
+        line-height: 1.8;
+        white-space: pre-line;
+        overflow-wrap: anywhere;
+    }
+
+    .dept-delete-muted {
+        color: #98a2b3;
+        font-style: italic;
+    }
+
+    .dept-delete-confirmation {
+        margin-top: 22px;
+        padding: 17px;
+        background: #fff8f2;
+        border: 1px solid #f2e2d3;
+        border-radius: 10px;
+    }
+
+        .dept-delete-confirmation h4 {
+            margin: 0 0 8px;
+            color: #8b4b24;
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .dept-delete-confirmation p {
+            margin: 0;
+            color: #826c5d;
+            font-size: 12px;
+            line-height: 1.8;
+        }
+
+    .dept-delete-actions {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+        padding-top: 22px;
+    }
+
+    .dept-delete-danger {
+        padding: 12px 18px;
+        border: none;
+        border-radius: 9px;
+        background: #b9382d;
+        color: #fff;
+        font-weight: 800;
+        cursor: pointer;
+    }
+
+        .dept-delete-danger:hover {
+            background: #92291f;
+        }
+
+    .dept-delete-sidebar-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 43px;
+        height: 43px;
+        border-radius: 12px;
+        background: #edf3fc;
+        color: #244a7c;
+        font-size: 22px;
+        font-weight: 800;
+    }
+
+    .dept-delete-sidebar h3 {
+        margin: 18px 0 10px;
+        color: #203451;
+        font-size: 18px;
+        font-weight: 800;
+    }
+
+    .dept-delete-tip {
+        padding: 17px 0;
+        border-bottom: 1px solid #edf0f5;
+    }
+
+        .dept-delete-tip:last-child {
+            border-bottom: none;
+        }
+
+        .dept-delete-tip strong {
+            color: #2d3e56;
+            font-size: 13px;
+        }
+
+        .dept-delete-tip p {
+            margin: 7px 0 0;
+            color: #778398;
+            font-size: 12px;
+            line-height: 1.8;
+        }
+
+    @@media (max-width: 767px) {
+        .dept-delete-page {
+            padding: 18px 10px 30px;
+        }
+
+        .dept-delete-card,
+        .dept-delete-sidebar {
+            padding: 19px;
+        }
+
+        .dept-delete-actions {
+            align-items: stretch;
+            flex-direction: column;
+        }
+
+        .dept-delete-danger,
+        .dept-delete-cancel {
+            width: 100%;
+            text-align: center;
+        }
+
+        .dept-delete-warning {
+            align-items: flex-start;
+        }
+    }
+</style>

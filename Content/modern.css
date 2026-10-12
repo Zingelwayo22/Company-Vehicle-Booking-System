@@ -1,0 +1,1718 @@
+﻿/* =========================================
+   COMPANY VEHICLE BOOKING SYSTEM
+   MODERN PROFESSIONAL THEME
+   ========================================= */
+
+:root {
+    --primary: #0f2d45;
+    --primary-light: #174a70;
+    --accent: #2479c9;
+    --background: #f4f7fb;
+    --card: #ffffff;
+    --text: #1d2939;
+    --muted: #667085;
+    --border: #e4e7ec;
+    --success: #12a150;
+    --warning: #e6a700;
+    --danger: #dc3545;
+}
+
+/* =========================================
+   GENERAL
+   ========================================= */
+
+body {
+    margin: 0;
+    padding: 0;
+    background: var(--background);
+    color: var(--text);
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+a {
+    text-decoration: none;
+}
+
+.container {
+    max-width: 1400px;
+}
+
+/* =========================================
+   TOP NAVBAR
+   ========================================= */
+
+.modern-navbar {
+    background: var(--primary);
+    min-height: 64px;
+    border: none;
+    border-radius: 0;
+    margin-bottom: 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+}
+
+    .modern-navbar .navbar-brand {
+        color: #ffffff !important;
+        font-size: 20px;
+        font-weight: 600;
+        padding-top: 20px;
+    }
+
+        .modern-navbar .navbar-brand:hover {
+            color: #ffffff !important;
+        }
+
+.brand-icon {
+    font-size: 25px;
+    margin-right: 10px;
+}
+
+/* =========================================
+   SIDEBAR
+   ========================================= */
+
+.sidebar {
+    position: fixed;
+    top: 64px;
+    left: 0;
+    bottom: 0;
+    width: 240px;
+    background: #132b3f;
+    padding-top: 20px;
+    overflow-y: auto;
+}
+
+.sidebar-title {
+    color: #91a4b5;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 10px 22px;
+    font-weight: 600;
+}
+
+.sidebar a {
+    display: block;
+    color: #dce5ed;
+    padding: 13px 22px;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+    .sidebar a:hover {
+        background: #1c496d;
+        color: #ffffff;
+    }
+
+    .sidebar a.active {
+        background: var(--accent);
+        color: #ffffff;
+        border-right: 4px solid #ffffff;
+    }
+
+.sidebar-icon {
+    width: 28px;
+    display: inline-block;
+    text-align: center;
+    margin-right: 8px;
+}
+
+/* =========================================
+   MAIN CONTENT
+   ========================================= */
+
+.main-content {
+    margin-left: 240px;
+    padding: 30px;
+    min-height: calc(100vh - 64px);
+}
+
+/* =========================================
+   PAGE HEADER
+   ========================================= */
+
+.page-header-modern {
+    margin-bottom: 25px;
+}
+
+    .page-header-modern h1 {
+        font-size: 28px;
+        font-weight: 600;
+        margin: 0 0 5px 0;
+    }
+
+    .page-header-modern p {
+        color: var(--muted);
+        margin: 0;
+    }
+
+/* =========================================
+   DASHBOARD HERO
+   ========================================= */
+
+.dashboard-hero {
+    position: relative;
+    min-height: 190px;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 25px;
+    background: #17364d;
+}
+
+    .dashboard-hero img {
+        width: 100%;
+        height: 190px;
+        object-fit: cover;
+    }
+
+.dashboard-hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient( 90deg, rgba(10, 30, 45, 0.90), rgba(10, 30, 45, 0.35) );
+}
+
+.dashboard-hero-content {
+    position: absolute;
+    top: 35px;
+    left: 35px;
+    color: #ffffff;
+}
+
+    .dashboard-hero-content h1 {
+        font-size: 30px;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+
+    .dashboard-hero-content p {
+        font-size: 15px;
+        margin: 0;
+        opacity: 0.9;
+    }
+
+/* =========================================
+   STAT CARDS
+   ========================================= */
+
+.stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    min-height: 140px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+    .stat-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(16, 24, 40, 0.08);
+    }
+
+.stat-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+    font-size: 21px;
+}
+
+.stat-title {
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 5px;
+}
+
+.stat-number {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text);
+}
+
+/* =========================================
+   ICON COLORS
+   ========================================= */
+
+.icon-blue {
+    background: #e8f2fc;
+    color: #2479c9;
+}
+
+.icon-yellow {
+    background: #fff5d9;
+    color: #d99a00;
+}
+
+.icon-green {
+    background: #e8f7ee;
+    color: #12a150;
+}
+
+.icon-red {
+    background: #fdecef;
+    color: #dc3545;
+}
+
+.icon-purple {
+    background: #f0eafe;
+    color: #7652c9;
+}
+
+/* =========================================
+   MODERN CARDS
+   ========================================= */
+
+.modern-card {
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 5px rgba(16, 24, 40, 0.03);
+}
+
+.modern-card-header {
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--border);
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.modern-card-body {
+    padding: 20px;
+}
+
+/* =========================================
+   TABLES
+   ========================================= */
+
+.modern-table {
+    width: 100%;
+    background: #ffffff;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+    .modern-table thead th {
+        background: #f8fafc;
+        color: #475467;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        padding: 13px;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .modern-table tbody td {
+        padding: 14px 13px;
+        border-bottom: 1px solid #edf0f3;
+        vertical-align: middle;
+        font-size: 13px;
+    }
+
+    .modern-table tbody tr:hover {
+        background: #f8fbff;
+    }
+
+/* =========================================
+   STATUS BADGES
+   ========================================= */
+
+.status-badge {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.status-pending {
+    background: #fff4d6;
+    color: #9a6700;
+}
+
+.status-approved {
+    background: #dff7e8;
+    color: #087f3d;
+}
+
+.status-rejected {
+    background: #fde3e6;
+    color: #b42318;
+}
+
+.status-cancelled {
+    background: #eee5ff;
+    color: #6941c6;
+}
+
+.status-completed {
+    background: #e5f0ff;
+    color: #175cd3;
+}
+
+.status-available {
+    background: #dff7e8;
+    color: #087f3d;
+}
+
+.status-unavailable {
+    background: #fde3e6;
+    color: #b42318;
+}
+
+/* =========================================
+   BUTTONS
+   ========================================= */
+
+.btn-modern-primary {
+    background: var(--accent);
+    border: none;
+    color: #ffffff;
+    border-radius: 6px;
+    padding: 9px 16px;
+    font-size: 13px;
+}
+
+    .btn-modern-primary:hover {
+        background: #1b65a8;
+        color: #ffffff;
+    }
+
+.btn-modern-secondary {
+    background: #ffffff;
+    border: 1px solid #d0d5dd;
+    color: #344054;
+    border-radius: 6px;
+    padding: 9px 16px;
+    font-size: 13px;
+}
+
+/* =========================================
+   VEHICLE CARDS
+   ========================================= */
+
+.vehicle-card {
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 25px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+    .vehicle-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(16, 24, 40, 0.10);
+    }
+
+.vehicle-card-image {
+    width: 100%;
+    height: 170px;
+    object-fit: cover;
+}
+
+.vehicle-card-body {
+    padding: 18px;
+}
+
+.vehicle-card-title {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.vehicle-registration {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+/* =========================================
+   FORMS
+   ========================================= */
+
+.form-control {
+    border: 1px solid #d0d5dd;
+    border-radius: 6px;
+    box-shadow: none;
+    min-height: 40px;
+}
+
+    .form-control:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(36, 121, 201, 0.12);
+    }
+
+.control-label {
+    color: #344054;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+/* =========================================
+   PROFILE
+   ========================================= */
+
+.profile-card {
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 25px;
+    margin-bottom: 20px;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 20px;
+}
+
+.profile-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #e8f2fc;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 25px;
+}
+
+/* =========================================
+   FOOTER
+   ========================================= */
+
+.modern-footer {
+    margin-left: 240px;
+    background: #ffffff;
+    border-top: 1px solid var(--border);
+    padding: 18px 30px;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+
+@media (max-width: 768px) {
+
+    .sidebar {
+        position: relative;
+        top: 0;
+        width: 100%;
+    }
+
+    .main-content {
+        margin-left: 0;
+        padding: 20px;
+    }
+
+    .modern-footer {
+        margin-left: 0;
+    }
+
+    .dashboard-hero-content h1 {
+        font-size: 23px;
+    }
+
+    .dashboard-hero {
+        min-height: 160px;
+    }
+
+        .dashboard-hero img {
+            height: 160px;
+        }
+}
+/* =========================================
+   FIXED APPLICATION LAYOUT
+   ========================================= */
+
+body {
+    padding-top: 64px;
+}
+
+.modern-navbar {
+    z-index: 1050;
+}
+
+.sidebar {
+    z-index: 1000;
+}
+
+.sidebar-system-info {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    color: #91a4b5;
+    font-size: 12px;
+}
+
+    .sidebar-system-info strong {
+        color: #dce5ed;
+        font-weight: 500;
+    }
+
+    .sidebar-system-info small {
+        display: block;
+        margin-top: 3px;
+    }
+
+.pull-right {
+    float: right;
+}
+
+@media (max-width: 768px) {
+
+    body {
+        padding-top: 64px;
+    }
+
+    .sidebar {
+        position: relative;
+        top: 0;
+        width: 100%;
+        min-height: auto;
+    }
+
+    .sidebar-system-info {
+        position: relative;
+        bottom: auto;
+        left: auto;
+        right: auto;
+        margin: 20px;
+    }
+
+    .main-content {
+        margin-left: 0;
+    }
+
+    .modern-footer {
+        margin-left: 0;
+    }
+
+    .pull-right {
+        float: none;
+        display: block;
+        margin-top: 5px;
+    }
+}
+
+/* =========================================
+   PROFESSIONAL DASHBOARD
+   ========================================= */
+
+.dashboard-page {
+    width: 100%;
+}
+
+/* HERO */
+
+.dashboard-hero {
+    position: relative;
+    height: 210px;
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 24px;
+    background: #12344d;
+}
+
+    .dashboard-hero img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+.dashboard-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient( 90deg, rgba(7, 30, 49, 0.95) 0%, rgba(7, 30, 49, 0.75) 45%, rgba(7, 30, 49, 0.15) 100% );
+}
+
+.dashboard-hero-content {
+    position: absolute;
+    left: 32px;
+    top: 28px;
+    color: #ffffff;
+}
+
+.dashboard-eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    opacity: 0.75;
+    margin-bottom: 8px;
+}
+
+.dashboard-hero-content h1 {
+    margin: 0 0 7px 0;
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.dashboard-hero-content p {
+    margin: 0;
+    font-size: 15px;
+    opacity: 0.92;
+}
+
+.dashboard-date {
+    margin-top: 18px;
+    font-size: 13px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+/* =========================================
+   STATISTICS
+   ========================================= */
+
+.dashboard-stats {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 14px;
+    margin-bottom: 24px;
+}
+
+.dashboard-stat {
+    background: #ffffff;
+    border: 1px solid #e4e7ec;
+    border-radius: 11px;
+    padding: 16px;
+    min-height: 145px;
+    transition: all 0.2s ease;
+}
+
+    .dashboard-stat:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 22px rgba(16, 24, 40, 0.08);
+    }
+
+.stat-top {
+    margin-bottom: 13px;
+}
+
+.stat-icon-modern {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 19px;
+    font-weight: 700;
+}
+
+.stat-label {
+    color: #667085;
+    font-size: 12px;
+    margin-bottom: 5px;
+    line-height: 1.3;
+}
+
+.stat-value {
+    color: #102a43;
+    font-size: 25px;
+    font-weight: 700;
+}
+
+.stat-description {
+    color: #98a2b3;
+    font-size: 10px;
+    margin-top: 5px;
+}
+
+/* STAT COLORS */
+
+.stat-blue {
+    background: linear-gradient(145deg, #ffffff, #f4f9ff);
+}
+
+    .stat-blue .stat-icon-modern {
+        background: #e4f0ff;
+        color: #2479c9;
+    }
+
+.stat-yellow {
+    background: linear-gradient(145deg, #ffffff, #fffaf0);
+}
+
+    .stat-yellow .stat-icon-modern {
+        background: #fff0c7;
+        color: #d18b00;
+    }
+
+.stat-green {
+    background: linear-gradient(145deg, #ffffff, #f2fbf6);
+}
+
+    .stat-green .stat-icon-modern {
+        background: #dcf7e7;
+        color: #079447;
+    }
+
+.stat-red {
+    background: linear-gradient(145deg, #ffffff, #fff5f6);
+}
+
+    .stat-red .stat-icon-modern {
+        background: #fde1e5;
+        color: #d92d20;
+    }
+
+.stat-purple {
+    background: linear-gradient(145deg, #ffffff, #f9f6ff);
+}
+
+    .stat-purple .stat-icon-modern {
+        background: #ece3ff;
+        color: #6941c6;
+    }
+
+.stat-cyan {
+    background: linear-gradient(145deg, #ffffff, #f1fbfc);
+}
+
+    .stat-cyan .stat-icon-modern {
+        background: #d9f4f7;
+        color: #0086a3;
+    }
+
+.stat-dark {
+    background: linear-gradient(145deg, #ffffff, #f4f6f8);
+}
+
+    .stat-dark .stat-icon-modern {
+        background: #e8edf2;
+        color: #344054;
+    }
+
+/* =========================================
+   ANALYTICS GRID
+   ========================================= */
+
+.dashboard-grid-analytics {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 0.75fr;
+    gap: 18px;
+    margin-bottom: 20px;
+}
+
+.dashboard-panel {
+    min-height: 285px;
+    margin-bottom: 0;
+}
+
+.dashboard-panel-header {
+    padding: 18px 20px;
+    border-bottom: 1px solid #eaecf0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+    .dashboard-panel-header h3 {
+        margin: 0 0 4px 0;
+        font-size: 16px;
+        font-weight: 700;
+        color: #102a43;
+    }
+
+    .dashboard-panel-header p {
+        margin: 0;
+        color: #98a2b3;
+        font-size: 12px;
+    }
+
+.dashboard-link {
+    color: #2479c9;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+    .dashboard-link:hover {
+        color: #175b99;
+    }
+
+/* =========================================
+   BOOKING OVERVIEW
+   ========================================= */
+
+.booking-overview {
+    padding: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 35px;
+}
+
+.donut-chart {
+    width: 165px;
+    height: 165px;
+    border-radius: 50%;
+    background: conic-gradient( #12a150 0deg 210deg, #f5ae00 210deg 270deg, #dc3545 270deg 300deg, #7652c9 300deg 320deg, #2479c9 320deg 360deg );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.donut-inner {
+    width: 112px;
+    height: 112px;
+    background: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+    .donut-inner strong {
+        color: #102a43;
+        font-size: 27px;
+    }
+
+    .donut-inner span {
+        color: #667085;
+        font-size: 10px;
+        margin-top: 2px;
+    }
+
+.status-list {
+    flex: 1;
+}
+
+.status-row {
+    display: flex;
+    align-items: center;
+    padding: 9px 0;
+    border-bottom: 1px solid #f0f2f5;
+    font-size: 12px;
+}
+
+    .status-row:last-child {
+        border-bottom: none;
+    }
+
+.status-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.status-name {
+    flex: 1;
+    color: #475467;
+}
+
+.status-row strong {
+    color: #102a43;
+}
+
+.dot-pending {
+    background: #f5ae00;
+}
+
+.dot-approved {
+    background: #12a150;
+}
+
+.dot-rejected {
+    background: #dc3545;
+}
+
+.dot-cancelled {
+    background: #7652c9;
+}
+
+.dot-completed {
+    background: #2479c9;
+}
+
+/* =========================================
+   VEHICLE AVAILABILITY
+   ========================================= */
+
+.availability-content {
+    padding: 25px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+}
+
+.availability-ring {
+    width: 145px;
+    height: 145px;
+    border-radius: 50%;
+    background: conic-gradient( #12a150 var(--availability), #e9eef2 var(--availability) );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.availability-inner {
+    width: 105px;
+    height: 105px;
+    border-radius: 50%;
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+    .availability-inner strong {
+        font-size: 23px;
+        color: #102a43;
+    }
+
+    .availability-inner span {
+        color: #667085;
+        font-size: 11px;
+    }
+
+    .availability-inner small {
+        color: #12a150;
+        font-size: 10px;
+        font-weight: 600;
+        margin-top: 2px;
+    }
+
+.availability-details {
+    flex: 1;
+}
+
+.availability-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 0;
+    font-size: 12px;
+}
+
+    .availability-item span:nth-child(2) {
+        flex: 1;
+    }
+
+    .availability-item strong {
+        color: #102a43;
+    }
+
+.availability-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+}
+
+    .availability-dot.available {
+        background: #12a150;
+    }
+
+    .availability-dot.unavailable {
+        background: #dc3545;
+    }
+
+.availability-details hr {
+    border: 0;
+    border-top: 1px solid #eaecf0;
+    margin: 5px 0;
+}
+
+.availability-total {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 8px;
+    color: #667085;
+    font-size: 12px;
+}
+
+    .availability-total strong {
+        color: #102a43;
+    }
+
+/* =========================================
+   QUICK ACTIONS
+   ========================================= */
+
+.quick-actions {
+    padding: 15px;
+}
+
+.quick-action {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px;
+    margin-bottom: 9px;
+    border: 1px solid #e4e7ec;
+    border-radius: 8px;
+    color: #344054;
+    background: #fbfcfd;
+    font-size: 12px;
+    transition: all 0.2s ease;
+}
+
+    .quick-action:hover {
+        border-color: #b7d5ef;
+        background: #f4f9ff;
+        color: #175b99;
+        transform: translateX(2px);
+    }
+
+    .quick-action span:nth-child(2) {
+        flex: 1;
+    }
+
+    .quick-action strong {
+        color: #98a2b3;
+    }
+
+.quick-action-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+}
+
+    .quick-action-icon.blue {
+        background: #e4f0ff;
+        color: #2479c9;
+    }
+
+    .quick-action-icon.green {
+        background: #dcf7e7;
+        color: #079447;
+    }
+
+    .quick-action-icon.purple {
+        background: #ece3ff;
+        color: #6941c6;
+    }
+
+    .quick-action-icon.orange {
+        background: #fff0d6;
+        color: #c77700;
+    }
+
+/* =========================================
+   RECENT BOOKINGS
+   ========================================= */
+
+.recent-bookings-panel {
+    overflow: hidden;
+}
+
+.dashboard-bookings-table {
+    margin: 0;
+}
+
+    .dashboard-bookings-table thead th {
+        padding: 12px 14px;
+        white-space: nowrap;
+    }
+
+    .dashboard-bookings-table tbody td {
+        padding: 12px 14px;
+    }
+
+.employee-cell {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.employee-avatar {
+    width: 31px;
+    height: 31px;
+    border-radius: 50%;
+    background: #e4f0ff;
+    color: #2479c9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 12px;
+}
+
+.employee-cell strong {
+    display: block;
+    font-size: 12px;
+    color: #344054;
+}
+
+.employee-cell small {
+    display: block;
+    color: #98a2b3;
+    font-size: 10px;
+    margin-top: 2px;
+}
+
+.registration-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 5px;
+    background: #f2f4f7;
+    color: #475467;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.status-badge-modern {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+    .status-badge-modern.status-pending {
+        background: #fff0c7;
+        color: #946200;
+    }
+
+    .status-badge-modern.status-approved {
+        background: #dcf7e7;
+        color: #087f3d;
+    }
+
+    .status-badge-modern.status-rejected {
+        background: #fde1e5;
+        color: #b42318;
+    }
+
+    .status-badge-modern.status-cancelled {
+        background: #ece3ff;
+        color: #6941c6;
+    }
+
+    .status-badge-modern.status-completed {
+        background: #e4f0ff;
+        color: #175cd3;
+    }
+
+.btn-view-modern {
+    display: inline-block;
+    background: #2479c9;
+    color: #ffffff !important;
+    padding: 6px 11px;
+    border-radius: 5px;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+    .btn-view-modern:hover {
+        background: #175b99;
+    }
+
+/* =========================================
+   EMPTY STATE
+   ========================================= */
+
+.empty-dashboard {
+    padding: 45px 20px;
+    text-align: center;
+}
+
+.empty-dashboard-icon {
+    font-size: 35px;
+    margin-bottom: 10px;
+}
+
+.empty-dashboard h4 {
+    margin: 0 0 5px;
+    color: #344054;
+}
+
+.empty-dashboard p {
+    color: #98a2b3;
+    font-size: 12px;
+}
+
+/* =========================================
+   DASHBOARD FOOTER MESSAGE
+   ========================================= */
+
+.dashboard-footer-message {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 20px;
+    padding: 15px 20px;
+    background: #eaf3fb;
+    border: 1px solid #d5e8f8;
+    border-radius: 10px;
+    color: #175b99;
+}
+
+    .dashboard-footer-message > span {
+        font-size: 24px;
+    }
+
+    .dashboard-footer-message strong {
+        display: block;
+        font-size: 12px;
+    }
+
+    .dashboard-footer-message small {
+        display: block;
+        font-size: 10px;
+        margin-top: 2px;
+        color: #667085;
+    }
+
+/* =========================================
+   RESPONSIVE DASHBOARD
+   ========================================= */
+
+@media (max-width: 1200px) {
+
+    .dashboard-stats {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .dashboard-grid-analytics {
+        grid-template-columns: 1fr 1fr;
+    }
+
+        .dashboard-grid-analytics > .dashboard-panel:last-child {
+            grid-column: 1 / -1;
+        }
+}
+
+@media (max-width: 768px) {
+
+    .dashboard-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .dashboard-grid-analytics {
+        grid-template-columns: 1fr;
+    }
+
+        .dashboard-grid-analytics > .dashboard-panel:last-child {
+            grid-column: auto;
+        }
+
+    .dashboard-hero {
+        height: 190px;
+    }
+
+    .dashboard-hero-content {
+        left: 20px;
+        top: 25px;
+    }
+
+        .dashboard-hero-content h1 {
+            font-size: 23px;
+        }
+
+    .booking-overview {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .availability-content {
+        flex-direction: column;
+    }
+}
+
+/* =========================================
+   VEHICLE AVAILABILITY PAGE
+   ========================================= */
+
+.vehicle-page {
+    width: 100%;
+}
+
+.vehicle-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 20px;
+}
+
+.page-eyebrow {
+    color: #2479c9;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    margin-bottom: 6px;
+}
+
+.vehicle-page-header h1 {
+    color: #102a43;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.vehicle-header-actions {
+    display: flex;
+    gap: 10px;
+}
+
+
+/* =========================================
+   VEHICLE SUMMARY
+   ========================================= */
+
+.vehicle-summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.vehicle-summary-card {
+    background: #ffffff;
+    border: 1px solid #e4e7ec;
+    border-radius: 10px;
+    padding: 18px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+    .vehicle-summary-card span {
+        display: block;
+        color: #667085;
+        font-size: 12px;
+        margin-bottom: 3px;
+    }
+
+    .vehicle-summary-card strong {
+        display: block;
+        color: #102a43;
+        font-size: 23px;
+    }
+
+.vehicle-summary-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+
+    .vehicle-summary-icon.blue {
+        background: #e4f0ff;
+        color: #2479c9;
+    }
+
+    .vehicle-summary-icon.green {
+        background: #dcf7e7;
+        color: #087f3d;
+    }
+
+    .vehicle-summary-icon.red {
+        background: #fde1e5;
+        color: #d92d20;
+    }
+
+
+/* =========================================
+   VEHICLE GRID
+   ========================================= */
+
+.vehicle-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+}
+
+
+/* =========================================
+   FLEET CARD
+   ========================================= */
+
+.fleet-card {
+    background: #ffffff;
+    border: 1px solid #e4e7ec;
+    border-radius: 13px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(16, 24, 40, 0.03);
+    transition: all 0.25s ease;
+}
+
+    .fleet-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 28px rgba(16, 24, 40, 0.10);
+    }
+
+
+/* =========================================
+   VEHICLE IMAGE
+   ========================================= */
+
+.fleet-card-image {
+    position: relative;
+    height: 190px;
+    overflow: hidden;
+    background: #16364d;
+}
+
+    .fleet-card-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.4s ease;
+    }
+
+.fleet-card:hover .fleet-card-image img {
+    transform: scale(1.04);
+}
+
+.fleet-image-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient( 180deg, rgba(8, 28, 44, 0.05), rgba(8, 28, 44, 0.50) );
+}
+
+.fleet-status {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    padding: 6px 11px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 700;
+    backdrop-filter: blur(8px);
+}
+
+    .fleet-status.available {
+        background: rgba(220, 247, 231, 0.95);
+        color: #087f3d;
+    }
+
+    .fleet-status.unavailable {
+        background: rgba(253, 225, 229, 0.95);
+        color: #b42318;
+    }
+
+
+/* =========================================
+   VEHICLE BODY
+   ========================================= */
+
+.fleet-card-body {
+    padding: 19px;
+}
+
+.fleet-card-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.fleet-card-make {
+    color: #667085;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+}
+
+.fleet-card-title-row h3 {
+    margin: 3px 0 0;
+    color: #102a43;
+    font-size: 19px;
+    font-weight: 700;
+}
+
+.fleet-year {
+    background: #f2f4f7;
+    color: #475467;
+    padding: 5px 8px;
+    border-radius: 5px;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+
+/* =========================================
+   REGISTRATION
+   ========================================= */
+
+.fleet-registration {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 15px;
+    padding: 10px 12px;
+    background: #f8fafc;
+    border-radius: 7px;
+}
+
+    .fleet-registration span {
+        color: #98a2b3;
+        font-size: 9px;
+        font-weight: 600;
+        letter-spacing: 0.8px;
+    }
+
+    .fleet-registration strong {
+        color: #344054;
+        font-size: 12px;
+        letter-spacing: 0.5px;
+    }
+
+
+/* =========================================
+   VEHICLE DETAILS
+   ========================================= */
+
+.fleet-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 16px;
+    padding-bottom: 17px;
+    border-bottom: 1px solid #eaecf0;
+}
+
+.fleet-detail {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.fleet-detail-icon {
+    width: 29px;
+    height: 29px;
+    border-radius: 7px;
+    background: #f2f6fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+}
+
+.fleet-detail small {
+    display: block;
+    color: #98a2b3;
+    font-size: 9px;
+    margin-bottom: 2px;
+}
+
+.fleet-detail strong {
+    display: block;
+    color: #475467;
+    font-size: 10px;
+}
+
+
+/* =========================================
+   VEHICLE ACTION
+   ========================================= */
+
+.fleet-card-footer {
+    padding-top: 15px;
+}
+
+.fleet-request-button {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    border-radius: 7px;
+    background: #2479c9;
+    color: #ffffff !important;
+    font-size: 12px;
+    font-weight: 600;
+    transition: background 0.2s ease;
+}
+
+    .fleet-request-button:hover {
+        background: #175b99;
+    }
+
+.fleet-unavailable-button {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #e4e7ec;
+    border-radius: 7px;
+    background: #f2f4f7;
+    color: #98a2b3;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+/* =========================================
+   EMPTY STATE
+   ========================================= */
+
+.vehicle-empty-state {
+    background: #ffffff;
+    border: 1px solid #e4e7ec;
+    border-radius: 12px;
+    text-align: center;
+    padding: 60px 20px;
+}
+
+    .vehicle-empty-state > div {
+        font-size: 45px;
+        margin-bottom: 12px;
+    }
+
+    .vehicle-empty-state h3 {
+        color: #344054;
+        margin-bottom: 7px;
+    }
+
+    .vehicle-empty-state p {
+        color: #98a2b3;
+        font-size: 13px;
+    }
+
+
+/* =========================================
+   RESPONSIVE VEHICLES
+   ========================================= */
+
+@media (max-width: 1100px) {
+
+    .vehicle-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+
+    .vehicle-page-header {
+        display: block;
+    }
+
+    .vehicle-header-actions {
+        margin-top: 15px;
+    }
+
+    .vehicle-summary {
+        grid-template-columns: 1fr;
+    }
+
+    .vehicle-grid {
+        grid-template-columns: 1fr;
+    }
+}

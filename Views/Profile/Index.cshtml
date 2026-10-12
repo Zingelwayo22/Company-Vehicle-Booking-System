@@ -1,0 +1,995 @@
+﻿
+@model CompanyVehicleBookingSystem.Models.ApplicationUser
+
+@{
+    ViewBag.Title = "My Profile";
+}
+
+<div class="profile-page">
+
+    <!-- PROFILE HEADER -->
+    <div class="profile-hero">
+
+        <div class="profile-avatar">
+            @if (!string.IsNullOrEmpty(Model.FirstName))
+            {
+                @Model.FirstName.Substring(0, 1).ToUpper()
+            }
+            else
+            {
+                <span>👤</span>
+            }
+        </div>
+
+        <div class="profile-header-content">
+
+            <span class="profile-eyebrow">
+                EMPLOYEE PORTAL
+            </span>
+
+            <h1>
+                @Model.FirstName @Model.LastName
+            </h1>
+
+            <p>
+                @if (!string.IsNullOrEmpty(Model.Position))
+                {
+                    @Model.Position
+                }
+                else
+                {
+                    <span>Company Employee</span>
+                }
+
+                @if (Model.Department != null)
+                {
+                    <span class="profile-divider">•</span>
+                    @Model.Department.Name
+                }
+            </p>
+
+            <div class="profile-status-row">
+
+                @if (Model.IsActive)
+                {
+                    <span class="profile-status active">
+                        <span class="status-dot"></span>
+                        Active Account
+                    </span>
+                }
+                else
+                {
+                    <span class="profile-status inactive">
+                        <span class="status-dot"></span>
+                        Inactive Account
+                    </span>
+                }
+
+                @if (Model.IsVehicleBookingAllowed)
+                {
+                    <span class="profile-status booking-allowed">
+                        🚗 Vehicle Booking Enabled
+                    </span>
+                }
+                else
+                {
+                    <span class="profile-status booking-disabled">
+                        🚫 Vehicle Booking Disabled
+                    </span>
+                }
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- PROFILE CONTENT -->
+    <div class="profile-grid">
+
+        <!-- EMPLOYEE INFORMATION -->
+        <div class="profile-card">
+
+            <div class="card-header">
+
+                <div class="card-icon employee-icon">
+                    👤
+                </div>
+
+                <div>
+                    <h2>Employee Information</h2>
+                    <p>Your registered company information</p>
+                </div>
+
+            </div>
+
+
+            <div class="profile-details">
+
+                <div class="detail-item">
+
+                    <span class="detail-label">
+                        Employee Number
+                    </span>
+
+                    <span class="detail-value highlight-value">
+                        @Model.EmployeeNumber
+                    </span>
+
+                </div>
+
+
+                <div class="detail-item">
+
+                    <span class="detail-label">
+                        First Name
+                    </span>
+
+                    <span class="detail-value">
+                        @Model.FirstName
+                    </span>
+
+                </div>
+
+
+                <div class="detail-item">
+
+                    <span class="detail-label">
+                        Last Name
+                    </span>
+
+                    <span class="detail-value">
+                        @Model.LastName
+                    </span>
+
+                </div>
+
+
+                <div class="detail-item">
+
+                    <span class="detail-label">
+                        Email Address
+                    </span>
+
+                    <span class="detail-value">
+                        @Model.Email
+                    </span>
+
+                </div>
+
+
+                <div class="detail-item">
+
+                    <span class="detail-label">
+                        Position
+                    </span>
+
+                    <span class="detail-value">
+
+                        @if (!string.IsNullOrEmpty(Model.Position))
+                        {
+                            @Model.Position
+                        }
+                        else
+                        {
+                            <span class="muted-value">Not Provided</span>
+                        }
+
+                    </span>
+
+                </div>
+
+
+                <div class="detail-item">
+
+                    <span class="detail-label">
+                        Department
+                    </span>
+
+                    <span class="detail-value">
+
+                        @if (Model.Department != null)
+                        {
+                            @Model.Department.Name
+                        }
+                        else
+                        {
+                            <span class="muted-value">
+                                Not Assigned
+                            </span>
+                        }
+
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- DRIVER INFORMATION -->
+        <div class="profile-card">
+
+            <div class="card-header">
+
+                <div class="card-icon driver-icon">
+                    🪪
+                </div>
+
+                <div>
+                    <h2>Driver Information</h2>
+                    <p>Your driving licence information</p>
+                </div>
+
+            </div>
+
+
+            <div class="profile-details">
+
+                <div class="detail-item">
+
+                    <span class="detail-label">
+                        Driver's Licence Number
+                    </span>
+
+                    <span class="detail-value">
+
+                        @if (!string.IsNullOrEmpty(Model.DriversLicenceNumber))
+                        {
+                            @Model.DriversLicenceNumber
+                        }
+                        else
+                        {
+                            <span class="muted-value">
+                                Not Provided
+                            </span>
+                        }
+
+                    </span>
+
+                </div>
+
+
+                <div class="detail-item">
+
+                    <span class="detail-label">
+                        Licence Expiry
+                    </span>
+
+                    <span class="detail-value">
+
+                        @if (Model.DriversLicenceExpiry.HasValue)
+                        {
+                            @Model.DriversLicenceExpiry.Value.ToString("dd/MM/yyyy")
+                        }
+                        else
+                        {
+                            <span class="muted-value">
+                                Not Provided
+                            </span>
+                        }
+
+                    </span>
+
+                </div>
+
+
+                @if (Model.DriversLicenceExpiry.HasValue)
+                {
+                    <div class="licence-notice">
+
+                        <span class="notice-icon">
+                            ℹ️
+                        </span>
+
+                        <div>
+
+                            <strong>Licence Information</strong>
+
+                            <p>
+                                Keep your driver's licence information
+                                up to date with the company.
+                            </p>
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+
+        </div>
+
+
+        <!-- ACCOUNT & BOOKING PERMISSIONS -->
+        <div class="profile-card full-width-card">
+
+            <div class="card-header">
+
+                <div class="card-icon permissions-icon">
+                    🔐
+                </div>
+
+                <div>
+                    <h2>Account & Booking Permissions</h2>
+                    <p>Your account status and vehicle booking access</p>
+                </div>
+
+            </div>
+
+
+            <div class="permission-grid">
+
+                <div class="permission-item">
+
+                    <div class="permission-icon">
+                        👤
+                    </div>
+
+                    <div class="permission-content">
+
+                        <span class="permission-label">
+                            Account Status
+                        </span>
+
+                        @if (Model.IsActive)
+                        {
+                            <span class="permission-badge success">
+                                <span class="badge-dot"></span>
+                                Active
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="permission-badge danger">
+                                <span class="badge-dot"></span>
+                                Inactive
+                            </span>
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <div class="permission-item">
+
+                    <div class="permission-icon">
+                        🚗
+                    </div>
+
+                    <div class="permission-content">
+
+                        <span class="permission-label">
+                            Vehicle Booking
+                        </span>
+
+                        @if (Model.IsVehicleBookingAllowed)
+                        {
+                            <span class="permission-badge success">
+                                <span class="badge-dot"></span>
+                                Allowed
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="permission-badge danger">
+                                <span class="badge-dot"></span>
+                                Not Allowed
+                            </span>
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <div class="permission-item">
+
+                    <div class="permission-icon">
+                        📅
+                    </div>
+
+                    <div class="permission-content">
+
+                        <span class="permission-label">
+                            Employee Since
+                        </span>
+
+                        <span class="permission-value">
+                            @Model.DateAdded.ToString("dd/MM/yyyy")
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- INFORMATION MESSAGE -->
+    <div class="profile-information">
+
+        <div class="information-symbol">
+            ℹ️
+        </div>
+
+        <div>
+
+            <strong>Need to update your information?</strong>
+
+            <p>
+                Your employee information and vehicle booking permissions
+                are managed by an authorised administrator. Please contact
+                your administrator if any of your details need to be changed.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- ACTIONS -->
+    <div class="profile-actions">
+
+        @Html.ActionLink(
+            "← Back to My Bookings",
+            "Index",
+            "Booking",
+            null,
+            new
+            {
+                @class = "back-button"
+            }
+        )
+
+        @Html.ActionLink(
+            "🚗 Request Vehicle",
+            "Create",
+            "Booking",
+            null,
+            new
+            {
+                @class = "profile-booking-button"
+            }
+        )
+
+    </div>
+
+</div>
+
+
+<style>
+
+    .profile-page {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 10px 10px 50px;
+    }
+
+
+    /* HERO */
+
+    .profile-hero {
+        display: flex;
+        align-items: center;
+        gap: 25px;
+        padding: 35px 40px;
+        margin-bottom: 25px;
+        border-radius: 18px;
+        color: #fff;
+        background: linear-gradient( 135deg, rgba(25, 45, 65, 0.98), rgba(42, 75, 105, 0.94) );
+        box-shadow: 0 10px 30px rgba(0,0,0,0.10);
+    }
+
+
+    .profile-avatar {
+        width: 88px;
+        height: 88px;
+        flex-shrink: 0;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255,255,255,0.14);
+        border: 3px solid rgba(255,255,255,0.25);
+        font-size: 38px;
+        font-weight: 700;
+    }
+
+
+    .profile-header-content {
+        min-width: 0;
+    }
+
+
+    .profile-eyebrow {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 1.8px;
+        opacity: 0.75;
+    }
+
+
+    .profile-hero h1 {
+        margin: 5px 0 5px;
+        font-size: 30px;
+        font-weight: 700;
+    }
+
+
+    .profile-hero p {
+        margin: 0;
+        font-size: 15px;
+        opacity: 0.85;
+    }
+
+
+    .profile-divider {
+        margin: 0 8px;
+        opacity: 0.6;
+    }
+
+
+    .profile-status-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 15px;
+    }
+
+
+    .profile-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 6px 11px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+
+        .profile-status.active,
+        .profile-status.booking-allowed {
+            background: rgba(255,255,255,0.14);
+        }
+
+
+        .profile-status.inactive,
+        .profile-status.booking-disabled {
+            background: rgba(255,255,255,0.10);
+        }
+
+
+    .status-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #6ee7b7;
+    }
+
+
+    .inactive .status-dot {
+        background: #fca5a5;
+    }
+
+
+    /* GRID */
+
+    .profile-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 22px;
+    }
+
+
+    /* CARDS */
+
+    .profile-card {
+        background: #fff;
+        border: 1px solid #e5e9ed;
+        border-radius: 16px;
+        padding: 27px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    }
+
+
+    .full-width-card {
+        grid-column: 1 / -1;
+    }
+
+
+    .card-header {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        padding-bottom: 20px;
+        margin-bottom: 4px;
+        border-bottom: 1px solid #edf0f2;
+    }
+
+
+    .card-icon {
+        width: 44px;
+        height: 44px;
+        flex-shrink: 0;
+        border-radius: 11px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+    }
+
+
+    .employee-icon {
+        background: #eef5ff;
+    }
+
+
+    .driver-icon {
+        background: #f2f8f2;
+    }
+
+
+    .permissions-icon {
+        background: #f7f2ff;
+    }
+
+
+    .card-header h2 {
+        margin: 0 0 4px;
+        font-size: 18px;
+        font-weight: 700;
+        color: #263238;
+    }
+
+
+    .card-header p {
+        margin: 0;
+        color: #8a959f;
+        font-size: 12px;
+    }
+
+
+    /* DETAILS */
+
+    .profile-details {
+        padding-top: 10px;
+    }
+
+
+    .detail-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+        padding: 13px 0;
+        border-bottom: 1px solid #f0f2f4;
+    }
+
+
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+
+
+    .detail-label {
+        color: #7b8794;
+        font-size: 13px;
+    }
+
+
+    .detail-value {
+        color: #263238;
+        font-size: 14px;
+        font-weight: 600;
+        text-align: right;
+        word-break: break-word;
+    }
+
+
+    .highlight-value {
+        color: #2f80ed;
+    }
+
+
+    .muted-value {
+        color: #9aa3ab;
+        font-weight: 500;
+        font-style: italic;
+    }
+
+
+    /* LICENCE NOTICE */
+
+    .licence-notice {
+        display: flex;
+        gap: 11px;
+        align-items: flex-start;
+        margin-top: 15px;
+        padding: 13px 14px;
+        background: #f5f9ff;
+        border: 1px solid #dceafa;
+        border-radius: 9px;
+    }
+
+
+    .notice-icon {
+        font-size: 16px;
+    }
+
+
+    .licence-notice strong {
+        color: #285b8f;
+        font-size: 12px;
+    }
+
+
+    .licence-notice p {
+        margin: 3px 0 0;
+        color: #71808c;
+        font-size: 11px;
+        line-height: 1.5;
+    }
+
+
+    /* PERMISSIONS */
+
+    .permission-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+        padding-top: 20px;
+    }
+
+
+    .permission-item {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        padding: 17px;
+        border: 1px solid #edf0f2;
+        border-radius: 11px;
+        background: #fafbfc;
+    }
+
+
+    .permission-icon {
+        width: 40px;
+        height: 40px;
+        flex-shrink: 0;
+        border-radius: 10px;
+        background: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 17px;
+    }
+
+
+    .permission-content {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+
+    .permission-label {
+        color: #7b8794;
+        font-size: 11px;
+        font-weight: 600;
+    }
+
+
+    .permission-value {
+        color: #263238;
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+
+    .permission-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+
+        .permission-badge.success {
+            color: #198754;
+        }
+
+
+        .permission-badge.danger {
+            color: #d64545;
+        }
+
+
+    .badge-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: currentColor;
+    }
+
+
+    /* INFORMATION */
+
+    .profile-information {
+        display: flex;
+        gap: 13px;
+        align-items: flex-start;
+        margin-top: 22px;
+        padding: 16px 18px;
+        background: #f5f9ff;
+        border: 1px solid #dceafa;
+        border-radius: 11px;
+    }
+
+
+    .information-symbol {
+        font-size: 18px;
+    }
+
+
+    .profile-information strong {
+        color: #285b8f;
+        font-size: 13px;
+    }
+
+
+    .profile-information p {
+        margin: 5px 0 0;
+        color: #637381;
+        font-size: 12px;
+        line-height: 1.6;
+    }
+
+
+    /* ACTIONS */
+
+    .profile-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-top: 25px;
+    }
+
+
+    .back-button,
+    .profile-booking-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 44px;
+        padding: 11px 20px;
+        border-radius: 9px;
+        font-size: 13px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+
+    .back-button {
+        background: #fff;
+        border: 1px solid #d8dee5;
+        color: #5f6b76;
+    }
+
+
+        .back-button:hover {
+            background: #f5f6f7;
+            color: #37474f;
+            text-decoration: none;
+        }
+
+
+    .profile-booking-button {
+        background: #198754;
+        border: 1px solid #198754;
+        color: #fff;
+    }
+
+
+        .profile-booking-button:hover {
+            background: #157347;
+            border-color: #157347;
+            color: #fff;
+            text-decoration: none;
+            transform: translateY(-1px);
+            box-shadow: 0 5px 12px rgba(25,135,84,0.20);
+        }
+
+
+    /* RESPONSIVE */
+
+    @@media (max-width: 900px) {
+
+        .profile-grid {
+            grid-template-columns: 1fr;
+        }
+
+
+        .full-width-card {
+            grid-column: auto;
+        }
+
+
+        .permission-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+
+    @@media (max-width: 600px) {
+
+        .profile-page {
+            padding: 5px 5px 35px;
+        }
+
+
+        .profile-hero {
+            padding: 25px 20px;
+            gap: 17px;
+            align-items: flex-start;
+        }
+
+
+        .profile-avatar {
+            width: 65px;
+            height: 65px;
+            font-size: 28px;
+        }
+
+
+        .profile-hero h1 {
+            font-size: 23px;
+        }
+
+
+        .profile-hero p {
+            font-size: 13px;
+        }
+
+
+        .profile-card {
+            padding: 20px 17px;
+        }
+
+
+        .detail-item {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 5px;
+        }
+
+
+        .detail-value {
+            text-align: left;
+        }
+
+
+        .profile-actions {
+            flex-direction: column-reverse;
+            align-items: stretch;
+        }
+
+
+        .back-button,
+        .profile-booking-button {
+            width: 100%;
+        }
+    }
+</style>
+

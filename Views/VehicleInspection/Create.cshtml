@@ -1,0 +1,755 @@
+﻿@model CompanyVehicleBookingSystem.Models.VehicleInspection
+
+@{
+    ViewBag.Title = "Record Vehicle Inspection";
+
+    var isBeforeInspection = Model.InspectionType == "Before";
+}
+
+<style>
+
+    .inspection-create-page {
+        padding-bottom: 40px;
+    }
+
+    /* HERO */
+
+    .inspection-create-hero {
+        background: linear-gradient(135deg, #1f3c88, #3159b7);
+        border-radius: 16px;
+        padding: 30px;
+        color: white;
+        margin-bottom: 25px;
+        box-shadow: 0 10px 30px rgba(31, 60, 136, 0.18);
+    }
+
+    .inspection-create-icon {
+        width: 58px;
+        height: 58px;
+        border-radius: 14px;
+        background: rgba(255,255,255,0.15);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+        margin-bottom: 17px;
+    }
+
+    .inspection-create-hero h1 {
+        margin: 0 0 7px 0;
+        font-size: 30px;
+        font-weight: 700;
+    }
+
+    .inspection-create-hero p {
+        margin: 0;
+        color: rgba(255,255,255,0.85);
+        font-size: 14px;
+    }
+
+    .booking-reference {
+        display: inline-block;
+        margin-top: 16px;
+        padding: 6px 11px;
+        border-radius: 20px;
+        background: rgba(255,255,255,0.14);
+        color: white;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    /* FORM CARD */
+
+    .inspection-form-card {
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 16px;
+        box-shadow: 0 4px 18px rgba(0,0,0,0.05);
+        overflow: hidden;
+        margin-bottom: 25px;
+    }
+
+    .inspection-section {
+        padding: 25px;
+        border-bottom: 1px solid #edf0f3;
+    }
+
+        .inspection-section:last-child {
+            border-bottom: none;
+        }
+
+    .inspection-section-header {
+        margin-bottom: 22px;
+    }
+
+        .inspection-section-header h3 {
+            margin: 0 0 6px 0;
+            color: #1f2937;
+            font-size: 19px;
+            font-weight: 700;
+        }
+
+        .inspection-section-header p {
+            margin: 0;
+            color: #6b7280;
+            font-size: 13px;
+        }
+
+    /* INSPECTION TYPE */
+
+    .inspection-type-card {
+        display: flex;
+        align-items: center;
+        padding: 17px;
+        border-radius: 10px;
+        border: 1px solid #e5e7eb;
+        background: #f8fafc;
+    }
+
+    .inspection-type-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 13px;
+        font-size: 21px;
+    }
+
+    .inspection-type-before {
+        background: #eff6ff;
+        color: #1d4ed8;
+    }
+
+    .inspection-type-after {
+        background: #ecfdf5;
+        color: #047857;
+    }
+
+    .inspection-type-title {
+        font-size: 14px;
+        font-weight: 700;
+        color: #1f2937;
+    }
+
+    .inspection-type-description {
+        color: #6b7280;
+        font-size: 12px;
+        margin-top: 3px;
+    }
+
+    .inspection-date-box {
+        padding: 17px;
+        border-radius: 10px;
+        border: 1px solid #e5e7eb;
+        background: #f8fafc;
+        height: 100%;
+    }
+
+    .inspection-date-label {
+        display: block;
+        color: #6b7280;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-weight: 700;
+        margin-bottom: 6px;
+    }
+
+    .inspection-date-value {
+        color: #1f2937;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    /* FORM FIELDS */
+
+    .inspection-form-group {
+        margin-bottom: 21px;
+    }
+
+        .inspection-form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .inspection-form-group label {
+            color: #374151;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 7px;
+        }
+
+    .inspection-form-control {
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        box-shadow: none;
+        min-height: 43px;
+        padding: 10px 12px;
+        font-size: 13px;
+    }
+
+        .inspection-form-control:focus {
+            border-color: #3159b7;
+            box-shadow: 0 0 0 3px rgba(49,89,183,0.10);
+        }
+
+    textarea.inspection-form-control {
+        min-height: 105px;
+        resize: vertical;
+    }
+
+    .field-help {
+        margin-top: 6px;
+        color: #9ca3af;
+        font-size: 11px;
+    }
+
+    .field-validation {
+        display: block;
+        margin-top: 5px;
+        font-size: 12px;
+    }
+
+    /* PHOTO */
+
+    .photo-upload-box {
+        border: 2px dashed #d1d5db;
+        border-radius: 12px;
+        padding: 25px;
+        background: #f8fafc;
+        text-align: center;
+    }
+
+    .photo-upload-icon {
+        font-size: 35px;
+        opacity: 0.65;
+        margin-bottom: 10px;
+    }
+
+    .photo-upload-box label {
+        display: block;
+        color: #374151;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    .photo-upload-box input[type="file"] {
+        max-width: 450px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 8px;
+        border: 1px solid #d1d5db;
+        padding: 8px;
+    }
+
+    .photo-help {
+        margin: 10px 0 0 0;
+        color: #6b7280;
+        font-size: 12px;
+    }
+
+    /* INFO MESSAGE */
+
+    .inspection-info {
+        background: #eff6ff;
+        border: 1px solid #bfdbfe;
+        border-radius: 10px;
+        padding: 15px 17px;
+        margin-top: 20px;
+        color: #1e40af;
+        font-size: 12px;
+        line-height: 1.6;
+    }
+
+        .inspection-info strong {
+            color: #1e3a8a;
+        }
+
+    /* BUTTONS */
+
+    .inspection-actions {
+        padding: 22px 25px;
+        background: #f8fafc;
+        border-top: 1px solid #e5e7eb;
+    }
+
+    .save-inspection-button {
+        border: none;
+        border-radius: 8px;
+        padding: 11px 20px;
+        font-weight: 700;
+        font-size: 13px;
+    }
+
+    .cancel-inspection-button {
+        border-radius: 8px;
+        padding: 10px 18px;
+        font-weight: 600;
+        font-size: 13px;
+        margin-left: 8px;
+    }
+
+    .validation-summary {
+        border-radius: 10px;
+        margin-bottom: 22px;
+    }
+
+    @@media (max-width: 767px) {
+
+        .inspection-create-hero {
+            padding: 25px 20px;
+        }
+
+            .inspection-create-hero h1 {
+                font-size: 24px;
+            }
+
+        .inspection-section {
+            padding: 20px;
+        }
+
+        .inspection-actions {
+            padding: 18px 20px;
+        }
+
+        .cancel-inspection-button {
+            margin-left: 0;
+            margin-top: 10px;
+        }
+
+        .save-inspection-button,
+        .cancel-inspection-button {
+            width: 100%;
+        }
+
+        .inspection-date-box {
+            margin-top: 15px;
+        }
+    }
+</style>
+
+
+<div class="container inspection-create-page">
+
+    <!-- HERO -->
+
+    <div class="inspection-create-hero">
+
+        <div class="inspection-create-icon">
+            🔍
+        </div>
+
+        <h1>Record Vehicle Inspection</h1>
+
+        <p>
+            Record the condition of the company vehicle before or after the booking.
+        </p>
+
+        <span class="booking-reference">
+            Booking #@Model.BookingId
+        </span>
+
+    </div>
+
+
+    @using (Html.BeginForm(
+        "Create",
+        "VehicleInspection",
+        FormMethod.Post,
+        new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.HiddenFor(model => model.BookingId)
+        @Html.HiddenFor(model => model.VehicleId)
+        @Html.HiddenFor(model => model.InspectionType)
+
+
+        @Html.ValidationSummary(
+            true,
+            "",
+            new { @class = "alert alert-danger validation-summary" }
+        )
+
+
+        <div class="inspection-form-card">
+
+            <!-- INSPECTION INFORMATION -->
+
+            <div class="inspection-section">
+
+                <div class="inspection-section-header">
+
+                    <h3>Inspection Information</h3>
+
+                    <p>
+                        Confirm the type and date of this vehicle inspection.
+                    </p>
+
+                </div>
+
+
+                <div class="row">
+
+                    <div class="col-md-8">
+
+                        <div class="inspection-type-card">
+
+                            <div class="inspection-type-icon
+                                @(isBeforeInspection
+                                    ? "inspection-type-before"
+                                    : "inspection-type-after")">
+
+                                @if (isBeforeInspection)
+                                {
+                                    <span>🚗</span>
+                                }
+                                else
+                                {
+                                    <span>🔧</span>
+                                }
+
+                            </div>
+
+                            <div>
+
+                                <div class="inspection-type-title">
+
+                                    @if (isBeforeInspection)
+                                    {
+                                        <span>Before Trip Inspection</span>
+                                    }
+                                    else
+                                    {
+                                        <span>After Trip Inspection</span>
+                                    }
+
+                                </div>
+
+                                <div class="inspection-type-description">
+
+                                    @if (isBeforeInspection)
+                                    {
+                                        <span>
+                                            Record the vehicle's condition before the employee starts the trip.
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span>
+                                            Record the vehicle's condition after the employee returns the vehicle.
+                                        </span>
+                                    }
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-md-4">
+
+                        <div class="inspection-date-box">
+
+                            <span class="inspection-date-label">
+                                Inspection Date
+                            </span>
+
+                            <div class="inspection-date-value">
+                                @DateTime.Now.ToString("dd/MM/yyyy HH:mm")
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- VEHICLE CONDITION -->
+
+            <div class="inspection-section">
+
+                <div class="inspection-section-header">
+
+                    <h3>Vehicle Condition</h3>
+
+                    <p>
+                        Record the vehicle's physical condition and mileage accurately.
+                    </p>
+
+                </div>
+
+
+                <!-- MILEAGE -->
+
+                <div class="inspection-form-group">
+
+                    @Html.LabelFor(model => model.Mileage)
+
+                    @Html.EditorFor(
+                        model => model.Mileage,
+                        new
+                        {
+                            htmlAttributes = new
+                            {
+                                @class = "form-control inspection-form-control",
+                                type = "number",
+                                min = "0",
+                                placeholder = "Enter current vehicle mileage"
+                            }
+                        })
+
+                    <div class="field-help">
+                        Enter the current odometer reading in kilometres.
+                    </div>
+
+                    @Html.ValidationMessageFor(
+                        model => model.Mileage,
+                        "",
+                        new { @class = "text-danger field-validation" })
+
+                </div>
+
+
+                <div class="row">
+
+                    <!-- SCRATCHES -->
+
+                    <div class="col-md-6">
+
+                        <div class="inspection-form-group">
+
+                            @Html.LabelFor(model => model.Scratches)
+
+                            @Html.TextAreaFor(
+                                model => model.Scratches,
+                                new
+                                {
+                                    @class = "form-control inspection-form-control",
+                                    rows = "4",
+                                    placeholder = "Describe any scratches. If none, enter 'None'."
+                                })
+
+                            @Html.ValidationMessageFor(
+                                model => model.Scratches,
+                                "",
+                                new { @class = "text-danger field-validation" })
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- DENTS -->
+
+                    <div class="col-md-6">
+
+                        <div class="inspection-form-group">
+
+                            @Html.LabelFor(model => model.Dents)
+
+                            @Html.TextAreaFor(
+                                model => model.Dents,
+                                new
+                                {
+                                    @class = "form-control inspection-form-control",
+                                    rows = "4",
+                                    placeholder = "Describe any dents. If none, enter 'None'."
+                                })
+
+                            @Html.ValidationMessageFor(
+                                model => model.Dents,
+                                "",
+                                new { @class = "text-danger field-validation" })
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="row">
+
+                    <!-- OTHER DAMAGE -->
+
+                    <div class="col-md-6">
+
+                        <div class="inspection-form-group">
+
+                            @Html.LabelFor(model => model.OtherDamage)
+
+                            @Html.TextAreaFor(
+                                model => model.OtherDamage,
+                                new
+                                {
+                                    @class = "form-control inspection-form-control",
+                                    rows = "4",
+                                    placeholder = "Describe any other damage. If none, enter 'None'."
+                                })
+
+                            @Html.ValidationMessageFor(
+                                model => model.OtherDamage,
+                                "",
+                                new { @class = "text-danger field-validation" })
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- GENERAL CONDITION -->
+
+                    <div class="col-md-6">
+
+                        <div class="inspection-form-group">
+
+                            @Html.LabelFor(model => model.GeneralCondition)
+
+                            @Html.TextAreaFor(
+                                model => model.GeneralCondition,
+                                new
+                                {
+                                    @class = "form-control inspection-form-control",
+                                    rows = "4",
+                                    placeholder = "Describe the overall condition of the vehicle."
+                                })
+
+                            @Html.ValidationMessageFor(
+                                model => model.GeneralCondition,
+                                "",
+                                new { @class = "text-danger field-validation" })
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- NOTES -->
+
+                <div class="inspection-form-group">
+
+                    @Html.LabelFor(model => model.Notes)
+
+                    @Html.TextAreaFor(
+                        model => model.Notes,
+                        new
+                        {
+                            @class = "form-control inspection-form-control",
+                            rows = "4",
+                            placeholder = "Add any additional information or observations."
+                        })
+
+                    <div class="field-help">
+                        Use this section for anything important that is not covered above.
+                    </div>
+
+                    @Html.ValidationMessageFor(
+                        model => model.Notes,
+                        "",
+                        new { @class = "text-danger field-validation" })
+
+                </div>
+
+
+                <div class="inspection-info">
+
+                    <strong>Inspection reminder:</strong>
+                    Record the vehicle condition as accurately as possible.
+                    Clearly describe any existing scratches, dents or other damage.
+                    This information helps protect both the company vehicle and the employee.
+
+                </div>
+
+            </div>
+
+
+            <!-- PHOTO -->
+
+            <div class="inspection-section">
+
+                <div class="inspection-section-header">
+
+                    <h3>Vehicle Photo</h3>
+
+                    <p>
+                        Optionally upload a photo showing the vehicle's condition.
+                    </p>
+
+                </div>
+
+
+                <div class="photo-upload-box">
+
+                    <div class="photo-upload-icon">
+                        📷
+                    </div>
+
+                    <label for="photo">
+                        Upload Vehicle Photo
+                    </label>
+
+                    <input type="file"
+                           name="photo"
+                           id="photo"
+                           class="form-control"
+                           accept=".jpg,.jpeg,.png" />
+
+                    <p class="photo-help">
+                        Optional. JPG, JPEG or PNG files only.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- ACTIONS -->
+
+            <div class="inspection-actions">
+
+                <button type="submit"
+                        class="btn btn-success save-inspection-button">
+
+                    ✓ Save Inspection
+
+                </button>
+
+
+                @Html.ActionLink(
+                    "Cancel",
+                    "Index",
+                    "VehicleInspection",
+                    new
+                    {
+                        bookingId = Model.BookingId
+                    },
+                    new
+                    {
+                        @class = "btn btn-default cancel-inspection-button"
+                    }
+                )
+
+            </div>
+
+        </div>
+
+    }
+
+</div>
+
+
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryval")
+
+}

@@ -1,0 +1,1066 @@
+﻿@model IEnumerable<CompanyVehicleBookingSystem.Models.Vehicle>
+
+@{
+    ViewBag.Title = "Vehicle Management";
+
+    var vehicles = Model.ToList();
+
+    var totalVehicles = vehicles.Count;
+    var availableVehicles = vehicles.Count(v => v.Status == "Available");
+    var bookedVehicles = vehicles.Count(v => v.Status == "Booked");
+    var maintenanceVehicles = vehicles.Count(v => v.Status == "Maintenance");
+    var inactiveVehicles = vehicles.Count(v => v.Status == "Inactive");
+}
+
+<style>
+
+    /* =========================================================
+       ADMIN VEHICLE MANAGEMENT
+       ========================================================= */
+
+    .vehicle-management-page {
+        max-width: 1550px;
+        margin: 0 auto;
+        padding: 10px 10px 50px 10px;
+    }
+
+
+    /* =========================================================
+       HEADER
+       ========================================================= */
+
+    .vehicle-management-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 30px;
+        margin-bottom: 28px;
+    }
+
+    .vehicle-management-eyebrow {
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 1.4px;
+        color: #287fd0;
+        margin-bottom: 7px;
+    }
+
+    .vehicle-management-header h1 {
+        margin: 0 0 8px 0;
+        font-size: 34px;
+        font-weight: 700;
+        color: #142f43;
+    }
+
+    .vehicle-management-header p {
+        margin: 0;
+        color: #71808e;
+        font-size: 14px;
+    }
+
+
+    /* =========================================================
+       ADD VEHICLE BUTTON
+       ========================================================= */
+
+    .vehicle-add-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: #287fd0;
+        color: #ffffff !important;
+        text-decoration: none !important;
+        border-radius: 9px;
+        padding: 11px 18px;
+        font-size: 13px;
+        font-weight: 700;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+    }
+
+        .vehicle-add-button:hover {
+            background: #1d68ad;
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(40, 127, 208, 0.20);
+        }
+
+
+    /* =========================================================
+       SUMMARY CARDS
+       ========================================================= */
+
+    .vehicle-summary-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 15px;
+        margin-bottom: 28px;
+    }
+
+    .vehicle-summary-card {
+        background: #ffffff;
+        border: 1px solid #e5ebf0;
+        border-radius: 15px;
+        padding: 18px;
+        box-shadow: 0 5px 18px rgba(20, 47, 67, 0.05);
+        transition: all 0.2s ease;
+    }
+
+        .vehicle-summary-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 9px 25px rgba(20, 47, 67, 0.09);
+        }
+
+    .vehicle-summary-icon {
+        width: 39px;
+        height: 39px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 17px;
+        margin-bottom: 12px;
+    }
+
+        .vehicle-summary-icon.total {
+            background: #eaf3fb;
+        }
+
+        .vehicle-summary-icon.available {
+            background: #e5f7ee;
+        }
+
+        .vehicle-summary-icon.booked {
+            background: #fff4d6;
+        }
+
+        .vehicle-summary-icon.maintenance {
+            background: #fdeaea;
+        }
+
+        .vehicle-summary-icon.inactive {
+            background: #e9eef3;
+        }
+
+    .vehicle-summary-label {
+        color: #788894;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        margin-bottom: 4px;
+    }
+
+    .vehicle-summary-value {
+        color: #142f43;
+        font-size: 25px;
+        font-weight: 700;
+        line-height: 1;
+    }
+
+
+    /* =========================================================
+       MAIN CARD
+       ========================================================= */
+
+    .vehicle-management-card {
+        background: #ffffff;
+        border: 1px solid #e4ebf0;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 7px 28px rgba(20, 47, 67, 0.06);
+    }
+
+    .vehicle-management-card-header {
+        padding: 23px 25px;
+        border-bottom: 1px solid #edf1f4;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+    }
+
+        .vehicle-management-card-header h2 {
+            margin: 0 0 5px 0;
+            color: #142f43;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .vehicle-management-card-header p {
+            margin: 0;
+            color: #7a8995;
+            font-size: 13px;
+        }
+
+    .vehicle-count-badge {
+        background: #eef4f8;
+        color: #24455b;
+        padding: 7px 13px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+
+    /* =========================================================
+       TABLE
+       ========================================================= */
+
+    .vehicle-table-wrapper {
+        overflow-x: auto;
+    }
+
+    .vehicle-management-table {
+        width: 100%;
+        min-width: 1100px;
+        border-collapse: collapse;
+        margin: 0;
+    }
+
+        .vehicle-management-table thead {
+            background: #f7f9fb;
+        }
+
+        .vehicle-management-table th {
+            padding: 14px 17px;
+            text-align: left;
+            border-bottom: 1px solid #e6edf1;
+            color: #6b7d8b;
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+            white-space: nowrap;
+        }
+
+        .vehicle-management-table td {
+            padding: 17px;
+            border-bottom: 1px solid #edf1f4;
+            color: #334b5d;
+            font-size: 13px;
+            vertical-align: middle;
+        }
+
+        .vehicle-management-table tbody tr {
+            transition: background 0.2s ease;
+        }
+
+            .vehicle-management-table tbody tr:hover {
+                background: #f9fbfc;
+            }
+
+            .vehicle-management-table tbody tr:last-child td {
+                border-bottom: none;
+            }
+
+
+    /* =========================================================
+       VEHICLE IMAGE
+       ========================================================= */
+
+    .vehicle-table-vehicle {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 205px;
+    }
+
+    .vehicle-table-image {
+        width: 62px;
+        height: 48px;
+        border-radius: 9px;
+        overflow: hidden;
+        background: #edf2f5;
+        flex-shrink: 0;
+    }
+
+        .vehicle-table-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+    .vehicle-table-placeholder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+    }
+
+    .vehicle-table-name {
+        color: #142f43;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .vehicle-table-details {
+        color: #8996a1;
+        font-size: 10px;
+        margin-top: 3px;
+    }
+
+
+    /* =========================================================
+       REGISTRATION
+       ========================================================= */
+
+    .vehicle-registration-badge {
+        display: inline-block;
+        background: #f2f5f7;
+        border: 1px solid #e2e8ec;
+        color: #203e52;
+        border-radius: 7px;
+        padding: 7px 10px;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.3px;
+        white-space: nowrap;
+    }
+
+
+    /* =========================================================
+       YEAR / COLOUR
+       ========================================================= */
+
+    .vehicle-basic-info {
+        color: #29485d;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+
+    /* =========================================================
+       COMPLIANCE DATES
+       ========================================================= */
+
+    .vehicle-expiry-date {
+        white-space: nowrap;
+    }
+
+    .vehicle-expiry-date-main {
+        color: #29485d;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .vehicle-expiry-date-empty {
+        color: #9aa6ae;
+        font-size: 11px;
+        font-style: italic;
+    }
+
+
+    /* =========================================================
+       STATUS
+       ========================================================= */
+
+    .vehicle-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 11px;
+        border-radius: 20px;
+        font-size: 10px;
+        font-weight: 800;
+        white-space: nowrap;
+    }
+
+    .vehicle-status-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: currentColor;
+    }
+
+    .vehicle-status.available {
+        background: #e5f7ee;
+        color: #16804f;
+    }
+
+    .vehicle-status.booked {
+        background: #fff4d6;
+        color: #a66a00;
+    }
+
+    .vehicle-status.maintenance {
+        background: #fdeaea;
+        color: #c03939;
+    }
+
+    .vehicle-status.inactive {
+        background: #e9eef3;
+        color: #536675;
+    }
+
+    .vehicle-status.default {
+        background: #edf1f4;
+        color: #657783;
+    }
+
+
+    /* =========================================================
+       ACTIONS
+       ========================================================= */
+
+    .vehicle-actions {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        white-space: nowrap;
+    }
+
+    .vehicle-action-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 8px 12px;
+        border-radius: 7px;
+        font-size: 11px;
+        font-weight: 700;
+        text-decoration: none !important;
+        transition: all 0.2s ease;
+    }
+
+    .vehicle-action-details {
+        background: #eaf3fb;
+        color: #287fd0 !important;
+    }
+
+        .vehicle-action-details:hover {
+            background: #287fd0;
+            color: #ffffff !important;
+            transform: translateY(-1px);
+        }
+
+    .vehicle-action-edit {
+        background: #fff4d6;
+        color: #9b6807 !important;
+    }
+
+        .vehicle-action-edit:hover {
+            background: #d99a19;
+            color: #ffffff !important;
+            transform: translateY(-1px);
+        }
+
+
+    /* =========================================================
+       EMPTY STATE
+       ========================================================= */
+
+    .vehicle-empty-state {
+        padding: 75px 30px;
+        text-align: center;
+    }
+
+    .vehicle-empty-icon {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 20px auto;
+        border-radius: 22px;
+        background: #edf4f9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 36px;
+    }
+
+    .vehicle-empty-state h3 {
+        margin: 0 0 8px 0;
+        color: #142f43;
+        font-size: 21px;
+        font-weight: 700;
+    }
+
+    .vehicle-empty-state p {
+        max-width: 480px;
+        margin: 0 auto 22px auto;
+        color: #7b8995;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+
+    /* =========================================================
+       FOOTER
+       ========================================================= */
+
+    .vehicle-management-footer {
+        padding: 18px 25px;
+        border-top: 1px solid #edf1f4;
+        background: #fafcfd;
+        color: #87949f;
+        font-size: 11px;
+    }
+
+
+    /* =========================================================
+       RESPONSIVE
+       ========================================================= */
+
+    @@media (max-width: 1250px) {
+
+        .vehicle-summary-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+
+
+    @@media (max-width: 768px) {
+
+        .vehicle-management-page {
+            padding: 5px 5px 40px 5px;
+        }
+
+        .vehicle-management-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+            .vehicle-management-header h1 {
+                font-size: 28px;
+            }
+
+        .vehicle-add-button {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .vehicle-summary-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .vehicle-management-card-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+
+
+    @@media (max-width: 480px) {
+
+        .vehicle-summary-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .vehicle-summary-card {
+            padding: 16px;
+        }
+    }
+</style>
+
+
+<div class="vehicle-management-page">
+
+
+    <!-- =====================================================
+         PAGE HEADER
+         ====================================================== -->
+
+    <div class="vehicle-management-header">
+
+        <div>
+
+            <div class="vehicle-management-eyebrow">
+                FLEET ADMINISTRATION
+            </div>
+
+            <h1>
+                Vehicle Management
+            </h1>
+
+            <p>
+                Manage company vehicles, compliance information and fleet status.
+            </p>
+
+        </div>
+
+
+        @Html.ActionLink(
+            "＋ Add Vehicle",
+            "Create",
+            null,
+            new { @class = "vehicle-add-button" }
+        )
+
+    </div>
+
+
+    <!-- =====================================================
+         SUMMARY CARDS
+         ====================================================== -->
+
+    <div class="vehicle-summary-grid">
+
+
+        <!-- TOTAL -->
+
+        <div class="vehicle-summary-card">
+
+            <div class="vehicle-summary-icon total">
+                🚗
+            </div>
+
+            <div class="vehicle-summary-label">
+                Total Vehicles
+            </div>
+
+            <div class="vehicle-summary-value">
+                @totalVehicles
+            </div>
+
+        </div>
+
+
+        <!-- AVAILABLE -->
+
+        <div class="vehicle-summary-card">
+
+            <div class="vehicle-summary-icon available">
+                ✓
+            </div>
+
+            <div class="vehicle-summary-label">
+                Available
+            </div>
+
+            <div class="vehicle-summary-value">
+                @availableVehicles
+            </div>
+
+        </div>
+
+
+        <!-- BOOKED -->
+
+        <div class="vehicle-summary-card">
+
+            <div class="vehicle-summary-icon booked">
+                📅
+            </div>
+
+            <div class="vehicle-summary-label">
+                Booked
+            </div>
+
+            <div class="vehicle-summary-value">
+                @bookedVehicles
+            </div>
+
+        </div>
+
+
+        <!-- MAINTENANCE -->
+
+        <div class="vehicle-summary-card">
+
+            <div class="vehicle-summary-icon maintenance">
+                🔧
+            </div>
+
+            <div class="vehicle-summary-label">
+                Maintenance
+            </div>
+
+            <div class="vehicle-summary-value">
+                @maintenanceVehicles
+            </div>
+
+        </div>
+
+
+        <!-- INACTIVE -->
+
+        <div class="vehicle-summary-card">
+
+            <div class="vehicle-summary-icon inactive">
+                —
+            </div>
+
+            <div class="vehicle-summary-label">
+                Inactive
+            </div>
+
+            <div class="vehicle-summary-value">
+                @inactiveVehicles
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         VEHICLE LIST
+         ====================================================== -->
+
+    <div class="vehicle-management-card">
+
+
+        <div class="vehicle-management-card-header">
+
+            <div>
+
+                <h2>
+                    Company Fleet
+                </h2>
+
+                <p>
+                    View and manage the vehicles registered in the system.
+                </p>
+
+            </div>
+
+            <div class="vehicle-count-badge">
+                @totalVehicles vehicle(s)
+            </div>
+
+        </div>
+
+
+        @if (!Model.Any())
+        {
+
+            <!-- EMPTY STATE -->
+
+            <div class="vehicle-empty-state">
+
+                <div class="vehicle-empty-icon">
+                    🚗
+                </div>
+
+                <h3>
+                    No Vehicles Added
+                </h3>
+
+                <p>
+                    There are currently no company vehicles in the system.
+                    Add your first vehicle to begin managing the fleet.
+                </p>
+
+                @Html.ActionLink(
+                    "＋ Add First Vehicle",
+                    "Create",
+                    null,
+                    new { @class = "vehicle-add-button" }
+                )
+
+            </div>
+
+        }
+        else
+        {
+
+            <!-- =================================================
+                 TABLE
+                 ================================================== -->
+
+            <div class="vehicle-table-wrapper">
+
+                <table class="vehicle-management-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Registration
+                            </th>
+
+                            <th>
+                                Vehicle
+                            </th>
+
+                            <th>
+                                Year
+                            </th>
+
+                            <th>
+                                Colour
+                            </th>
+
+                            <th>
+                                Insurance
+                            </th>
+
+                            <th>
+                                Licence Disk
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Actions
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        @foreach (var vehicle in Model)
+                        {
+
+                            <tr>
+
+
+                                <!-- REGISTRATION -->
+
+                                <td>
+
+                                    <span class="vehicle-registration-badge">
+                                        @vehicle.RegistrationNumber
+                                    </span>
+
+                                </td>
+
+
+                                <!-- VEHICLE -->
+
+                                <td>
+
+                                    <div class="vehicle-table-vehicle">
+
+                                        <div class="vehicle-table-image">
+
+                                            @if (!String.IsNullOrEmpty(vehicle.ImagePath))
+                                            {
+                                                <img src="@Url.Content(vehicle.ImagePath)"
+                                                     alt="@vehicle.Make @vehicle.Model" />
+                                            }
+                                            else
+                                            {
+                                                <div class="vehicle-table-placeholder">
+                                                    🚗
+                                                </div>
+                                            }
+
+                                        </div>
+
+
+                                        <div>
+
+                                            <div class="vehicle-table-name">
+                                                @vehicle.Make @vehicle.Model
+                                            </div>
+
+                                            <div class="vehicle-table-details">
+
+                                                @if (!String.IsNullOrEmpty(vehicle.VIN))
+                                                {
+                                                    @:VIN: @vehicle.VIN
+                                                }
+                                                else
+                                                {
+                                                    @:VIN not specified
+                                                }
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- YEAR -->
+
+                                <td>
+
+                                    <span class="vehicle-basic-info">
+                                        @vehicle.Year
+                                    </span>
+
+                                </td>
+
+
+                                <!-- COLOUR -->
+
+                                <td>
+
+                                    @if (!String.IsNullOrEmpty(vehicle.Colour))
+                                    {
+                                        <span class="vehicle-basic-info">
+                                            @vehicle.Colour
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="vehicle-expiry-date-empty">
+                                            Not specified
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <!-- INSURANCE -->
+
+                                <td>
+
+                                    @if (vehicle.InsuranceExpiry.HasValue)
+                                    {
+                                        <div class="vehicle-expiry-date">
+
+                                            <div class="vehicle-expiry-date-main">
+                                                @vehicle.InsuranceExpiry.Value.ToString("dd/MM/yyyy")
+                                            </div>
+
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <span class="vehicle-expiry-date-empty">
+                                            Not specified
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <!-- LICENCE DISK -->
+
+                                <td>
+
+                                    @if (vehicle.LicenceDiskExpiry.HasValue)
+                                    {
+                                        <div class="vehicle-expiry-date">
+
+                                            <div class="vehicle-expiry-date-main">
+                                                @vehicle.LicenceDiskExpiry.Value.ToString("dd/MM/yyyy")
+                                            </div>
+
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <span class="vehicle-expiry-date-empty">
+                                            Not specified
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <!-- STATUS -->
+
+                                <td>
+
+                                    @if (vehicle.Status == "Available")
+                                    {
+                                        <span class="vehicle-status available">
+
+                                            <span class="vehicle-status-dot"></span>
+
+                                            Available
+
+                                        </span>
+                                    }
+                                    else if (vehicle.Status == "Booked")
+                                    {
+                                        <span class="vehicle-status booked">
+
+                                            <span class="vehicle-status-dot"></span>
+
+                                            Booked
+
+                                        </span>
+                                    }
+                                    else if (vehicle.Status == "Maintenance")
+                                    {
+                                        <span class="vehicle-status maintenance">
+
+                                            <span class="vehicle-status-dot"></span>
+
+                                            Maintenance
+
+                                        </span>
+                                    }
+                                    else if (vehicle.Status == "Inactive")
+                                    {
+                                        <span class="vehicle-status inactive">
+
+                                            <span class="vehicle-status-dot"></span>
+
+                                            Inactive
+
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="vehicle-status default">
+
+                                            <span class="vehicle-status-dot"></span>
+
+                                            @vehicle.Status
+
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <!-- ACTIONS -->
+
+                                <td>
+
+                                    <div class="vehicle-actions">
+
+                                        @Html.ActionLink(
+                                            "Details",
+                                            "Details",
+                                            new { id = vehicle.VehicleId },
+                                            new { @class = "vehicle-action-button vehicle-action-details" }
+                                        )
+
+                                        @Html.ActionLink(
+                                            "Edit",
+                                            "Edit",
+                                            new { id = vehicle.VehicleId },
+                                            new { @class = "vehicle-action-button vehicle-action-edit" }
+                                        )
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- FOOTER -->
+
+            <div class="vehicle-management-footer">
+
+                Showing
+                <strong>@totalVehicles</strong>
+                vehicle(s) in the company fleet.
+
+                &nbsp;&nbsp;|&nbsp;&nbsp;
+
+                Vehicle compliance and service information can be maintained
+                from the vehicle details and edit pages.
+
+            </div>
+
+        }
+
+    </div>
+
+</div>

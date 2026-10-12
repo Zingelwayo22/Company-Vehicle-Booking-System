@@ -1,0 +1,583 @@
+﻿@model IEnumerable<CompanyVehicleBookingSystem.Models.Vehicle>
+
+@{
+    ViewBag.Title = "Available Vehicles";
+    var vehicles = Model == null
+        ? new List<CompanyVehicleBookingSystem.Models.Vehicle>()
+        : Model.ToList();
+}
+
+<style>
+    .available-page {
+        max-width: 1450px;
+        margin: 0 auto;
+        padding: 10px 10px 45px;
+        color: #183247;
+    }
+
+    .available-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 28px;
+    }
+
+    .available-eyebrow {
+        color: #287fd0;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 1.5px;
+        margin-bottom: 8px;
+    }
+
+    .available-header h1 {
+        margin: 0 0 9px;
+        font-size: 32px;
+        font-weight: 800;
+        color: #142f43;
+    }
+
+    .available-header p {
+        margin: 0;
+        color: #788995;
+        font-size: 14px;
+    }
+
+    .available-count {
+        background: #ffffff;
+        border: 1px solid #e3eaf0;
+        border-radius: 13px;
+        padding: 15px 20px;
+        min-width: 135px;
+        box-shadow: 0 5px 18px rgba(20,47,67,.05);
+        text-align: center;
+    }
+
+        .available-count strong {
+            display: block;
+            color: #16804f;
+            font-size: 27px;
+            font-weight: 800;
+        }
+
+        .available-count span {
+            color: #788995;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+    .available-alert {
+        padding: 14px 17px;
+        margin-bottom: 20px;
+        border-radius: 10px;
+        font-size: 13px;
+    }
+
+    .available-error {
+        background: #fff0f0;
+        border: 1px solid #f3cccc;
+        color: #a52f2f;
+    }
+
+    .booking-period-card {
+        background: #ffffff;
+        border: 1px solid #e3eaf0;
+        border-radius: 16px;
+        overflow: hidden;
+        margin-bottom: 30px;
+        box-shadow: 0 6px 22px rgba(20,47,67,.05);
+    }
+
+    .booking-period-heading {
+        padding: 17px 22px;
+        background: #f5f9fc;
+        border-bottom: 1px solid #e7edf2;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 15px;
+        font-weight: 800;
+        color: #183247;
+    }
+
+    .booking-period-body {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px;
+        padding: 22px;
+    }
+
+    .period-item {
+        background: #f8fafc;
+        border: 1px solid #edf1f4;
+        border-radius: 11px;
+        padding: 16px;
+    }
+
+    .period-label {
+        display: block;
+        color: #7c8b97;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: .8px;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+    }
+
+    .period-value {
+        color: #183247;
+        font-size: 17px;
+        font-weight: 800;
+    }
+
+    .available-section-heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 18px;
+    }
+
+        .available-section-heading h2 {
+            margin: 0 0 6px;
+            font-size: 21px;
+            font-weight: 800;
+            color: #183247;
+        }
+
+        .available-section-heading p {
+            margin: 0;
+            font-size: 13px;
+            color: #788995;
+        }
+
+    .available-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 23px;
+    }
+
+    .available-vehicle-card {
+        background: #ffffff;
+        border: 1px solid #e3eaf0;
+        border-radius: 17px;
+        overflow: hidden;
+        box-shadow: 0 6px 23px rgba(20,47,67,.06);
+        transition: transform .2s ease, box-shadow .2s ease;
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+    }
+
+        .available-vehicle-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 13px 30px rgba(20,47,67,.11);
+        }
+
+    .available-vehicle-image {
+        position: relative;
+        height: 205px;
+        background: #f0f4f7;
+        overflow: hidden;
+    }
+
+        .available-vehicle-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+    .available-image-placeholder {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 9px;
+        color: #7f919f;
+        background: linear-gradient(135deg, #edf3f7, #f8fafc);
+    }
+
+        .available-image-placeholder span {
+            font-size: 48px;
+        }
+
+        .available-image-placeholder small {
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+    .available-status {
+        position: absolute;
+        top: 14px;
+        right: 14px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 11px;
+        border-radius: 20px;
+        background: #e5f7ee;
+        color: #16804f;
+        font-size: 10px;
+        font-weight: 800;
+        box-shadow: 0 3px 10px rgba(0,0,0,.06);
+    }
+
+    .available-status-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: currentColor;
+    }
+
+    .available-vehicle-body {
+        padding: 21px;
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+    }
+
+    .available-vehicle-year {
+        color: #287fd0;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: .8px;
+        text-transform: uppercase;
+        margin-bottom: 7px;
+    }
+
+    .available-vehicle-title {
+        margin: 0 0 15px;
+        color: #183247;
+        font-size: 21px;
+        font-weight: 800;
+        line-height: 1.3;
+    }
+
+    .available-registration-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 13px 0;
+        border-top: 1px solid #edf1f4;
+        border-bottom: 1px solid #edf1f4;
+        margin-bottom: 19px;
+    }
+
+    .available-registration-label {
+        color: #82909b;
+        font-size: 11px;
+    }
+
+    .available-registration {
+        padding: 7px 10px;
+        border: 1px solid #dce5eb;
+        background: #f4f7f9;
+        color: #203e52;
+        border-radius: 6px;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: .4px;
+    }
+
+    .available-select-button {
+        display: block;
+        width: 100%;
+        border: none;
+        border-radius: 9px;
+        padding: 13px 15px;
+        background: #287fd0;
+        color: #ffffff;
+        font-size: 12px;
+        font-weight: 800;
+        text-align: center;
+        cursor: pointer;
+        transition: background .2s ease, transform .2s ease;
+        margin-top: auto;
+    }
+
+        .available-select-button:hover,
+        .available-select-button:focus {
+            background: #1d68ad;
+            color: #ffffff;
+            transform: translateY(-1px);
+        }
+
+    .available-empty {
+        padding: 55px 25px;
+        text-align: center;
+        background: #ffffff;
+        border: 1px solid #e3eaf0;
+        border-radius: 16px;
+        box-shadow: 0 6px 22px rgba(20,47,67,.04);
+    }
+
+    .available-empty-icon {
+        width: 76px;
+        height: 76px;
+        margin: 0 auto 19px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 22px;
+        background: #fff4d6;
+        font-size: 34px;
+    }
+
+    .available-empty h3 {
+        margin: 0 0 10px;
+        font-size: 21px;
+        font-weight: 800;
+        color: #183247;
+    }
+
+    .available-empty p {
+        max-width: 490px;
+        margin: 0 auto 10px;
+        color: #788995;
+        font-size: 13px;
+        line-height: 1.7;
+    }
+
+    .available-back {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 25px;
+        padding: 11px 16px;
+        border: 1px solid #dfe7ed;
+        border-radius: 9px;
+        background: #ffffff;
+        color: #365469 !important;
+        font-size: 12px;
+        font-weight: 700;
+        text-decoration: none !important;
+        transition: background .2s ease;
+    }
+
+        .available-back:hover {
+            background: #f2f6f9;
+        }
+
+    @@media (max-width: 1050px) {
+        .available-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    @@media (max-width: 768px) {
+        .available-page {
+            padding: 5px 5px 35px;
+        }
+
+        .available-header {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+            .available-header h1 {
+                font-size: 27px;
+            }
+
+        .available-count {
+            width: 100%;
+            text-align: left;
+        }
+
+        .booking-period-body {
+            grid-template-columns: 1fr;
+            gap: 12px;
+            padding: 15px;
+        }
+
+        .available-section-heading {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+    }
+
+    @@media (max-width: 520px) {
+        .available-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .available-vehicle-image {
+            height: 220px;
+        }
+
+        .available-vehicle-title {
+            font-size: 19px;
+        }
+    }
+</style>
+
+<div class="available-page">
+
+    <div class="available-header">
+        <div>
+            <div class="available-eyebrow">FLEET RESERVATIONS</div>
+            <h1>Available Vehicles</h1>
+            <p>Select a company vehicle for your requested booking period.</p>
+        </div>
+
+        <div class="available-count">
+            <strong>@vehicles.Count</strong>
+            <span>VEHICLE(S) AVAILABLE</span>
+        </div>
+    </div>
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="available-alert available-error">
+            <strong>Unable to continue:</strong>
+            @TempData["Error"]
+        </div>
+    }
+
+    <div class="booking-period-card">
+        <div class="booking-period-heading">
+            <span>📅</span>
+            Requested Booking Period
+        </div>
+
+        <div class="booking-period-body">
+            <div class="period-item">
+                <span class="period-label">Start Date &amp; Time</span>
+                <div class="period-value">
+                    @Convert.ToDateTime(ViewBag.StartDateTime).ToString("dd/MM/yyyy HH:mm")
+                </div>
+            </div>
+
+            <div class="period-item">
+                <span class="period-label">End Date &amp; Time</span>
+                <div class="period-value">
+                    @Convert.ToDateTime(ViewBag.EndDateTime).ToString("dd/MM/yyyy HH:mm")
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="available-section-heading">
+        <div>
+            <h2>Choose Your Vehicle</h2>
+            <p>Only vehicles available for the selected period are listed.</p>
+        </div>
+    </div>
+
+    @if (!vehicles.Any())
+    {
+        <div class="available-empty">
+            <div class="available-empty-icon">🚗</div>
+
+            <h3>No Vehicles Available</h3>
+
+            <p>
+                There are currently no vehicles available during your
+                requested booking period.
+            </p>
+
+            <p>
+                Try selecting a different date or time to see other vehicles.
+            </p>
+
+            @Html.ActionLink(
+                "Choose Another Booking Period",
+                "Create",
+                "Booking",
+                null,
+                new { @class = "available-back" }
+            )
+        </div>
+    }
+    else
+    {
+        <div class="available-grid">
+            @foreach (var vehicle in vehicles)
+            {
+                <div class="available-vehicle-card">
+
+                    <div class="available-vehicle-image">
+                        @if (!String.IsNullOrWhiteSpace(vehicle.ImagePath))
+                        {
+                            <img src="@Url.Content(vehicle.ImagePath)"
+                                 alt="@vehicle.Make @vehicle.Model"
+                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+
+                            <div class="available-image-placeholder" style="display:none;">
+                                <span>🚗</span>
+                                <small>Vehicle image unavailable</small>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="available-image-placeholder">
+                                <span>🚗</span>
+                                <small>Company Fleet Vehicle</small>
+                            </div>
+                        }
+
+                        <div class="available-status">
+                            <span class="available-status-dot"></span>
+                            Available
+                        </div>
+                    </div>
+
+                    <div class="available-vehicle-body">
+
+                        <div class="available-vehicle-year">
+                            @(vehicle.Year > 0 ? vehicle.Year.ToString() : "Company Fleet")
+                        </div>
+
+                        <h3 class="available-vehicle-title">
+                            @vehicle.Make @vehicle.Model
+                        </h3>
+
+                        <div class="available-registration-row">
+                            <span class="available-registration-label">
+                                Registration Number
+                            </span>
+
+                            <span class="available-registration">
+                                @vehicle.RegistrationNumber
+                            </span>
+                        </div>
+
+                        @using (Html.BeginForm(
+                            "Create",
+                            "Booking",
+                            FormMethod.Get))
+                        {
+                            <input type="hidden"
+                                   name="vehicleId"
+                                   value="@vehicle.VehicleId" />
+
+                            <input type="hidden"
+                                   name="startDateTime"
+                                   value="@ViewBag.StartDateTime" />
+
+                            <input type="hidden"
+                                   name="endDateTime"
+                                   value="@ViewBag.EndDateTime" />
+
+                            <button type="submit" class="available-select-button">
+                                Select This Vehicle &nbsp; →
+                            </button>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+    @Html.ActionLink(
+        "← Back to Booking",
+        "Create",
+        "Booking",
+        null,
+        new { @class = "available-back" }
+    )
+
+</div>

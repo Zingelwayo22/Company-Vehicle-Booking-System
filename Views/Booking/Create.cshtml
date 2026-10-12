@@ -1,0 +1,958 @@
+﻿@model CompanyVehicleBookingSystem.Models.Booking
+
+@{
+    ViewBag.Title = "Request Vehicle";
+}
+
+<div class="request-page">
+
+    <!-- PAGE HEADER -->
+    <div class="request-hero">
+
+        <div class="request-hero-content">
+
+            <div class="request-hero-icon">
+                🚗
+            </div>
+
+            <div>
+                <span class="request-eyebrow">
+                    EMPLOYEE PORTAL
+                </span>
+
+                <h1>Request a Company Vehicle</h1>
+
+                <p>
+                    Submit your vehicle request by selecting your travel period
+                    and providing the required booking information.
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- AVAILABILITY CHECK -->
+    <div class="request-card availability-card">
+
+        <div class="section-heading">
+
+            <div class="section-number">
+                1
+            </div>
+
+            <div>
+                <h2>Check Vehicle Availability</h2>
+
+                <p>
+                    Select the period you need the vehicle to see which
+                    company vehicles are available.
+                </p>
+            </div>
+
+        </div>
+
+
+        @using (Html.BeginForm(
+            "CheckAvailability",
+            "Booking",
+            FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-row">
+
+                <div class="form-field">
+
+                    <label for="startDateTime">
+                        Start Date & Time
+                    </label>
+
+                    <div class="input-icon">
+
+                        <span>📅</span>
+
+                        <input type="datetime-local"
+                               id="startDateTime"
+                               name="startDateTime"
+                               class="modern-input"
+                               required />
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-field">
+
+                    <label for="endDateTime">
+                        End Date & Time
+                    </label>
+
+                    <div class="input-icon">
+
+                        <span>📅</span>
+
+                        <input type="datetime-local"
+                               id="endDateTime"
+                               name="endDateTime"
+                               class="modern-input"
+                               required />
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="availability-action">
+
+                <button type="submit"
+                        class="availability-button">
+
+                    <span>🔍</span>
+                    Check Vehicle Availability
+
+                </button>
+
+            </div>
+        }
+
+    </div>
+
+
+    <!-- BOOKING REQUEST -->
+    <div class="request-card">
+
+        <div class="section-heading">
+
+            <div class="section-number">
+                2
+            </div>
+
+            <div>
+                <h2>Booking Information</h2>
+
+                <p>
+                    Complete the information below to submit your vehicle
+                    booking request.
+                </p>
+            </div>
+
+        </div>
+
+
+        @using (Html.BeginForm(
+            "Create",
+            "Booking",
+            FormMethod.Post,
+            new
+            {
+                id = "bookingForm"
+            }))
+        {
+            @Html.AntiForgeryToken()
+
+            @Html.ValidationSummary(
+                false,
+                "Please correct the following:",
+                new
+                {
+                    @class = "validation-summary"
+                }
+            )
+
+
+            <!-- VEHICLE -->
+            <div class="form-section">
+
+                <div class="form-section-title">
+
+                    <span class="form-section-icon">
+                        🚘
+                    </span>
+
+                    <div>
+                        <h3>Select Vehicle</h3>
+
+                        <p>
+                            Choose the company vehicle you would like to request.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="form-field">
+
+                    @Html.LabelFor(
+                        model => model.VehicleId,
+                        "Vehicle"
+                    )
+
+                    @Html.DropDownList(
+                        "VehicleId",
+                        null,
+                        "-- Select Vehicle --",
+                        new
+                        {
+                            @class = "modern-input vehicle-select"
+                        }
+                    )
+
+                    @Html.ValidationMessageFor(
+                        model => model.VehicleId,
+                        "",
+                        new
+                        {
+                            @class = "field-validation"
+                        }
+                    )
+
+                </div>
+
+            </div>
+
+
+            <!-- REASONS -->
+            <div class="form-section">
+
+                <div class="form-section-title">
+
+                    <span class="form-section-icon">
+                        📝
+                    </span>
+
+                    <div>
+                        <h3>Booking Reasons</h3>
+
+                        <p>
+                            Tell the administrator why you require the vehicle
+                            and why you selected this particular vehicle.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="form-field">
+
+                    @Html.LabelFor(
+                        model => model.ReasonForVehicle
+                    )
+
+                    @Html.TextAreaFor(
+                        model => model.ReasonForVehicle,
+                        5,
+                        60,
+                        new
+                        {
+                            @class = "modern-textarea",
+                            placeholder =
+                                "Explain why you need a company vehicle..."
+                        }
+                    )
+
+                    <small class="field-help">
+                        Please provide a clear reason for your trip or business
+                        requirement.
+                    </small>
+
+                    @Html.ValidationMessageFor(
+                        model => model.ReasonForVehicle,
+                        "",
+                        new
+                        {
+                            @class = "field-validation"
+                        }
+                    )
+
+                </div>
+
+
+                <div class="form-field">
+
+                    @Html.LabelFor(
+                        model => model.VehicleSelectionReason
+                    )
+
+                    @Html.TextAreaFor(
+                        model => model.VehicleSelectionReason,
+                        5,
+                        60,
+                        new
+                        {
+                            @class = "modern-textarea",
+                            placeholder =
+                                "Explain why you specifically need this vehicle..."
+                        }
+                    )
+
+                    <small class="field-help">
+                        For example, explain if the vehicle is suitable because
+                        of passenger capacity, equipment, distance or terrain.
+                    </small>
+
+                    @Html.ValidationMessageFor(
+                        model => model.VehicleSelectionReason,
+                        "",
+                        new
+                        {
+                            @class = "field-validation"
+                        }
+                    )
+
+                </div>
+
+            </div>
+
+
+            <!-- BOOKING PERIOD -->
+            <div class="form-section">
+
+                <div class="form-section-title">
+
+                    <span class="form-section-icon">
+                        🗓️
+                    </span>
+
+                    <div>
+                        <h3>Booking Period</h3>
+
+                        <p>
+                            Specify exactly when you need the vehicle.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="form-row">
+
+                    <div class="form-field">
+
+                        @Html.LabelFor(
+                            model => model.StartDateTime
+                        )
+
+                        <div class="input-icon">
+
+                            <span>📅</span>
+
+                            @Html.EditorFor(
+                                model => model.StartDateTime,
+                                new
+                                {
+                                    htmlAttributes = new
+                                    {
+                                        @class = "modern-input",
+                                        type = "datetime-local"
+                                    }
+                                }
+                            )
+
+                        </div>
+
+                        @Html.ValidationMessageFor(
+                            model => model.StartDateTime,
+                            "",
+                            new
+                            {
+                                @class = "field-validation"
+                            }
+                        )
+
+                    </div>
+
+
+                    <div class="form-field">
+
+                        @Html.LabelFor(
+                            model => model.EndDateTime
+                        )
+
+                        <div class="input-icon">
+
+                            <span>📅</span>
+
+                            @Html.EditorFor(
+                                model => model.EndDateTime,
+                                new
+                                {
+                                    htmlAttributes = new
+                                    {
+                                        @class = "modern-input",
+                                        type = "datetime-local"
+                                    }
+                                }
+                            )
+
+                        </div>
+
+                        @Html.ValidationMessageFor(
+                            model => model.EndDateTime,
+                            "",
+                            new
+                            {
+                                @class = "field-validation"
+                            }
+                        )
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- IMPORTANT INFORMATION -->
+            <div class="information-box">
+
+                <div class="information-icon">
+                    ℹ️
+                </div>
+
+                <div>
+
+                    <strong>Before you submit</strong>
+
+                    <p>
+                        Make sure your booking dates, selected vehicle and
+                        reasons are correct. Your request will remain
+                        <strong>Pending</strong> until an administrator
+                        reviews it.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- ACTIONS -->
+            <div class="form-actions">
+
+                @Html.ActionLink(
+                    "Cancel",
+                    "Index",
+                    null,
+                    new
+                    {
+                        @class = "cancel-button"
+                    }
+                )
+
+                <button type="submit"
+                        class="submit-button">
+
+                    <span>✓</span>
+                    Submit Booking Request
+
+                </button>
+
+            </div>
+
+        }
+
+    </div>
+
+</div>
+
+
+<style>
+
+    .request-page {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 10px 10px 50px;
+    }
+
+
+    /* HERO */
+
+    .request-hero {
+        background: linear-gradient( 135deg, rgba(25, 45, 65, 0.97), rgba(42, 75, 105, 0.94) );
+        border-radius: 18px;
+        padding: 35px 40px;
+        margin-bottom: 25px;
+        color: #fff;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.10);
+    }
+
+
+    .request-hero-content {
+        display: flex;
+        align-items: center;
+        gap: 22px;
+    }
+
+
+    .request-hero-icon {
+        width: 70px;
+        height: 70px;
+        border-radius: 18px;
+        background: rgba(255,255,255,0.14);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 34px;
+        flex-shrink: 0;
+    }
+
+
+    .request-eyebrow {
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 1.8px;
+        opacity: 0.75;
+    }
+
+
+    .request-hero h1 {
+        margin: 5px 0 8px;
+        font-size: 30px;
+        font-weight: 700;
+    }
+
+
+    .request-hero p {
+        margin: 0;
+        font-size: 15px;
+        opacity: 0.85;
+        line-height: 1.6;
+    }
+
+
+    /* CARDS */
+
+    .request-card {
+        background: #fff;
+        border: 1px solid #e6e9ed;
+        border-radius: 16px;
+        padding: 30px;
+        margin-bottom: 25px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    }
+
+
+    .availability-card {
+        border-top: 4px solid #2f80ed;
+    }
+
+
+    /* SECTION HEADING */
+
+    .section-heading {
+        display: flex;
+        align-items: flex-start;
+        gap: 15px;
+        margin-bottom: 28px;
+    }
+
+
+    .section-number {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: #2f80ed;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        flex-shrink: 0;
+    }
+
+
+    .section-heading h2 {
+        margin: 0 0 6px;
+        font-size: 21px;
+        font-weight: 700;
+        color: #263238;
+    }
+
+
+    .section-heading p {
+        margin: 0;
+        color: #7b8794;
+        font-size: 14px;
+        line-height: 1.5;
+    }
+
+
+    /* FORM */
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 22px;
+    }
+
+
+    .form-field {
+        margin-bottom: 22px;
+    }
+
+
+        .form-field label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #37474f;
+        }
+
+
+    .modern-input,
+    .modern-textarea {
+        width: 100%;
+        border: 1px solid #d8dee5;
+        border-radius: 9px;
+        background: #fff;
+        color: #263238;
+        font-size: 14px;
+        padding: 12px 14px;
+        transition: all 0.2s ease;
+        box-sizing: border-box;
+    }
+
+
+    .modern-input {
+        height: 46px;
+    }
+
+
+    .modern-textarea {
+        min-height: 125px;
+        resize: vertical;
+        line-height: 1.6;
+    }
+
+
+        .modern-input:focus,
+        .modern-textarea:focus {
+            outline: none;
+            border-color: #2f80ed;
+            box-shadow: 0 0 0 3px rgba(47,128,237,0.10);
+        }
+
+
+    .input-icon {
+        position: relative;
+    }
+
+
+        .input-icon span {
+            position: absolute;
+            left: 13px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 2;
+            font-size: 16px;
+        }
+
+
+        .input-icon .modern-input {
+            padding-left: 42px;
+        }
+
+
+        .input-icon input {
+            padding-left: 42px;
+        }
+
+
+    select.modern-input {
+        cursor: pointer;
+    }
+
+
+    .field-help {
+        display: block;
+        margin-top: 7px;
+        color: #89939e;
+        font-size: 12px;
+        line-height: 1.5;
+    }
+
+
+    .field-validation {
+        display: block;
+        margin-top: 6px;
+        color: #d64545;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+
+    .validation-summary {
+        background: #fff3f3;
+        border: 1px solid #f1c4c4;
+        border-radius: 10px;
+        padding: 15px 18px;
+        margin-bottom: 25px;
+        color: #b52b2b;
+    }
+
+
+    /* FORM SECTIONS */
+
+    .form-section {
+        padding: 25px 0;
+        border-bottom: 1px solid #edf0f2;
+    }
+
+
+        .form-section:first-of-type {
+            padding-top: 0;
+        }
+
+
+        .form-section:last-of-type {
+            border-bottom: none;
+        }
+
+
+    .form-section-title {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 22px;
+    }
+
+
+    .form-section-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        background: #f0f6ff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        flex-shrink: 0;
+    }
+
+
+    .form-section-title h3 {
+        margin: 2px 0 4px;
+        color: #263238;
+        font-size: 17px;
+        font-weight: 700;
+    }
+
+
+    .form-section-title p {
+        margin: 0;
+        color: #89939e;
+        font-size: 13px;
+    }
+
+
+    /* AVAILABILITY BUTTON */
+
+    .availability-action {
+        margin-top: 5px;
+    }
+
+
+    .availability-button {
+        border: none;
+        border-radius: 9px;
+        background: #2f80ed;
+        color: #fff;
+        padding: 12px 20px;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+
+        .availability-button:hover {
+            background: #246dcc;
+            transform: translateY(-1px);
+            box-shadow: 0 5px 12px rgba(47,128,237,0.20);
+        }
+
+
+        .availability-button span {
+            margin-right: 7px;
+        }
+
+
+    /* INFORMATION BOX */
+
+    .information-box {
+        display: flex;
+        gap: 13px;
+        align-items: flex-start;
+        background: #f5f9ff;
+        border: 1px solid #d9e8fb;
+        border-radius: 11px;
+        padding: 16px 18px;
+        margin-top: 25px;
+    }
+
+
+    .information-icon {
+        font-size: 18px;
+        margin-top: 1px;
+    }
+
+
+    .information-box strong {
+        color: #285b8f;
+    }
+
+
+    .information-box p {
+        margin: 5px 0 0;
+        color: #637381;
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+
+    /* ACTIONS */
+
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 12px;
+        padding-top: 25px;
+    }
+
+
+    .cancel-button,
+    .submit-button {
+        min-height: 44px;
+        padding: 11px 20px;
+        border-radius: 9px;
+        font-size: 14px;
+        font-weight: 700;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        transition: all 0.2s ease;
+    }
+
+
+    .cancel-button {
+        border: 1px solid #d8dee5;
+        background: #fff;
+        color: #5f6b76;
+    }
+
+
+        .cancel-button:hover {
+            background: #f5f6f7;
+            color: #37474f;
+            text-decoration: none;
+        }
+
+
+    .submit-button {
+        border: none;
+        background: #198754;
+        color: #fff;
+        cursor: pointer;
+    }
+
+
+        .submit-button:hover {
+            background: #157347;
+            color: #fff;
+            transform: translateY(-1px);
+            box-shadow: 0 5px 12px rgba(25,135,84,0.20);
+        }
+
+
+    /* RESPONSIVE */
+
+    @@media (max-width: 768px) {
+
+        .request-page {
+            padding: 5px 5px 35px;
+        }
+
+
+        .request-hero {
+            padding: 25px 22px;
+        }
+
+
+        .request-hero-content {
+            align-items: flex-start;
+        }
+
+
+        .request-hero h1 {
+            font-size: 24px;
+        }
+
+
+        .request-card {
+            padding: 22px 18px;
+        }
+
+
+        .form-row {
+            grid-template-columns: 1fr;
+            gap: 0;
+        }
+
+
+        .form-actions {
+            flex-direction: column-reverse;
+            align-items: stretch;
+        }
+
+
+        .cancel-button,
+        .submit-button {
+            width: 100%;
+        }
+    }
+
+
+    @@media (max-width: 480px) {
+
+        .request-hero-icon {
+            width: 52px;
+            height: 52px;
+            font-size: 25px;
+        }
+
+
+        .request-hero h1 {
+            font-size: 21px;
+        }
+
+
+        .request-hero p {
+            font-size: 13px;
+        }
+
+
+        .section-heading {
+            gap: 10px;
+        }
+
+
+        .section-number {
+            width: 32px;
+            height: 32px;
+        }
+    }
+</style>
+
+
+@section Scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+}

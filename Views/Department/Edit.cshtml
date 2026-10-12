@@ -1,0 +1,348 @@
+﻿@model CompanyVehicleBookingSystem.Models.Department
+
+@{
+    ViewBag.Title = "Edit Department";
+}
+
+<div class="container-fluid dept-edit-page">
+
+    <div class="dept-edit-header">
+        <div>
+            <span class="dept-edit-eyebrow">HUMAN RESOURCES</span>
+            <h2>Edit Department</h2>
+            <p>Update department information and keep company records accurate.</p>
+        </div>
+
+        @Html.ActionLink(
+            "← Departments",
+            "Index",
+            "Department",
+            null,
+            new { @class = "dept-edit-back" }
+        )
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-8">
+
+            <div class="dept-edit-card">
+
+                <div class="dept-edit-card-heading">
+                    <div class="dept-edit-icon">D</div>
+                    <div>
+                        <h3>Department Information</h3>
+                        <p>Review and update the details below.</p>
+                    </div>
+                </div>
+
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(model => model.DepartmentId)
+
+                    @Html.ValidationSummary(
+                        true,
+                        "",
+                        new { @class = "alert alert-danger" }
+                    )
+
+                    <div class="dept-edit-field">
+                        @Html.LabelFor(
+                            model => model.Name,
+                            "Department Name"
+                        )
+
+                        @Html.TextBoxFor(
+                            model => model.Name,
+                            new
+                            {
+                                @class = "form-control dept-edit-input",
+                                placeholder = "e.g. Information Technology",
+                                maxlength = "100"
+                            }
+                        )
+
+                        @Html.ValidationMessageFor(
+                            model => model.Name,
+                            "",
+                            new { @class = "text-danger" }
+                        )
+
+                        <small>
+                            Use a clear name that employees and administrators
+                            can easily recognise.
+                        </small>
+                    </div>
+
+                    <div class="dept-edit-actions">
+                        <button type="submit" class="dept-edit-save">
+                            Save Changes
+                        </button>
+
+                        @Html.ActionLink(
+                            "Cancel",
+                            "Index",
+                            "Department",
+                            null,
+                            new { @class = "dept-edit-cancel" }
+                        )
+                    </div>
+                }
+            </div>
+
+        </div>
+
+        <div class="col-md-4">
+
+            <div class="dept-edit-sidebar">
+                <div class="dept-edit-sidebar-icon">i</div>
+
+                <h3>Department Management</h3>
+
+                <p>
+                    Departments help organise employees and support
+                    administration of company vehicle bookings.
+                </p>
+
+                <div class="dept-edit-tip">
+                    <strong>Before saving</strong>
+                    <ul>
+                        <li>Check the department name.</li>
+                        <li>Avoid creating duplicate departments.</li>
+                        <li>Make sure the name is clear and accurate.</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<style>
+    .dept-edit-page {
+        padding: 25px 30px 40px;
+        color: #26364c;
+    }
+
+    .dept-edit-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 18px;
+        margin-bottom: 28px;
+    }
+
+    .dept-edit-eyebrow {
+        color: #718096;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 1.7px;
+    }
+
+    .dept-edit-header h2 {
+        margin: 8px 0;
+        color: #1d304d;
+        font-size: 29px;
+        font-weight: 800;
+    }
+
+    .dept-edit-header p {
+        margin: 0;
+        color: #778398;
+        font-size: 13px;
+    }
+
+    .dept-edit-back,
+    .dept-edit-cancel {
+        display: inline-block;
+        padding: 11px 16px;
+        border: 1px solid #dce3ed;
+        border-radius: 9px;
+        background: #fff;
+        color: #35465e;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+        .dept-edit-back:hover,
+        .dept-edit-cancel:hover {
+            background: #f4f7fb;
+            text-decoration: none;
+        }
+
+    .dept-edit-card,
+    .dept-edit-sidebar {
+        padding: 26px;
+        margin-bottom: 24px;
+        background: #fff;
+        border: 1px solid #e5eaf1;
+        border-radius: 15px;
+        box-shadow: 0 5px 18px rgba(20, 39, 70, .04);
+    }
+
+    .dept-edit-card-heading {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding-bottom: 22px;
+        margin-bottom: 25px;
+        border-bottom: 1px solid #edf0f5;
+    }
+
+    .dept-edit-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 48px;
+        height: 48px;
+        border-radius: 13px;
+        background: #edf3fc;
+        color: #244a7c;
+        font-size: 20px;
+        font-weight: 800;
+    }
+
+    .dept-edit-card-heading h3 {
+        margin: 0 0 6px;
+        color: #203451;
+        font-size: 18px;
+        font-weight: 800;
+    }
+
+    .dept-edit-card-heading p {
+        margin: 0;
+        color: #778398;
+        font-size: 12px;
+    }
+
+    .dept-edit-field {
+        margin-bottom: 25px;
+    }
+
+        .dept-edit-field label {
+            display: block;
+            margin-bottom: 10px;
+            color: #34445b;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+    .dept-edit-input {
+        height: 46px;
+        padding: 10px 13px;
+        border: 1px solid #dce3ed;
+        border-radius: 9px;
+        box-shadow: none;
+        color: #26364c;
+    }
+
+        .dept-edit-input:focus {
+            border-color: #517db4;
+            box-shadow: 0 0 0 3px rgba(81, 125, 180, .12);
+        }
+
+    .dept-edit-field small {
+        display: block;
+        margin-top: 9px;
+        color: #8290a3;
+        font-size: 12px;
+        line-height: 1.6;
+    }
+
+    .dept-edit-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        padding-top: 20px;
+        border-top: 1px solid #edf0f5;
+    }
+
+    .dept-edit-save {
+        padding: 12px 20px;
+        border: none;
+        border-radius: 9px;
+        background: #244a7c;
+        color: #fff;
+        font-weight: 800;
+        cursor: pointer;
+    }
+
+        .dept-edit-save:hover {
+            background: #19365b;
+        }
+
+    .dept-edit-sidebar-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 43px;
+        height: 43px;
+        border-radius: 12px;
+        background: #edf3fc;
+        color: #244a7c;
+        font-size: 22px;
+        font-weight: 800;
+    }
+
+    .dept-edit-sidebar h3 {
+        margin: 18px 0 10px;
+        color: #203451;
+        font-size: 18px;
+        font-weight: 800;
+    }
+
+    .dept-edit-sidebar p {
+        color: #748197;
+        font-size: 13px;
+        line-height: 1.8;
+    }
+
+    .dept-edit-tip {
+        margin-top: 20px;
+        padding: 17px;
+        border-radius: 10px;
+        background: #f5f8fc;
+    }
+
+        .dept-edit-tip strong {
+            color: #2c4569;
+            font-size: 13px;
+        }
+
+        .dept-edit-tip ul {
+            margin: 12px 0 0;
+            padding-left: 18px;
+            color: #6e7d92;
+            font-size: 12px;
+            line-height: 2;
+        }
+
+    @@media (max-width: 767px) {
+        .dept-edit-page {
+            padding: 18px 10px 30px;
+        }
+
+        .dept-edit-card,
+        .dept-edit-sidebar {
+            padding: 19px;
+        }
+
+        .dept-edit-actions {
+            flex-direction: column;
+        }
+
+        .dept-edit-save,
+        .dept-edit-cancel {
+            width: 100%;
+            text-align: center;
+        }
+    }
+</style>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

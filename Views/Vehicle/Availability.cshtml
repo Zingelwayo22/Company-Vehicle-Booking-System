@@ -1,0 +1,351 @@
+﻿@model IEnumerable<CompanyVehicleBookingSystem.Models.Vehicle>
+
+@{
+    ViewBag.Title = "Vehicle Availability";
+}
+
+<div class="vehicle-page">
+
+    <!-- PAGE HEADER -->
+    <div class="page-header-modern vehicle-page-header">
+
+        <div>
+            <div class="page-eyebrow">
+                COMPANY FLEET
+            </div>
+
+            <h1>
+                Vehicle Availability
+            </h1>
+
+            <p>
+                View the current status and details of company vehicles.
+            </p>
+        </div>
+
+        <div class="vehicle-header-actions">
+
+            @Html.ActionLink(
+                "My Bookings",
+                "Index",
+                "Booking",
+                null,
+                new { @class = "btn-modern-secondary" }
+            )
+
+            @Html.ActionLink(
+                "Request Vehicle",
+                "Create",
+                "Booking",
+                null,
+                new { @class = "btn-modern-primary" }
+            )
+
+        </div>
+
+    </div>
+
+
+    <!-- SUMMARY -->
+    <div class="vehicle-summary">
+
+        <div class="vehicle-summary-card">
+
+            <div class="vehicle-summary-icon blue">
+                🚗
+            </div>
+
+            <div>
+                <span>Total Fleet</span>
+
+                <strong>
+                    @Model.Count()
+                </strong>
+            </div>
+
+        </div>
+
+
+        <div class="vehicle-summary-card">
+
+            <div class="vehicle-summary-icon green">
+                ✓
+            </div>
+
+            <div>
+                <span>Available</span>
+
+                <strong>
+                    @Model.Count(v => v.Status == "Available")
+                </strong>
+            </div>
+
+        </div>
+
+
+        <div class="vehicle-summary-card">
+
+            <div class="vehicle-summary-icon red">
+                ×
+            </div>
+
+            <div>
+                <span>Unavailable</span>
+
+                <strong>
+                    @Model.Count(v => v.Status != "Available")
+                </strong>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- VEHICLE GRID -->
+    <div class="vehicle-grid">
+
+        @foreach (var vehicle in Model)
+        {
+            <div class="fleet-card">
+
+
+                <!-- VEHICLE IMAGE -->
+                <div class="fleet-card-image">
+
+                    @if (!String.IsNullOrEmpty(vehicle.ImagePath))
+                    {
+                        <img src="@Url.Content(vehicle.ImagePath)"
+                             alt="@vehicle.Make @vehicle.Model" />
+                    }
+                    else
+                    {
+                        <img src="@Url.Content("~/Content/Images/fleet-hero.png")"
+                             alt="@vehicle.Make @vehicle.Model" />
+                    }
+
+
+                    <div class="fleet-image-overlay">
+                    </div>
+
+
+                    <!-- STATUS -->
+                    @if (vehicle.Status == "Available")
+                    {
+                        <span class="fleet-status available">
+                            ● Available
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="fleet-status unavailable">
+                            ● @vehicle.Status
+                        </span>
+                    }
+
+                </div>
+
+
+                <!-- VEHICLE BODY -->
+                <div class="fleet-card-body">
+
+
+                    <!-- NAME -->
+                    <div class="fleet-card-title-row">
+
+                        <div>
+
+                            <div class="fleet-card-make">
+                                @vehicle.Make
+                            </div>
+
+                            <h3>
+                                @vehicle.Model
+                            </h3>
+
+                        </div>
+
+                        <div class="fleet-year">
+                            @vehicle.Year
+                        </div>
+
+                    </div>
+
+
+                    <!-- REGISTRATION -->
+                    <div class="fleet-registration">
+
+                        <span>
+                            REGISTRATION
+                        </span>
+
+                        <strong>
+                            @vehicle.RegistrationNumber
+                        </strong>
+
+                    </div>
+
+
+                    <!-- DETAILS -->
+                    <div class="fleet-details">
+
+
+                        <!-- COLOUR -->
+                        <div class="fleet-detail">
+
+                            <span class="fleet-detail-icon">
+                                🎨
+                            </span>
+
+                            <div>
+
+                                <small>
+                                    Colour
+                                </small>
+
+                                <strong>
+                                    @(String.IsNullOrEmpty(vehicle.Colour)
+                                        ? "Not set"
+                                        : vehicle.Colour)
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- INSURANCE -->
+                        <div class="fleet-detail">
+
+                            <span class="fleet-detail-icon">
+                                🛡
+                            </span>
+
+                            <div>
+
+                                <small>
+                                    Insurance
+                                </small>
+
+                                <strong>
+
+                                    @(vehicle.InsuranceExpiry.HasValue
+                                        ? vehicle.InsuranceExpiry.Value.ToString("dd/MM/yyyy")
+                                        : "Not set")
+
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- LICENCE -->
+                        <div class="fleet-detail">
+
+                            <span class="fleet-detail-icon">
+                                📋
+                            </span>
+
+                            <div>
+
+                                <small>
+                                    Licence Disk
+                                </small>
+
+                                <strong>
+
+                                    @(vehicle.LicenceDiskExpiry.HasValue
+                                        ? vehicle.LicenceDiskExpiry.Value.ToString("dd/MM/yyyy")
+                                        : "Not set")
+
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- NEXT SERVICE -->
+                        <div class="fleet-detail">
+
+                            <span class="fleet-detail-icon">
+                                🔧
+                            </span>
+
+                            <div>
+
+                                <small>
+                                    Next Service
+                                </small>
+
+                                <strong>
+
+                                    @(vehicle.NextServiceDate.HasValue
+                                        ? vehicle.NextServiceDate.Value.ToString("dd/MM/yyyy")
+                                        : "Not set")
+
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ACTION -->
+                    <div class="fleet-card-footer">
+
+                        @if (vehicle.Status == "Available")
+                        {
+                            @Html.ActionLink(
+                                "Request This Vehicle",
+                                "Create",
+                                "Booking",
+                                new { vehicleId = vehicle.VehicleId },
+                                new { @class = "fleet-request-button" }
+                            )
+                        }
+                        else
+                        {
+                            <button type="button"
+                                    class="fleet-unavailable-button"
+                                    disabled>
+
+                                Vehicle Unavailable
+
+                            </button>
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
+        }
+
+    </div>
+
+
+    <!-- EMPTY STATE -->
+    @if (!Model.Any())
+    {
+        <div class="vehicle-empty-state">
+
+            <div>
+                🚗
+            </div>
+
+            <h3>
+                No vehicles available
+            </h3>
+
+            <p>
+                There are currently no vehicles registered in the company fleet.
+            </p>
+
+        </div>
+    }
+
+</div>

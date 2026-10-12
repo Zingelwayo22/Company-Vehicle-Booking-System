@@ -1,0 +1,858 @@
+﻿
+@model CompanyVehicleBookingSystem.Models.AdminDashboardViewModel
+
+@{
+    ViewBag.Title = "Dashboard";
+
+    var totalVehicles = Model.TotalVehicles;
+    var availableVehicles = Model.AvailableVehicles;
+
+    var vehiclePercentage = totalVehicles > 0
+        ? (availableVehicles * 100) / totalVehicles
+        : 0;
+}
+
+<div class="dashboard-page">
+
+    <!-- =========================================
+         WELCOME HERO
+         ========================================= -->
+
+    <div class="dashboard-hero">
+
+        <img src="@Url.Content("~/Content/Images/fleet-hero.png")"
+             alt="Company Fleet Vehicles" />
+
+        <div class="dashboard-hero-overlay"></div>
+
+        <div class="dashboard-hero-content">
+
+            <div class="dashboard-eyebrow">
+                COMPANY FLEET MANAGEMENT
+            </div>
+
+            <h1>
+                Welcome, @User.Identity.Name
+            </h1>
+
+            <p>
+                Manage your company vehicles, bookings and employees
+                all in one place.
+            </p>
+
+            <div class="dashboard-date">
+                <span>▣</span>
+                @DateTime.Now.ToString("dddd, dd MMMM yyyy")
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================
+         STATISTICS
+         ========================================= -->
+
+    <div class="dashboard-stats">
+
+        <!-- Total Bookings -->
+
+        <div class="dashboard-stat stat-blue">
+
+            <div class="stat-top">
+
+                <div class="stat-icon-modern">
+                    ▣
+                </div>
+
+            </div>
+
+            <div class="stat-label">
+                Total Bookings
+            </div>
+
+            <div class="stat-value">
+                @Model.TotalBookings
+            </div>
+
+            <div class="stat-description">
+                All booking requests
+            </div>
+
+        </div>
+
+
+        <!-- Pending -->
+
+        <div class="dashboard-stat stat-yellow">
+
+            <div class="stat-top">
+
+                <div class="stat-icon-modern">
+                    ◷
+                </div>
+
+            </div>
+
+            <div class="stat-label">
+                Pending Bookings
+            </div>
+
+            <div class="stat-value">
+                @Model.PendingBookings
+            </div>
+
+            <div class="stat-description">
+                Awaiting review
+            </div>
+
+        </div>
+
+
+        <!-- Approved -->
+
+        <div class="dashboard-stat stat-green">
+
+            <div class="stat-top">
+
+                <div class="stat-icon-modern">
+                    ✓
+                </div>
+
+            </div>
+
+            <div class="stat-label">
+                Approved Bookings
+            </div>
+
+            <div class="stat-value">
+                @Model.ApprovedBookings
+            </div>
+
+            <div class="stat-description">
+                Approved requests
+            </div>
+
+        </div>
+
+
+        <!-- Rejected -->
+
+        <div class="dashboard-stat stat-red">
+
+            <div class="stat-top">
+
+                <div class="stat-icon-modern">
+                    ×
+                </div>
+
+            </div>
+
+            <div class="stat-label">
+                Rejected Bookings
+            </div>
+
+            <div class="stat-value">
+                @Model.RejectedBookings
+            </div>
+
+            <div class="stat-description">
+                Declined requests
+            </div>
+
+        </div>
+
+
+        <!-- Cancelled -->
+
+        <div class="dashboard-stat stat-purple">
+
+            <div class="stat-top">
+
+                <div class="stat-icon-modern">
+                    ⊘
+                </div>
+
+            </div>
+
+            <div class="stat-label">
+                Cancelled Bookings
+            </div>
+
+            <div class="stat-value">
+                @Model.CancelledBookings
+            </div>
+
+            <div class="stat-description">
+                Cancelled requests
+            </div>
+
+        </div>
+
+
+        <!-- Completed -->
+
+        <div class="dashboard-stat stat-cyan">
+
+            <div class="stat-top">
+
+                <div class="stat-icon-modern">
+                    ✓
+                </div>
+
+            </div>
+
+            <div class="stat-label">
+                Completed Bookings
+            </div>
+
+            <div class="stat-value">
+                @Model.CompletedBookings
+            </div>
+
+            <div class="stat-description">
+                Completed trips
+            </div>
+
+        </div>
+
+
+        <!-- Vehicles -->
+
+        <div class="dashboard-stat stat-dark">
+
+            <div class="stat-top">
+
+                <div class="stat-icon-modern">
+                    🚗
+                </div>
+
+            </div>
+
+            <div class="stat-label">
+                Total Vehicles
+            </div>
+
+            <div class="stat-value">
+                @Model.TotalVehicles
+            </div>
+
+            <div class="stat-description">
+                Company fleet
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================
+         ANALYTICS ROW
+         ========================================= -->
+
+    <div class="dashboard-grid-analytics">
+
+
+        <!-- BOOKING STATUS -->
+
+        <div class="modern-card dashboard-panel">
+
+            <div class="dashboard-panel-header">
+
+                <div>
+                    <h3>
+                        Booking Status Overview
+                    </h3>
+
+                    <p>
+                        Current booking activity
+                    </p>
+                </div>
+
+                <a href="@Url.Action("AdminIndex", "Booking")"
+                   class="dashboard-link">
+
+                    View All →
+                </a>
+
+            </div>
+
+
+            <div class="booking-overview">
+
+                <div class="donut-chart">
+
+                    <div class="donut-inner">
+
+                        <strong>
+                            @Model.TotalBookings
+                        </strong>
+
+                        <span>
+                            Total Bookings
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="status-list">
+
+                    <div class="status-row">
+
+                        <span class="status-dot dot-pending"></span>
+
+                        <span class="status-name">
+                            Pending
+                        </span>
+
+                        <strong>
+                            @Model.PendingBookings
+                        </strong>
+
+                    </div>
+
+
+                    <div class="status-row">
+
+                        <span class="status-dot dot-approved"></span>
+
+                        <span class="status-name">
+                            Approved
+                        </span>
+
+                        <strong>
+                            @Model.ApprovedBookings
+                        </strong>
+
+                    </div>
+
+
+                    <div class="status-row">
+
+                        <span class="status-dot dot-rejected"></span>
+
+                        <span class="status-name">
+                            Rejected
+                        </span>
+
+                        <strong>
+                            @Model.RejectedBookings
+                        </strong>
+
+                    </div>
+
+
+                    <div class="status-row">
+
+                        <span class="status-dot dot-cancelled"></span>
+
+                        <span class="status-name">
+                            Cancelled
+                        </span>
+
+                        <strong>
+                            @Model.CancelledBookings
+                        </strong>
+
+                    </div>
+
+
+                    <div class="status-row">
+
+                        <span class="status-dot dot-completed"></span>
+
+                        <span class="status-name">
+                            Completed
+                        </span>
+
+                        <strong>
+                            @Model.CompletedBookings
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- VEHICLE AVAILABILITY -->
+
+        <div class="modern-card dashboard-panel">
+
+            <div class="dashboard-panel-header">
+
+                <div>
+
+                    <h3>
+                        Vehicle Availability
+                    </h3>
+
+                    <p>
+                        Current fleet availability
+                    </p>
+
+                </div>
+
+                <a href="@Url.Action("Index", "Vehicle")"
+                   class="dashboard-link">
+
+                    Manage →
+                </a>
+
+            </div>
+
+
+            <div class="availability-content">
+
+                <div class="availability-ring"
+                     style="--availability:@vehiclePercentage%;">
+
+                    <div class="availability-inner">
+
+                        <strong>
+                            @Model.AvailableVehicles
+                        </strong>
+
+                        <span>
+                            of @Model.TotalVehicles
+                        </span>
+
+                        <small>
+                            Available
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <div class="availability-details">
+
+                    <div class="availability-item">
+
+                        <span class="availability-dot available"></span>
+
+                        <span>
+                            Available
+                        </span>
+
+                        <strong>
+                            @Model.AvailableVehicles
+                        </strong>
+
+                    </div>
+
+
+                    <div class="availability-item">
+
+                        <span class="availability-dot unavailable"></span>
+
+                        <span>
+                            Unavailable
+                        </span>
+
+                        <strong>
+                            @Model.UnavailableVehicles
+                        </strong>
+
+                    </div>
+
+
+                    <hr />
+
+                    <div class="availability-total">
+
+                        <span>
+                            Total Vehicles
+                        </span>
+
+                        <strong>
+                            @Model.TotalVehicles
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- QUICK ACTIONS -->
+
+        <div class="modern-card dashboard-panel">
+
+            <div class="dashboard-panel-header">
+
+                <div>
+
+                    <h3>
+                        Quick Actions
+                    </h3>
+
+                    <p>
+                        Common administration tasks
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="quick-actions">
+
+                <a href="@Url.Action("AdminIndex", "Booking")"
+                   class="quick-action">
+
+                    <span class="quick-action-icon blue">
+                        ▣
+                    </span>
+
+                    <span>
+                        Manage Bookings
+                    </span>
+
+                    <strong>
+                        →
+                    </strong>
+
+                </a>
+
+
+                <a href="@Url.Action("Index", "Vehicle")"
+                   class="quick-action">
+
+                    <span class="quick-action-icon green">
+                        🚗
+                    </span>
+
+                    <span>
+                        Manage Vehicles
+                    </span>
+
+                    <strong>
+                        →
+                    </strong>
+
+                </a>
+
+
+                <a href="@Url.Action("Index", "UserManagement")"
+                   class="quick-action">
+
+                    <span class="quick-action-icon purple">
+                        ♟
+                    </span>
+
+                    <span>
+                        Manage Employees
+                    </span>
+
+                    <strong>
+                        →
+                    </strong>
+
+                </a>
+
+
+                <a href="@Url.Action("Manage", "VehicleInspection")"
+                   class="quick-action">
+
+                    <span class="quick-action-icon orange">
+                        ✓
+                    </span>
+
+                    <span>
+                        Vehicle Inspections
+                    </span>
+
+                    <strong>
+                        →
+                    </strong>
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================
+         RECENT BOOKINGS
+         ========================================= -->
+
+    <div class="modern-card recent-bookings-panel">
+
+        <div class="dashboard-panel-header">
+
+            <div>
+
+                <h3>
+                    Recent Bookings
+                </h3>
+
+                <p>
+                    Latest vehicle booking activity
+                </p>
+
+            </div>
+
+            <a href="@Url.Action("AdminIndex", "Booking")"
+               class="dashboard-link">
+
+                View All Bookings →
+            </a>
+
+        </div>
+
+
+        @if (Model.RecentBookings != null &&
+             Model.RecentBookings.Any())
+        {
+
+            <div class="table-responsive">
+
+                <table class="modern-table dashboard-bookings-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Employee
+                            </th>
+
+                            <th>
+                                Vehicle
+                            </th>
+
+                            <th>
+                                Registration
+                            </th>
+
+                            <th>
+                                Start Date
+                            </th>
+
+                            <th>
+                                End Date
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        @foreach (var booking in Model.RecentBookings)
+                        {
+
+                            <tr>
+
+                                <td>
+
+                                    <div class="employee-cell">
+
+                                        <div class="employee-avatar">
+                                            @(
+                                                booking.User != null &&
+                                                !string.IsNullOrEmpty(booking.User.UserName)
+                                                ? booking.User.UserName.Substring(0, 1).ToUpper()
+                                                : "U"
+                                             )
+                                        </div>
+
+                                        <div>
+
+                                            <strong>
+                                                @(booking.User != null
+                                                    ? booking.User.UserName
+                                                    : "Unknown Employee")
+                                            </strong>
+
+                                            <small>
+                                                Booking #@booking.BookingId
+                                            </small>
+
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+
+                                <td>
+
+                                    @if (booking.Vehicle != null)
+                                    {
+                                        <strong>
+                                            @booking.Vehicle.Make
+                                            @booking.Vehicle.Model
+                                        </strong>
+                                    }
+                                    else
+                                    {
+                                        <span>
+                                            Vehicle unavailable
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <td>
+
+                                    @if (booking.Vehicle != null)
+                                    {
+                                        <span class="registration-badge">
+                                            @booking.Vehicle.RegistrationNumber
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <td>
+                                    @booking.StartDateTime.ToString("dd/MM/yyyy HH:mm")
+                                </td>
+
+
+                                <td>
+                                    @booking.EndDateTime.ToString("dd/MM/yyyy HH:mm")
+                                </td>
+
+
+                                <td>
+
+                                    @if (booking.Status == "Pending")
+                                    {
+                                        <span class="status-badge-modern status-pending">
+                                            Pending
+                                        </span>
+                                    }
+                                    else if (booking.Status == "Approved")
+                                    {
+                                        <span class="status-badge-modern status-approved">
+                                            Approved
+                                        </span>
+                                    }
+                                    else if (booking.Status == "Rejected")
+                                    {
+                                        <span class="status-badge-modern status-rejected">
+                                            Rejected
+                                        </span>
+                                    }
+                                    else if (booking.Status == "Cancelled")
+                                    {
+                                        <span class="status-badge-modern status-cancelled">
+                                            Cancelled
+                                        </span>
+                                    }
+                                    else if (booking.Status == "Completed")
+                                    {
+                                        <span class="status-badge-modern status-completed">
+                                            Completed
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="status-badge-modern">
+                                            @booking.Status
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <td>
+
+                                    @Html.ActionLink(
+                                        "View",
+                                        "Review",
+                                        "Booking",
+                                        new { id = booking.BookingId },
+                                        new { @class = "btn btn-sm btn-primary" }
+                                   )
+
+                                </td>
+
+                            </tr>
+
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        }
+        else
+        {
+
+            <div class="empty-dashboard">
+
+                <div class="empty-dashboard-icon">
+                    🚗
+                </div>
+
+                <h4>
+                    No bookings yet
+                </h4>
+
+                <p>
+                    Booking activity will appear here once employees
+                    submit vehicle requests.
+                </p>
+
+            </div>
+
+        }
+
+    </div>
+
+
+    <!-- =========================================
+         FOOTER MESSAGE
+         ========================================= -->
+
+    <div class="dashboard-footer-message">
+
+        <span>
+            🚗
+        </span>
+
+        <div>
+
+            <strong>
+                Company Fleet Management
+            </strong>
+
+            <small>
+                Keep your fleet organized, available and ready for business.
+            </small>
+
+        </div>
+
+    </div>
+
+</div>
+
