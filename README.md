@@ -56,46 +56,6 @@ A web-based application developed to simplify company vehicle booking, approval,
 5. Apply Entity Framework migrations if required.
 6. Build and run the application in Visual Studio.
 
-## Application Screenshots
-
-The following screenshots showcase the main features of the Company Vehicle Booking System.
-
-### 1. Employee Dashboard
-
-View the employee dashboard and booking overview.
-
-![Employee Dashboard](Screenshots/employee-dashboard.png)
-
-### 2. Vehicle Booking Request
-
-Employees can request company vehicles by providing the booking details and required reasons.
-
-![Vehicle Booking Request](Screenshots/vehicle-booking-request.png)
-
-### 3. My Bookings
-
-Employees can review their vehicle booking history and check booking statuses.
-
-![My Bookings](Screenshots/my-bookings.png)
-
-### 4. Admin Booking Management
-
-Administrators can review booking requests and manage approval decisions.
-
-![Admin Booking Management](Screenshots/admin-booking-management.png)
-
-### 5. Vehicle Management
-
-Administrators can manage company vehicles and their details.
-
-![Vehicle Management](Screenshots/vehicle-management.png)
-
-### 6. Vehicle Inspections
-
-The system supports vehicle condition inspections to record scratches, dents, and other damage.
-
-![Vehicle Inspections](Screenshots/vehicle-inspection.png)
-
 ## Project Purpose
 
 This project demonstrates practical experience in web application development, database design, authentication, role-based authorisation, CRUD operations, and business workflow management.
